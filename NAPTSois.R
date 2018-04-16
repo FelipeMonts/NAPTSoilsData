@@ -1,0 +1,233 @@
+#  Tell the program where the package libraries are  #####################
+
+
+.libPaths("C:/Felipe/SotwareANDCoding/R_Library/library")  ;
+
+
+
+###### Introduction to Web Scraping #####
+
+# Preliminaries
+rm(list = ls())
+# Set your working directory to some place you can find
+
+setwd("C:/Felipe/LaserDifractionSoilTextureAnalysis/NAPTSoilsData") ;
+
+# First we will need to install the packages we plan to use for this exercise (
+# if they are not already installed on your computer).
+# install.packages("httr", dependencies = TRUE)
+# install.packages("stringr", dependencies = TRUE)
+
+# httr is a package for downloading html
+library(httr)
+# A package for manipulating strings
+library(stringr)
+
+# Lets start by downloading an example web page:
+url <- "http://www.naptprogram.org/lab-results/program-archive"
+
+# We start by using the httr package to download the source html
+page <- httr::GET(url)
+
+# As we can see, this produces a great deal of information
+str(page)
+
+# To get at the actual content of the page, we use the content() function:
+page_content <- httr::content(page, "text") 
+
+# Now lets print it out
+cat(page_content)
+
+
+### Web Scraping NAPT Soils ###
+
+url.NAPT<-"http://www.naptprogram.org/lab-results/program-archive" 
+
+# we start by using the httr package to download the source html
+
+NAPT.page<-httr::GET(url.NAPT)
+
+ 
+#######################################################################################################################
+# 
+#       Boehmke, Bradley. 2016. Data Wrangling with R. New York, NY: Springer Science+Business Media.
+# 
+#       chapter 16  Scrapping data
+# 
+# 
+####################################################################################################################### 
+
+#install.packages("XML")
+
+library(XML)
+#install.packages('rvest')
+
+#install.packages("magrittr")
+
+library(rvest)
+library(magrittr)
+
+
+##########################################################################################################################
+# 
+#                               Trying with the NAPT website
+# 
+##########################################################################################################################
+
+
+##########          Getting the most recent results in the page Laboratory Results   #################################
+
+# Examples of the addres where the pdf files can be downloaded  
+
+# http://www.naptprogram.org/files/napt/lab-results/2017-q1-soil-general-report.pdf
+# 
+# http://www.naptprogram.org/files/napt/lab-results/2017-q2-soil-report.pdf
+
+
+
+#########     gettting all the date from  http://www.naptprogram.org/lab-results
+
+
+scraping_NAPT <- read_html ("http://www.naptprogram.org/lab-results")
+Lab_Results   <- scraping_NAPT %>%
+                 html_nodes ("td>a")   
+  
+length(Lab_Results)
+
+#########     using the node name text to filter soil results only
+
+
+Node.names.scraping_NAPT<-html_text(Lab_Results) ;
+str(Node.names.scraping_NAPT)
+
+
+Soils.NAPT<-which(Node.names.scraping_NAPT == "Soil") ;
+
+length(Lab_Results[Soils.NAPT])
+
+head(Lab_Results[Soils.NAPT])
+
+######    Use the node text to extract the file paths to the pdf files with the data
+
+Soil.NAPT.paths<-strsplit(as.character(Lab_Results[Soils.NAPT]), split='"') ;
+
+str(Soil.NAPT.paths)
+
+NAPT.pdfs.1<-sapply(Soil.NAPT.paths,'[',2) ;
+
+NAPT.paths<-paste0('http://www.naptprogram.org/',NAPT.pdfs.1) ;
+
+
+
+#### read the pdf and save the data as a data frame  
+
+install.packages('tabulizerjars')
+
+library(tabulizer)
+library(dplyr)
+
+
+out <- extract_tables(NAPT.paths[1])
+
+str(out)
+
+SoilTemp<-as.data.frame(out[[1]], optional=T)
+
+str(SoilTemp)
+
+SoilTemp.Col_names<-SoilTemp[1:3,]
+
+
+##########################################################################################################################
+# 
+#       Gaylon S. Campbell;John M. Norman. An Introduction to Environmental Biophysics (p. 131). Kindle Edition. 
+# 
+# 
+# TABLE 9.1.     Hydraulic properties of soils as a function of soil texture 
+# (recomputed  from Rawls et al. 1992).
+# 
+# Texture                 Silt     Clay     - Y,e       b     Ks
+# sand                   0.05     0.03      0.7      1.7     0.0058           0.09        0.03
+# loamy sand           0.12     0.07      0.9      2.1     0.0017          0.13        0.06
+# sandy loam            0.25     0.10      1.5     3.1     0.00072         0.21        0.1
+# loam                   0.40     0.18      I.I  4 . 5   0.00037        0.27        0.12
+# silt loam              0.65     0.15     2.1     4.7     0.00019         0.33        0.13
+# sandy clay loam    0.13     0.27      2.8     4        0.00012         0.26        0.15
+# clay loam             0.34     0.34      2.6     5.2     0.000064       0.32        0.2
+# silty clay loam      0.58     0.33      3.3      6.6     0.000042       0.37        0.32
+# sandy clay           0.07     0.40      2.9     6        0.000033      0.34        0.24
+# silty clay             0.45     0.45      3.4      7.9     0.000025      0.39        0.25
+# clay                    0.20     0.60      3.7      7.6     0.000017      0.4          0.27
+# 
+# TABLE 9.1. Hydraulic properties of soils as a function of soil texture
+# (recomputed from Rawls et al. 1992).
+# Texture Silt Clay - Y,e b Ks 8_33 0_ 1500
+# J/kg kg s m-3 ml/ml ml/ml
+# sand 0.05 0.03 0.7 1.7 0.0058 0.09 0.03
+# loamy sand 0.12 0.07 0.9 2.1 0.0017 0. I 3 0.06
+# sandy loam 0.25 0.10 1.5 3.1 0.00072 0.21 0.1
+# loam 0.40 0.18 I.I 4.5 0.00037 0.27 0.12
+# silt loam 0.65 0.15 2.1 4.7 0.00019 0.33 0.13
+# sandy clay loam 0.13 0.27 2.8 4 0.00012 0.26 0.15
+# clay loam 0.34 0.34 2.6 5.2 0.000064 0.32 0.2
+# silty clay loam 0.58 0.33 3.3 6.6 0.000042 0.37 0.32
+# sandy clay 0.07 0.40 2.9 6 0.000033 0.34 0.24
+# silty clay 0.45 0.45 3.4 7.9 0.000025 0.39 0.25
+# clay 0.20 0.60 3.7 7.6 0.000017 0.4 0.27
+
+##########################################################################################################################
+ 
+#install.packages("soiltexture")
+library('soiltexture')
+
+TT.plot(class.sys ='none' )
+
+TT.plot(class.sys="USDA.TT")
+
+TT.plot(class.sys = "USDA-NCSS.TT",
+        class.p.bg.col=T
+                )
+
+#######Cambell Soil Texture Data##############
+
+silt<-c(0.05,
+        0.12,
+        0.25,
+        0.4,
+        0.65,
+        0.13,
+        0.34,
+        0.58,
+        0.07,
+        0.45,
+        0.2
+        )
+clay<-c(0.03,
+       0.07,
+       0.1,
+       0.18,
+       0.15,
+       0.27,
+       0.34,
+       0.33,
+       0.4,
+       0.45,
+       0.6
+       )
+
+Campbell.Soil<-data.frame(clay*100, silt*100) ;
+
+Campbell.Soil$sand<-100-(Campbell.Soil$silt+Campbell.Soil$clay);
+
+names(Campbell.Soil)<-c('CLAY', 'SILT' , 'SAND')
+
+
+TT.plot(
+  class.sys          ="USDA-NCSS.TT",
+  tri.data           = Campbell.Soil,
+  main               ="Campbell Soil Texture Data",
+  class.p.bg.col     =T
+)
+
+
+
