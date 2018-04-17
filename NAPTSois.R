@@ -121,7 +121,7 @@ NAPT.paths<-paste0('http://www.naptprogram.org/',NAPT.pdfs.1) ;
 
 #### read the pdf and save the data as a data frame  
 
-install.packages('tabulizerjars')
+
 
 library(tabulizer)
 library(dplyr)
@@ -131,12 +131,33 @@ out <- extract_tables(NAPT.paths[1])
 
 str(out)
 
-SoilTemp<-as.data.frame(out[[1]], optional=T)
+SoilTemp<-as.data.frame(out[[1]], stringsAsFactors = F)
+
+length(out)
 
 str(SoilTemp)
+head(SoilTemp,1)
 
 SoilTemp.Col_names<-SoilTemp[1:3,]
 
+
+unname(unlist(SoilTemp.Col_names[1,c(4,7,10,13,16)]))
+
+unname(unlist(SoilTemp.Col_names[2,seq(1:3)]))
+
+
+Column.names<-c(unname(unlist(SoilTemp.Col_names[2,seq(1:3)])),paste(unname(unlist(SoilTemp.Col_names[1,c(4,7,10,13,16)])),rep(c('Median' , 'MAD'),5), sep="_"))
+
+
+
+Results.data<-as.data.frame(out[[length(out)]])
+
+names(Results.data)<-Column.names
+
+Texture.data<-Results.data[seq(which(Results.data$Analysis == 'Particle Size Analysis-Hydrometer'),dim(Results.data)[1]),]
+
+
+head(texture.data)
 
 ##########################################################################################################################
 # 
