@@ -119,45 +119,73 @@ NAPT.paths<-paste0('http://www.naptprogram.org/',NAPT.pdfs.1) ;
 
 
 
-#### read the pdf and save the data as a data frame  
 
+
+########### read the pdf to extract the columns and row names   #################
 
 
 library(tabulizer)
 library(dplyr)
 
 
-out <- extract_tables(NAPT.paths[1])
+out.1 <- extract_tables(NAPT.paths[1]) ;
+
+str(out.1)
+length(out.1)
+
+out.1[[1]]
+str(out.1[[1]])
+
+soil.names<-out.1[[1]][1,]
+analysis.names<-c("Soil" , "Units" , "n", rep(c("Median", "MAD"),5))
+
+soil_names<-paste(soil.names,analysis.names,sep="_");
+
+############## get the data from the table ###############
+
+
+Results.data.1<-out.1[[length(out.1)]];
+str(Results.data.1)
+row.names(Results.data.1)<-soil_names ; 
+
+Results.data.all<-Results.data.1
+
+########  Extract all the texture data in the Soils Results web page  ###########
+
+########### read the pdf to extract the columns and row names   #################
+
+data.1<-Results.data.all
+
+out<-extract_tables(NAPT.paths[2]) ;
 
 str(out)
-
-SoilTemp<-as.data.frame(out[[1]], stringsAsFactors = F)
-
 length(out)
 
-str(SoilTemp)
-head(SoilTemp,1)
+out[[1]]
+str(out[[1]])
 
-SoilTemp.Col_names<-SoilTemp[1:3,]
+soil.names<-out[[1]][1,c(1,2,3,4,5,7,8,10,11,13,14,16,17)]
+soil_names<-paste(soil.names,analysis.names,sep="_");
 
+############## get the data from the table ###############
 
-unname(unlist(SoilTemp.Col_names[1,c(4,7,10,13,16)]))
-
-unname(unlist(SoilTemp.Col_names[2,seq(1:3)]))
-
-
-Column.names<-c(unname(unlist(SoilTemp.Col_names[2,seq(1:3)])),paste(unname(unlist(SoilTemp.Col_names[1,c(4,7,10,13,16)])),rep(c('Median' , 'MAD'),5), sep="_"))
-
+Results.data<-out[[length(out)]];
+str(Results.data)
+row.names(Results.data)<-soil_names ; 
 
 
-Results.data<-as.data.frame(out[[length(out)]])
+############# combine the data with the previous pdf data ###########
+str(data.1)
+str(Results.data)
 
-names(Results.data)<-Column.names
+Results.data.all<-rbind(data.1,Results.data)
 
-Texture.data<-Results.data[seq(which(Results.data$Analysis == 'Particle Size Analysis-Hydrometer'),dim(Results.data)[1]),]
+str(data.1)
+str(Results.data)
 
 
-head(texture.data)
+
+
 
 ##########################################################################################################################
 # 
