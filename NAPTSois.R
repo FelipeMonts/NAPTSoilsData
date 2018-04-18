@@ -162,9 +162,8 @@ Results.data.1<-pdf.data.1[,select.columns]
 
 Results.data.all<-Results.data.1
 
-for (i %in% NAPT.paths[2:length(NAPT.paths)])
-  {
-i=2
+for (i in seq(2,length(NAPT.paths))) {
+#i=2
   ########### read the pdf to extract the columns and row names   #################
 
   data.1<-Results.data.all
@@ -204,10 +203,12 @@ i=2
   Results.data.all<-rbind(data.1,Results.data)
   
   str(Results.data.all)
-  
-}
+  }
+
+Trouble Shoot 2012 Q3
 
 
+Old Records stop being readable in 2005
 
 
 ##########################################################################################################################
