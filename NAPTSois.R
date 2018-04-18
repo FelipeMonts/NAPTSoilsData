@@ -136,53 +136,76 @@ length(out.1)
 out.1[[1]]
 str(out.1[[1]])
 
-soil.names<-out.1[[1]][1,]
-analysis.names<-c("Soil" , "Units" , "n", rep(c("Median", "MAD"),5))
+soil.names<-out.1[[1]][1,grep("Soil .*",out.1[[1]][1,])]
 
-soil_names<-paste(soil.names,analysis.names,sep="_");
+temp<-matrix(c(paste(soil.names,c("Median"),sep='_'),paste(soil.names,c("MAD"),sep='_')),nrow=length(soil.names),ncol=2)
+
+Soil_names<-as.vector(t(temp))
+
+
+analysis.names<-c("Analysis" , "Units" , "n", as.vector(t(temp)))
 
 ############## get the data from the table ###############
 
 
-Results.data.1<-out.1[[length(out.1)]];
-str(Results.data.1)
-row.names(Results.data.1)<-soil_names ; 
+pdf.data.1<-t(out.1[[length(out.1)]]);
 
-Results.data.all<-Results.data.1
+row.names(pdf.data.1)<-analysis.names
+str(pdf.data.1)
+
+select.columns<-sort(c(grep('Sand.*',pdf.data.1[1,]),grep('Silt.*',pdf.data.1[1,]),grep('Clay.*',pdf.data.1[1,])));
+
+Results.data.1<-pdf.data.1[,select.columns]
+
 
 ########  Extract all the texture data in the Soils Results web page  ###########
 
-########### read the pdf to extract the columns and row names   #################
+Results.data.all<-Results.data.1
 
-data.1<-Results.data.all
+for (i %in% NAPT.paths[2:length(NAPT.paths)])
+  {
+i=2
+  ########### read the pdf to extract the columns and row names   #################
 
-out<-extract_tables(NAPT.paths[2]) ;
+  data.1<-Results.data.all
 
-str(out)
-length(out)
+  out<-extract_tables(NAPT.paths[i]) ;
 
-out[[1]]
-str(out[[1]])
+  str(out)
+  length(out)
 
-soil.names<-out[[1]][1,c(1,2,3,4,5,7,8,10,11,13,14,16,17)]
-soil_names<-paste(soil.names,analysis.names,sep="_");
+  out[[1]]
+  str(out[[1]])
 
-############## get the data from the table ###############
+  soil.names<-out[[1]][1,grep("Soil .*",out[[1]][1,])]
 
-Results.data<-out[[length(out)]];
-str(Results.data)
-row.names(Results.data)<-soil_names ; 
+  temp<-matrix(c(paste(soil.names,c("Median"),sep='_'),paste(soil.names,c("MAD"),sep='_')),nrow=length(soil.names),ncol=2)
+
+  Soil_names<-as.vector(t(temp))
 
 
-############# combine the data with the previous pdf data ###########
-str(data.1)
-str(Results.data)
-
-Results.data.all<-rbind(data.1,Results.data)
-
-str(data.1)
-str(Results.data)
-
+  analysis.names<-c("Analysis" , "Units" , "n", as.vector(t(temp)))
+  
+  
+  ############## get the data from the table ###############
+  
+  pdf.data<-t(out[[length(out)]]);
+  row.names(pdf.data)<-analysis.names
+  str(pdf.data)
+  
+  select.columns<-sort(c(grep('Sand.*',pdf.data[1,]),grep('Silt.*',pdf.data[1,]),grep('Clay.*',pdf.data[1,])));
+  
+  Results.data<-pdf.data[,select.columns]
+  
+  ############# combine the data with the previous pdf data ###########
+  str(data.1)
+  str(Results.data)
+  
+  Results.data.all<-rbind(data.1,Results.data)
+  
+  str(Results.data.all)
+  
+}
 
 
 
