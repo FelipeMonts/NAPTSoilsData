@@ -121,6 +121,8 @@ NAPT.paths<-paste0('http://www.naptprogram.org/',NAPT.pdfs.1) ;
 
 
 
+
+
 ########### read the pdf to extract the columns and row names   #################
 
 
@@ -163,7 +165,7 @@ Results.data.1<-pdf.data.1[,select.columns]
 Results.data.all<-Results.data.1
 
 for (i in seq(2,length(NAPT.paths))) {
-#i=2
+#i=29
   ########### read the pdf to extract the columns and row names   #################
 
   data.1<-Results.data.all
@@ -205,10 +207,55 @@ for (i in seq(2,length(NAPT.paths))) {
   str(Results.data.all)
   }
 
-Trouble Shoot 2012 Q3
+
+######## The code above failed at 2011  Because of formatting differences in the pdf files#####
 
 
-Old Records stop being readable in 2005
+####### Using another way, downloading the files into a directory and taking the information from there #
+
+dir.create("../NAPT_PDFs");
+
+for (j in seq(29,32)) {
+  download.file(NAPT.paths[j], destfile = paste0("../NAPT_PDFs/pdf_",j,".pdf"), mode='wb')
+
+}
+
+#######  Again format differences  at Results for 2010  ###############
+
+NAPT.pdfs.1[33:40]
+
+strsplit(NAPT.pdfs.1[33:40],split="/f") 
+
+
+List.NAPT.pdfs_33_40<-strsplit(NAPT.pdfs.1[33:40],split="/f")
+
+NAPT.pdfs_33_40<-sapply(List.NAPT.pdfs_33_40,'[',2) ;
+
+NAPT.paths_33_40<-paste0('http://www.naptprogram.org/f',NAPT.pdfs_33_40)
+
+for (h in seq(1,length(NAPT.paths_33_40))) {
+  download.file(NAPT.paths_33_40, destfile = paste0("../NAPT_PDFs/pdf_",h+32,".pdf"), mode='wb')
+  
+}
+
+
+
+############# download the archive files #######################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Old Records stop being readable in 2005
 
 
 ##########################################################################################################################
