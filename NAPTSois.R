@@ -242,20 +242,87 @@ for (h in seq(1,length(NAPT.paths_33_40))) {
 
 ############# download the archive files #######################################
 
+scraping_NAPT_archive <- read_html ("http://www.naptprogram.org/lab-results/program-archive")
+Lab_Results_archive   <- scraping_NAPT_archive %>%
+                 html_nodes ("a")   
+
+
+length(Lab_Results_archive)
+
+grep('<a href="/files/napt/publications/program-archive/soils/',Lab_Results_archive)
+
+
+NAPT.archive.Soils<-Lab_Results_archive[grep('<a href="/files/napt/publications/program-archive/soils/',Lab_Results_archive)];
 
 
 
+Soil.archive.NAPT.paths<-strsplit(as.character(NAPT.archive.Soils), split='"') ;
+
+str(Soil.archive.NAPT.paths)
+
+NAPT.archive.pdfs.1<-sapply(Soil.archive.NAPT.paths,'[',2) ;
+
+NAPT.archive.paths<-paste0('http://www.naptprogram.org/',NAPT.archive.pdfs.1) ;
+
+
+dir.create("../NAPT_ARCHIVE_PDFs");
+
+for (k in seq(1,length(NAPT.archive.paths))) {
+  download.file(NAPT.archive.paths[k], destfile = paste0("../NAPT_ARCHIVE_PDFs/pdf_",k,".pdf"), mode='wb')
+  }
+
+#################### Read the pdf files that were images and needed to be transfromed to be able to incorporate
+##################### into the NAPT Soildatabase ################################################
+
+Archive.files<-list.files("../NAPT_ARCHIVE_PDFs")
 
 
 
+for (l in seq(1,length(Archive.files))) {
+  #i=29
+  ########### read the pdf to extract the columns and row names   #################
+  
+  Results.data.all.2<-Results.data.all[,1:3]
+  
+  out<-extract_tables(paste0("../NAPT_ARCHIVE_PDFs/",Archive.files[1])) ;
+  
+  str(out)
+  length(out)
+  
+  out[[1]]
+  str(out[[1]])
+  
+  soil.names<-out[[1]][1,grep("Soil .*",out[[1]][1,])]
+  
+  temp<-matrix(c(paste(soil.names,c("Median"),sep='_'),paste(soil.names,c("MAD"),sep='_')),nrow=length(soil.names),ncol=2)
+  
+  Soil_names<-as.vector(t(temp))
+  
+  
+  analysis.names<-c("Analysis" , "Units" , "n", as.vector(t(temp)))
+  
+  
+  ############## get the data from the table ###############
+  
+  pdf.data<-t(out[[length(out)]]);
+  row.names(pdf.data)<-analysis.names
+  str(pdf.data)
+  
+  select.columns<-sort(c(grep('Sand.*',pdf.data[1,]),grep('Silt.*',pdf.data[1,]),grep('Clay.*',pdf.data[1,])));
+  
+  Results.data<-pdf.data[,select.columns]
+  
+  ############# combine the data with the previous pdf data ###########
+  str(data.1)
+  str(Results.data)
+  
+  Results.data.all.2<-rbind(data.1[,1:3],Results.data)
+  
+  str(Results.data.all.2)
+}
 
 
 
-
-
-
-
-# Old Records stop being readable in 2005
 
 
 ##########################################################################################################################
