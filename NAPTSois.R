@@ -199,9 +199,9 @@ Archive.files<-list.files("../NAPT_PDFs")
 
 Archive.files[(grep("Copy.pdf$",Archive.files))] ;
 
-Archive.files.comp<- Archive.files[which(!seq(1,length(Archive.files))%in% grep("Copy.pdf$",Archive.files))] ;
+Archive.files.comp<-Archive.files[which( !(seq(1,length(Archive.files)) %in% grep("Copy.pdf$",Archive.files)) )] ;
 
-Hygrometer.Soils<-c(Archive.files[grep("Copy.pdf$",Archive.files)], Archive.files.comp[27:40]) ;
+Hygrometer.Soils<-c(Archive.files[grep("Copy.pdf$",Archive.files)], Archive.files.comp[c(27:33, 35)]) ;
 
 ########### read the pdf to extract the columns and row names   #################
 
@@ -304,7 +304,7 @@ library(XLConnect) ;
 ########### read the pdf to extract the columns and row names   #################
 
 
-TwoMethods.Soils<-Archive.files.comp[1:26] ;
+TwoMethods.Soils<-Archive.files.comp[-c(22,24,25)] ;
 
 rm('out.1', 'out' , 'Results.data', 'Results.data.all') 
 
@@ -324,7 +324,7 @@ temp<-matrix(c(paste(soil.names,c("Median"),sep='_'),paste(soil.names,c("MAD"),s
 Soil_names<-as.vector(t(temp))
 
 
-analysis.names<-c("Analysis" , "Units" , "n", as.vector(t(temp)))
+analysis.names<-c("Analysis" , "Units" , "n", as.vector(t(temp[2:6,])))
 
 ############## get the data from the table ###############
 
@@ -342,12 +342,12 @@ Results.data.all<-pdf.data.1[,select.columns]
 
 
 ##############Get the rest of the data and combine it #####################
-for (i in seq(3,length(TwoMethods.Soils))) {
-  #i=16
+for (i in seq(2,length(TwoMethods.Soils))) {
+  #i=26
   rm('out', 'Results.data') 
   data.1<-Results.data.all
   
-  out<- extract_tables(paste0("../NAPT_PDFs/", TwoMethods.Soils[2])) ;
+  out<- extract_tables(paste0("../NAPT_PDFs/", TwoMethods.Soils[i])) ;
   
   str(out)
   length(out)
@@ -362,7 +362,7 @@ for (i in seq(3,length(TwoMethods.Soils))) {
   Soil_names<-as.vector(t(temp))
   
   
-  analysis.names<-c("Analysis" , "Units" , "n", as.vector(t(temp)))
+  analysis.names<-c("Analysis" , "Units" , "n", as.vector(t(temp[2:6,])))
   
   ############## get the data from the table ###############
   
