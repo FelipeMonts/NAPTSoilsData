@@ -115,16 +115,95 @@ clay<-c(0.03,
 )
 
 Campbell.Soil<-data.frame(clay*100, silt*100) ;
+Campbell.Soil.2<-data.frame(clay*101, silt*101) ;
 
 Campbell.Soil$sand<-100-(Campbell.Soil$silt+Campbell.Soil$clay);
-
+Campbell.Soil.2$sand<-100-(Campbell.Soil.2$silt+Campbell.Soil.2$clay);
 names(Campbell.Soil)<-c('CLAY', 'SILT' , 'SAND')
-
+names(Campbell.Soil.2)<-c('CLAY', 'SILT' , 'SAND')
 
 TT.plot(
   class.sys          ="USDA-NCSS.TT",
   tri.data           = Campbell.Soil,
-  main               ="Campbell Soil Texture Data",
-  class.p.bg.col     =T
+  main               ="Campbell & NAPT Texture Data",
+  #class.p.bg.col     =T,
+  col                ="RED",
+  cex                = 0.5
+  )
+
+TT.plot(
+  class.sys          ="USDA-NCSS.TT",
+  add                = T,
+  tri.data           = Campbell.Soil.2,
+  main               ="Campbell & NAPT Texture Data",
+  #class.p.bg.col     =T,
+  col                ="BLUE",
+  cex                = 0.5
 )
 
+########################################################################################################
+# 
+#                      Get the NAPT soil texture data and format it for plotting
+#
+#########################################################################################################
+
+
+library(XLConnect) ;
+
+NAPT.data<-readWorksheetFromFile("Results_data_all.xlsx", sheet="Combined") ;
+str(NAPT.data)
+head(NAPT.data)
+
+
+NAPT.data.n<-NAPT.data[(which(NAPT.data[,1] == 'n')),] ;
+str(NAPT.data.n)
+head(NAPT.data.n)
+
+NAPT.data.Not_n<-NAPT.data[(which(NAPT.data[,1] != 'n')),] ;
+
+str(NAPT.data.Not_n)
+head(NAPT.data.Not_n)
+
+NAPT.Texture.Hygrom<-NAPT.data.Not_n[-c(1,2),c(2,3,4)]
+names(NAPT.Texture.Hygrom)<-c('SAND' , 'SILT' , 'CLAY') ;
+
+str(NAPT.Texture.Hygrom)
+head(NAPT.Texture.Hygrom)
+
+NAPT.Texture.Pipet<-NAPT.data.Not_n[-c(1,2),c(5,6,7)] ;
+
+str(NAPT.Texture.Pipet)
+head(NAPT.Texture.Pipet)
+
+names(NAPT.Texture.Pipet)<-c('SAND' , 'SILT' , 'CLAY') ;
+
+
+NAPT.all<-rbind(NAPT.Texture.Hygrom,NAPT.Texture.Pipet)
+
+str(NAPT.all)
+head(NAPT.all)
+
+NAPT.all.notNA<-NAPT.all[which(!(is.na.data.frame(NAPT.all[,1]))),]
+
+str(NAPT.all.notNA)
+head(NAPT.all.notNA)
+
+NAPT.Texture.data<-data.frame(lapply(NAPT.all.notNA,as.numeric))
+
+str(NAPT.Texture.data)
+head(NAPT.Texture.data)
+
+NAPT<-TT.normalise.sum(NAPT.Texture.data[-c(211,628),])
+
+
+
+###########PLot the Data ######################
+
+TT.plot(
+  class.sys          ="USDA-NCSS.TT",
+  tri.data           = NAPT,
+  main               ="NAPT Texture Data",
+  #class.p.bg.col     =T,
+  col                ="RED",
+  cex                = 0.5
+)
