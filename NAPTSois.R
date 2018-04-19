@@ -118,10 +118,90 @@ NAPT.pdfs.1<-sapply(Soil.NAPT.paths,'[',2) ;
 NAPT.paths<-paste0('http://www.naptprogram.org/',NAPT.pdfs.1) ;
 
 
+# ########### Download the pdf files to a local drive to get the data from them ##################
+# 
+# dir.create("../NAPT_PDFs");
+# 
+# for (j in seq(1,length(NAPT.paths))) {
+#   download.file(NAPT.paths[j], destfile = paste0("../NAPT_PDFs/pdf_",j,".pdf"), mode='wb')
+#   
+# }
+# 
+# NAPT.pdfs.1[seq(33,length(NAPT.paths))]
+# 
+# 
+# List.NAPT.pdfs_33_40<-strsplit(NAPT.pdfs.1[seq(33,length(NAPT.paths))],split="/f")
+# 
+# NAPT.pdfs_33_40<-sapply(List.NAPT.pdfs_33_40,'[',2) ;
+# 
+# NAPT.paths_33_40<-paste0('http://www.naptprogram.org/f',NAPT.pdfs_33_40)
+# 
+# for (h in seq(1,length(NAPT.paths_33_40))) {
+#   download.file(NAPT.paths_33_40[h], destfile = paste0("../NAPT_PDFs/pdf_",h+32,".pdf"), mode='wb')
+#   
+# }
+# 
 
 
 
+########  Extract all the texture data in the Soils Results web page  ###########
 
+#Results.data.all<-Results.data.1
+
+
+
+# ############# download the archive files #######################################
+# 
+# scraping_NAPT_archive <- read_html ("http://www.naptprogram.org/lab-results/program-archive")
+# Lab_Results_archive   <- scraping_NAPT_archive %>%
+#                  html_nodes ("a")   
+# 
+# 
+# length(Lab_Results_archive)
+# 
+# grep('<a href="/files/napt/publications/program-archive/soils/',Lab_Results_archive)
+# 
+# 
+# NAPT.archive.Soils<-Lab_Results_archive[grep('<a href="/files/napt/publications/program-archive/soils/',Lab_Results_archive)];
+# 
+# 
+# 
+# Soil.archive.NAPT.paths<-strsplit(as.character(NAPT.archive.Soils), split='"') ;
+# 
+# str(Soil.archive.NAPT.paths)
+# 
+# NAPT.archive.pdfs.1<-sapply(Soil.archive.NAPT.paths,'[',2) ;
+# 
+# NAPT.archive.paths<-paste0('http://www.naptprogram.org/',NAPT.archive.pdfs.1) ;
+# 
+# 
+# dir.create("../NAPT_ARCHIVE_PDFs");
+# 
+# for (k in seq(1,length(NAPT.archive.paths))) {
+#   download.file(NAPT.archive.paths[k], destfile = paste0("../NAPT_ARCHIVE_PDFs/pdf_",k,".pdf"), mode='wb')
+#   }
+# 
+# #################### Read the pdf files that were images and needed to be transfromed to be able to incorporate
+# ##################### into the NAPT Soildatabase ################################################
+
+Archive.files<-list.files("../NAPT_PDFs")
+
+
+#######################################################################################################################
+# 
+#                                   Files that have one method of soil analysis
+# 
+# 
+####################################################################################################################### 
+
+#################### Files that have one method of soil analysis ##########################
+
+
+Archive.files[(grep("Copy.pdf$",Archive.files))] ;
+
+Archive.files.comp<- Archive.files[which(!seq(1,length(Archive.files))%in% grep("Copy.pdf$",Archive.files))] ;
+
+Hygrometer.Soils<-c(Archive.files[grep("Copy.pdf$",Archive.files)], Archive.files.comp[27:40]) ;
 
 ########### read the pdf to extract the columns and row names   #################
 
@@ -130,7 +210,7 @@ library(tabulizer)
 library(dplyr)
 
 
-out.1 <- extract_tables(NAPT.paths[1]) ;
+out.1 <- extract_tables(paste0("../NAPT_PDFs/", Hygrometer.Soils[1])) ;
 
 str(out.1)
 length(out.1)
@@ -157,134 +237,117 @@ str(pdf.data.1)
 
 select.columns<-sort(c(grep('Sand.*',pdf.data.1[1,]),grep('Silt.*',pdf.data.1[1,]),grep('Clay.*',pdf.data.1[1,])));
 
-Results.data.1<-pdf.data.1[,select.columns]
+Results.data.all<-pdf.data.1[,select.columns]
 
 
-########  Extract all the texture data in the Soils Results web page  ###########
 
-Results.data.all<-Results.data.1
-
-for (i in seq(2,length(NAPT.paths))) {
-#i=29
-  ########### read the pdf to extract the columns and row names   #################
-
+##############Get the rest of the data and combine it #####################
+for (i in seq(12,length(Hygrometer.Soils))) {
+  #i=16
+  rm('out', 'Results.data') 
   data.1<-Results.data.all
-
-  out<-extract_tables(NAPT.paths[i]) ;
-
+  
+  out<- extract_tables(paste0("../NAPT_PDFs/", Hygrometer.Soils[i])) ;
+  
   str(out)
   length(out)
-
-  out[[1]]
-  str(out[[1]])
-
-  soil.names<-out[[1]][1,grep("Soil .*",out[[1]][1,])]
-
-  temp<-matrix(c(paste(soil.names,c("Median"),sep='_'),paste(soil.names,c("MAD"),sep='_')),nrow=length(soil.names),ncol=2)
-
-  Soil_names<-as.vector(t(temp))
-
-
-  analysis.names<-c("Analysis" , "Units" , "n", as.vector(t(temp)))
   
+  out[[2]]
+  str(out[[2]])
+  
+  soil.names<-out[[2]][1,grep("Soil .*",out[[2]][1,])]
+  
+  temp<-matrix(c(paste(soil.names,c("Median"),sep='_'),paste(soil.names,c("MAD"),sep='_')),nrow=length(soil.names),ncol=2)
+  
+  Soil_names<-as.vector(t(temp))
+  
+  
+  analysis.names<-c("Analysis" , "Units" , "n", as.vector(t(temp)))
   
   ############## get the data from the table ###############
   
+  
   pdf.data<-t(out[[length(out)]]);
-  row.names(pdf.data)<-analysis.names
+  
+  row.names(pdf.data)<-analysis.names[seq(1,dim(pdf.data)[1])]
   str(pdf.data)
   
   select.columns<-sort(c(grep('Sand.*',pdf.data[1,]),grep('Silt.*',pdf.data[1,]),grep('Clay.*',pdf.data[1,])));
   
   Results.data<-pdf.data[,select.columns]
   
+  
   ############# combine the data with the previous pdf data ###########
-  str(data.1)
+  str(Results.data)
   str(Results.data)
   
-  Results.data.all<-rbind(data.1,Results.data)
+  Results.data.all<-rbind(Results.data,Results.data.all)
   
   str(Results.data.all)
-  }
-
-
-######## The code above failed at 2011  Because of formatting differences in the pdf files#####
-
-
-####### Using another way, downloading the files into a directory and taking the information from there #
-
-dir.create("../NAPT_PDFs");
-
-for (j in seq(29,32)) {
-  download.file(NAPT.paths[j], destfile = paste0("../NAPT_PDFs/pdf_",j,".pdf"), mode='wb')
-
-}
-
-#######  Again format differences  at Results for 2010  ###############
-
-NAPT.pdfs.1[33:40]
-
-strsplit(NAPT.pdfs.1[33:40],split="/f") 
-
-
-List.NAPT.pdfs_33_40<-strsplit(NAPT.pdfs.1[33:40],split="/f")
-
-NAPT.pdfs_33_40<-sapply(List.NAPT.pdfs_33_40,'[',2) ;
-
-NAPT.paths_33_40<-paste0('http://www.naptprogram.org/f',NAPT.pdfs_33_40)
-
-for (h in seq(1,length(NAPT.paths_33_40))) {
-  download.file(NAPT.paths_33_40, destfile = paste0("../NAPT_PDFs/pdf_",h+32,".pdf"), mode='wb')
   
 }
 
+#write.csv(Results.data.all,file='Results_data_all.csv',quote=F)
+#Results.data.all<-read.csv('Results_data_all.csv',header=T, as.is=T)
+library(XLConnect) ;
+
+#writeWorksheetToFile("Results_data_all.xlsx",Results.data.all,sheet="Results_data_all")
+
+#######################################################################################################################
+# 
+#                                   Files that have two methods of soil analysis
+# 
+# 
+####################################################################################################################### 
 
 
-############# download the archive files #######################################
-
-scraping_NAPT_archive <- read_html ("http://www.naptprogram.org/lab-results/program-archive")
-Lab_Results_archive   <- scraping_NAPT_archive %>%
-                 html_nodes ("a")   
+########### read the pdf to extract the columns and row names   #################
 
 
-length(Lab_Results_archive)
+TwoMethods.Soils<-Archive.files.comp[1:26] ;
 
-grep('<a href="/files/napt/publications/program-archive/soils/',Lab_Results_archive)
-
-
-NAPT.archive.Soils<-Lab_Results_archive[grep('<a href="/files/napt/publications/program-archive/soils/',Lab_Results_archive)];
+rm('out.1', 'out' , 'Results.data', 'Results.data.all') 
 
 
+out.1 <- extract_tables(paste0("../NAPT_PDFs/", TwoMethods.Soils[1])) ;
 
-Soil.archive.NAPT.paths<-strsplit(as.character(NAPT.archive.Soils), split='"') ;
+str(out.1)
+length(out.1)
 
-str(Soil.archive.NAPT.paths)
+out.1[[1]]
+str(out.1[[1]])
 
-NAPT.archive.pdfs.1<-sapply(Soil.archive.NAPT.paths,'[',2) ;
+soil.names<-out.1[[1]][1,grep("Soil.*",out.1[[1]][1,])]
 
-NAPT.archive.paths<-paste0('http://www.naptprogram.org/',NAPT.archive.pdfs.1) ;
+temp<-matrix(c(paste(soil.names,c("Median"),sep='_'),paste(soil.names,c("MAD"),sep='_')),nrow=length(soil.names),ncol=2)
 
-
-dir.create("../NAPT_ARCHIVE_PDFs");
-
-for (k in seq(1,length(NAPT.archive.paths))) {
-  download.file(NAPT.archive.paths[k], destfile = paste0("../NAPT_ARCHIVE_PDFs/pdf_",k,".pdf"), mode='wb')
-  }
-
-#################### Read the pdf files that were images and needed to be transfromed to be able to incorporate
-##################### into the NAPT Soildatabase ################################################
-
-Archive.files<-list.files("../NAPT_ARCHIVE_PDFs")
+Soil_names<-as.vector(t(temp))
 
 
+analysis.names<-c("Analysis" , "Units" , "n", as.vector(t(temp)))
 
-for (l in seq(1,length(Archive.files))) {
-  #i=29
-  ########### read the pdf to extract the columns and row names   #################
+############## get the data from the table ###############
+
+
+pdf.data.1<-t(out.1[[length(out.1)]]);
+
+row.names(pdf.data.1)<-analysis.names
+str(pdf.data.1)
+
+select.columns<-sort(c(grep('Sand.*',pdf.data.1[1,]),grep('Silt.*',pdf.data.1[1,]),grep('Clay.*',pdf.data.1[1,])));
+
+Results.data.all<-pdf.data.1[,select.columns]
+
+
+
+
+##############Get the rest of the data and combine it #####################
+for (i in seq(3,length(TwoMethods.Soils))) {
+  #i=16
+  rm('out', 'Results.data') 
+  data.1<-Results.data.all
   
-  Results.data.all.2<-Results.data.all[,1:3]
-  
-  out<-extract_tables(paste0("../NAPT_ARCHIVE_PDFs/",Archive.files[1])) ;
+  out<- extract_tables(paste0("../NAPT_PDFs/", TwoMethods.Soils[2])) ;
   
   str(out)
   length(out)
@@ -292,7 +355,7 @@ for (l in seq(1,length(Archive.files))) {
   out[[1]]
   str(out[[1]])
   
-  soil.names<-out[[1]][1,grep("Soil .*",out[[1]][1,])]
+  soil.names<-out[[1]][1,grep("Soil.*",out[[1]][1,])] ;
   
   temp<-matrix(c(paste(soil.names,c("Median"),sep='_'),paste(soil.names,c("MAD"),sep='_')),nrow=length(soil.names),ncol=2)
   
@@ -301,25 +364,41 @@ for (l in seq(1,length(Archive.files))) {
   
   analysis.names<-c("Analysis" , "Units" , "n", as.vector(t(temp)))
   
-  
   ############## get the data from the table ###############
   
+  
   pdf.data<-t(out[[length(out)]]);
-  row.names(pdf.data)<-analysis.names
+  
+  row.names(pdf.data)<-analysis.names[seq(1,dim(pdf.data)[1])]
   str(pdf.data)
   
   select.columns<-sort(c(grep('Sand.*',pdf.data[1,]),grep('Silt.*',pdf.data[1,]),grep('Clay.*',pdf.data[1,])));
   
   Results.data<-pdf.data[,select.columns]
   
+  
   ############# combine the data with the previous pdf data ###########
-  str(data.1)
+  str(Results.data)
   str(Results.data)
   
-  Results.data.all.2<-rbind(data.1[,1:3],Results.data)
+  Results.data.all<-rbind(Results.data,Results.data.all)
   
-  str(Results.data.all.2)
+  str(Results.data.all)
+  
 }
+
+
+#write.csv(Results.data.all,file='Results_data_all_two.csv',quote=F)
+#Results.data.all<-read.csv('Results_data_all_two.csv',header=T, as.is=T)
+library(XLConnect) ;
+
+#writeWorksheetToFile("Results_data_all.xlsx",Results.data.all,sheet="Results_data_all_two")
+
+
+
+
+
+
 
 
 
