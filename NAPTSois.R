@@ -242,7 +242,7 @@ Results.data.all<-pdf.data.1[,select.columns]
 
 
 ##############Get the rest of the data and combine it #####################
-for (i in seq(12,length(Hygrometer.Soils))) {
+for (i in seq(2,length(Hygrometer.Soils))) {
   #i=16
   rm('out', 'Results.data') 
   data.1<-Results.data.all
