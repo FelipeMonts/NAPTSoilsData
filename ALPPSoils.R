@@ -48,7 +48,7 @@ ALPP.Tables <- extract_tables(paste0('../ALPP_PDFs/','ALLP', 34, '.pdf')) ;
 
 str(ALPP.Tables[157])
 
-Sand<-ALPP.Tables[157][1]
+Sand<-ALPP.Tables[157][[1]]
 
 str(Sand[[1]])
 
