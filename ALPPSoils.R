@@ -17,20 +17,24 @@ setwd("C:/Felipe/LaserDifractionSoilTextureAnalysis/NAPTSoilsData") ;
 # if they are not already installed on your computer).
 # install.packages("httr", dependencies = TRUE)
 # install.packages("stringr", dependencies = TRUE)
+# install.packages('tabulizer', dependencies = TRUE)
+# install.packages('stringi', dependencies = TRUE)
+
 
 # httr is a package for downloading html
 library(httr)
 # A package for manipulating strings
 library(stringr)
+library(stringi)
 
 
 
 dir.create("../ALPP_PDFs");
 
-for (i in seq(30,34)) {
-  download.file(paste0('https://www.collaborativetesting.com/assets/news/', i ,'_WebSum.pdf'), destfile= paste0('../ALPP_PDFs/','ALLP', i, '.pdf'), mode = 'wb' )
-
-}
+# for (i in seq(30,34)) {
+#   download.file(paste0('https://www.collaborativetesting.com/assets/news/', i ,'_WebSum.pdf'), destfile= paste0('../ALPP_PDFs/','ALLP', i, '.pdf'), mode = 'wb' )
+# 
+# }
   
 
 
@@ -45,8 +49,17 @@ ALPP.Tables <- extract_tables(paste0('../ALPP_PDFs/','ALLP', 34, '.pdf')) ;
 #   download.file(NAPT.archive.paths[k], destfile = paste0("../NAPT_ARCHIVE_PDFs/pdf_",k,".pdf"), mode='wb')
 #   }
 
+sssss<-ALPP.Tables[grepl('(SubTestCode 189)',ALPP.Tables)][[3]] ;
 
-str(ALPP.Tables[157])
+str_split(sssss[2,1], " ")
+
+str_split(sssss[3,1], " ")
+
+str_split(sssss[4,1], " ")
+
+str(sssss)
+
+
 
 Sand<-ALPP.Tables[157][[1]]
 
