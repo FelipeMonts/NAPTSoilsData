@@ -8,7 +8,7 @@
 ###### Introduction to Web Scraping #####
 
 # Preliminaries
-rm(list = ls())
+# rm(list = ls())
 # Set your working directory to some place you can find
 
 setwd("C:/Felipe/LaserDifractionSoilTextureAnalysis/NAPTSoilsData") ;
@@ -55,9 +55,9 @@ dir.create("../ALPP_PDFs");
 ########################################################################################################################
 
 
-for (i in seq(31:33)) {
+for (i in seq(32,33)) {
   
-  
+  i=33
   Texture.data.0<-ALPP.Texture   ;
   
   ALPP.Tables <- extract_tables(paste0('../ALPP_PDFs/','ALLP', i, '.pdf'), pages=c(127:137) ) ;
@@ -65,7 +65,7 @@ for (i in seq(31:33)) {
   
   ########## Extract the Sand Data Summary ########################
   
-  sss<-ALPP.Tables[grepl('(SubTestCode 189)',ALPP.Tables)][[3]] ;
+  sss<-ALPP.Tables[grepl('(SubTestCode 189)',ALPP.Tables)][[2]] ;
   
   data.sss<-data.frame(sss[2:4,2:4], stringsAsFactors = F) ;
   
