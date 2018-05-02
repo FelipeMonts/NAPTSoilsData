@@ -42,9 +42,11 @@ library(tabulizer)
 library(dplyr)
 
 
-<<<<<<< HEAD
-  ALPP.Tables <- extract_tables(paste0('../ALPP_PDFs/','ALLP', 22, '.pdf'),pages=c(125:127)) ;
+
+  ALPP.Tables <- extract_tables(paste0('../ALPP_PDFs/','ALLP', 20, '.pdf'),pages=c(113:115)) ;
   
+  
+  Sample.ID<-c('SRS1301' , 'SRS1302', 'SRS1303' ,  'SRS1304' , 'SRS1305') ;
   # 
   # for (k in seq(1,length(NAPT.archive.paths))) {
   #   download.file(NAPT.archive.paths[k], destfile = paste0("../NAPT_ARCHIVE_PDFs/pdf_",k,".pdf"), mode='wb')
@@ -59,7 +61,7 @@ sss<-ALPP.Tables[[1]];
   
 Median.row<-which(sss[,1] == "Grand Median") ;
 MAD.row<-which(sss[,1] == "Median Abs Dev") ;
-Sample.ID<-c('SRS1311' , 'SRS1312', 'SRS1313' ,  'SRS1314' , 'SRS1315') ;
+
  
 
  
@@ -120,40 +122,13 @@ names(data.ccc)[1:2]<-c('Clay_Mean' , 'Clay_MAD') ;
   
   Texture.data<-merge(merge(data.sss, data.lll),data.ccc) ;
   
-  Texture.data.0<-Texture.data  ;
-  
   ALPP.Texture<-rbind(Texture.data.0,Texture.data)  ;
   
-  
+  # ALPP.Texture<-Texture.data  ;
   
   rm(Texture.data , Texture.data.0)
   
   
   
 
-=======
-ALPP.Tables <- extract_tables(paste0('../ALPP_PDFs/','ALLP', 34, '.pdf')) ;
 
-# 
-# for (k in seq(1,length(NAPT.archive.paths))) {
-#   download.file(NAPT.archive.paths[k], destfile = paste0("../NAPT_ARCHIVE_PDFs/pdf_",k,".pdf"), mode='wb')
-#   }
->>>>>>> parent of 62dcf35... working on details of code to extract ALPP pdf information more effectively
-
-sssss<-ALPP.Tables[grepl('(SubTestCode 189)',ALPP.Tables)][[3]] ;
-
-str_split(sssss[2,1], " ")
-
-str_split(sssss[3,1], " ")
-
-str_split(sssss[4,1], " ")
-
-str(sssss)
-
-
-
-Sand<-ALPP.Tables[157][[1]]
-
-str(Sand[[1]])
-
-ALPP.Tables['Sand 2000-50$']
