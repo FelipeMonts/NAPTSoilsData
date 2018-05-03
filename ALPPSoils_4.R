@@ -43,14 +43,14 @@ library(dplyr)
 
 
 
-  ALPP.Tables <- extract_tables(paste0('../ALPP_PDFs/','ALLP',31, '.pdf'), pages=c(130,132,134)) ;
+  ALPP.Tables <- extract_tables(paste0('../ALPP_PDFs/','ALLP',32, '.pdf'), pages=c(131,133,135)) ;
   
   
   
-  Sample.ID<-c('SRS1611',
-               'SSR1612',
-               'SRS1613',
-               'SRS1614',
+  Sample.ID<-c('SRS1701',
+               'SSR1702',
+               'SRS1703',
+               'SRS1704',
                'SRS1615'  ) ;
   # 
   # for (k in seq(1,length(NAPT.archive.paths))) {
@@ -72,18 +72,6 @@ data.sss<-data.frame(as.numeric(sss[Median.row,which(!is.na(as.numeric(sss[Media
 
 str(data.sss)
 
-
-data.sss[3,1]<-as.numeric(str_split(sss[Median.row,4]," ")[[1]][1])
-data.sss[4,1]<-as.numeric(str_split(sss[Median.row,4]," ")[[1]][2])
-data.sss[5,1]<-as.numeric(str_split(sss[Median.row,4]," ")[[1]][3])
-
-
-data.sss[3,2]<-as.numeric(str_split(sss[MAD.row,4]," ")[[1]][1])
-data.sss[4,2]<-as.numeric(str_split(sss[MAD.row,4]," ")[[1]][2])
-data.sss[5,2]<-as.numeric(str_split(sss[MAD.row,4]," ")[[1]][3])
-
-
- 
 data.sss$Sample<-Sample.ID  ;
 
 names(data.sss)[1:2]<-c('Sand_Mean','Sand_MAD' ) ;
@@ -92,7 +80,7 @@ names(data.sss)[1:2]<-c('Sand_Mean','Sand_MAD' ) ;
   
 ########## Extract the Silt Data Summary ########################
   
-lll<-ALPP.Tables[[4]];
+lll<-ALPP.Tables[[2]];
 
 Median.row<-which(lll[,1] == "Grand Median") ;
 MAD.row<-which(lll[,1] == "Median Abs Dev") ;
@@ -105,15 +93,6 @@ data.lll<-data.frame(as.numeric(lll[Median.row,which(!is.na(as.numeric(lll[Media
 str(data.lll)
 
 
-data.lll[3,1]<-as.numeric(str_split(lll[Median.row,4]," ")[[1]][1])
-data.lll[4,1]<-as.numeric(str_split(lll[Median.row,4]," ")[[1]][2])
-data.lll[5,1]<-as.numeric(str_split(lll[Median.row,4]," ")[[1]][3])
-
-
-data.lll[3,2]<-as.numeric(str_split(lll[MAD.row,4]," ")[[1]][1])
-data.lll[4,2]<-as.numeric(str_split(lll[MAD.row,4]," ")[[1]][2])
-data.lll[5,2]<-as.numeric(str_split(lll[MAD.row,4]," ")[[1]][3])
-
 data.lll$Sample<-Sample.ID  ;
 
 names(data.lll)[1:2]<-c('Silt_Mean' , 'Silt_MAD' ) ;
@@ -124,7 +103,7 @@ names(data.lll)[1:2]<-c('Silt_Mean' , 'Silt_MAD' ) ;
   ########## Extract the Clay Data Summary ########################
   
 
-ccc<-ALPP.Tables[[6]];
+ccc<-ALPP.Tables[[3]];
 
 Median.row<-which(ccc[,1] == "Grand Median") ;
 MAD.row<-which(ccc[,1] == "Median Abs Dev") ;
@@ -135,18 +114,6 @@ MAD.row<-which(ccc[,1] == "Median Abs Dev") ;
 data.ccc<-data.frame(as.numeric(ccc[Median.row,which(!is.na(as.numeric(ccc[Median.row,])))]), as.numeric(ccc[MAD.row,which(!is.na(as.numeric(ccc[MAD.row,])))]))
 
 str(data.ccc)
-
-data.ccc[3,1]<-as.numeric(str_split(ccc[Median.row,4]," ")[[1]][1])
-data.ccc[4,1]<-as.numeric(str_split(ccc[Median.row,4]," ")[[1]][2])
-data.ccc[5,1]<-as.numeric(str_split(ccc[Median.row,4]," ")[[1]][3])
-
-
-data.ccc[3,2]<-as.numeric(str_split(ccc[MAD.row,4]," ")[[1]][1])
-data.ccc[4,2]<-as.numeric(str_split(ccc[MAD.row,4]," ")[[1]][2])
-data.ccc[5,2]<-as.numeric(str_split(ccc[MAD.row,4]," ")[[1]][3])
-
-
-
 
 
 data.ccc$Sample<-Sample.ID  ;
