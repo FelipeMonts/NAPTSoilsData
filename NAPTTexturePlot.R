@@ -150,74 +150,82 @@ TT.plot(
 
 library(XLConnect) ;
 
-NAPT.data<-readWorksheetFromFile("Results_data_all.xlsx", sheet="Combined") ;
+NAPT.data<-readWorksheetFromFile("Results_data_all.xlsx", sheet="Combined", startRow=1, endRow=864) ;
 str(NAPT.data)
 head(NAPT.data)
 
+NAPT.data.head<-NAPT.data[c(1,2),] ;
 
-NAPT.data.n<-NAPT.data[(which(NAPT.data[,1] == 'n')),] ;
-str(NAPT.data.n)
-head(NAPT.data.n)
+NAPT.data.nohead<-NAPT.data[-c(1,2),] ;
 
-NAPT.data.Not_n<-NAPT.data[(which(NAPT.data[,1] != 'n')),] ;
 
-str(NAPT.data.Not_n)
-head(NAPT.data.Not_n)
+NAPT.data.nohead$SAMPLE<-str_split(str_split(NAPT.data.nohead$X, " ", simplify = T)[,2], "_" ,simplify = T)[,1] ;
 
-NAPT.data.nohead<-NAPT.data.Not_n[-c(1,2),]
+NAPT.data.nohead$VALUE<-str_split(str_split(NAPT.data.nohead$X, " ", simplify = T)[,2], "_" ,simplify = T)[,2] ;
+
+
+NAPT.data.nohead.n_rows<-which(NAPT.data.nohead[,1] == 'n', arr.ind = T)  ;
+
+NAPT.data.nohead[NAPT.data.nohead.n_rows, 'SAMPLE']<-NAPT.data.nohead[NAPT.data.nohead.n_rows+1, 'SAMPLE'] ;
+
+NAPT.data.nohead[NAPT.data.nohead.n_rows, 'VALUE']<-NAPT.data.nohead[NAPT.data.nohead.n_rows, 'X'] ;
+
+
+str(NAPT.data.nohead)
 head(NAPT.data.nohead)
 
+NAPT.data.Median<-NAPT.data.nohead[NAPT.data.nohead$VALUE == 'Median',]
+str(NAPT.data.Median)
+head(NAPT.data.Median)
 
-NAPT.data.Median<-NAPT.data.nohead[grep('Median$',NAPT.data.nohead$X),]
+NAPT.Texture.Hydrom<-NAPT.data.Median[,c(1,2,3,4,8,9)] ;
 
-NAPT.Texture.Hygrom<-NAPT.data.Median[,c(1,2,3,4)]
-names(NAPT.Texture.Hygrom)<-c('Sample','SAND' , 'SILT' , 'CLAY') ;
-
-
+NAPT.Texture.Hydrom$ANALYSIS<-c('Hydrometer') ;
+head(NAPT.Texture.Hydrom)
 
 
-str(NAPT.Texture.Hygrom)
-head(NAPT.Texture.Hygrom)
+names(NAPT.Texture.Hydrom)[1:4]<-c('Sample','SAND' , 'SILT' , 'CLAY') ;
 
-NAPT.Texture.Pipet<-NAPT.data.Median[,c(1,5,6,7)] ;
+
+str(NAPT.Texture.Hydrom)
+head(NAPT.Texture.Hydrom)
+
+NAPT.Texture.Pipet<-NAPT.data.Median[,c(1,5,6,7,8,9)] ;
+
+NAPT.Texture.Pipet$ANALYSIS<-c('Pipette')  ;
 
 str(NAPT.Texture.Pipet)
 head(NAPT.Texture.Pipet,20)
 
-names(NAPT.Texture.Pipet)<-c('Sample', 'SAND' , 'SILT' , 'CLAY') ;
+names(NAPT.Texture.Pipet)[1:4]<-c('Sample', 'SAND' , 'SILT' , 'CLAY') ;
 
 
-NAPT.all<-rbind(NAPT.Texture.Hygrom,NAPT.Texture.Pipet)
+NAPT.all<-rbind(NAPT.Texture.Hydrom,NAPT.Texture.Pipet)  ;
 
 str(NAPT.all)
 head(NAPT.all,20)
 
-NAPT.all.notNA<-NAPT.all[which(!(is.na.data.frame(NAPT.all))),]
 
-str(NAPT.all.notNA)
-head(NAPT.all.notNA,20)
 
-NAPT.Texture.data<-data.frame(as.numeric(NAPT.all.notNA$SAND),as.numeric(NAPT.all.notNA$SILT),as.numeric(NAPT.all.notNA$CLAY)) ;
+NAPT.Texture.data<-data.frame(as.numeric(NAPT.all$SAND),as.numeric(NAPT.all$SILT),as.numeric(NAPT.all$CLAY),NAPT.all[,c(1,5,6,7)]) ;
 
 str(NAPT.Texture.data)
+
+names(NAPT.Texture.data)[c(1,2,3)]<-c('SAND' , 'SILT' , 'CLAY') ;
+
 head(NAPT.Texture.data)
-names(NAPT.Texture.data)<-c('SAND' , 'SILT' , 'CLAY') ;
-NAPT.Texture.data
+str(NAPT.Texture.data)
 
-NAPT.Texture.data$Sample<-NAPT.all.notNA$Sample ;
-
-
-which(is.na.data.frame(NAPT.Texture.data),arr.ind = T)
+which(is.na(NAPT.Texture.data$SAND))
 
 
+NAPT.Texture.data.norm.1<-TT.normalise.sum(NAPT.Texture.data[1:511,])
 
-NAPT.Texture.data.norm.1<-TT.normalise.sum(NAPT.Texture.data[c( 1:118),])
+NAPT.Texture.data.norm.2<-data.frame(NAPT.Texture.data.norm.1,NAPT.Texture.data[1:511,])
 
-NAPT.Texture.data.norm.1$Sample<-NAPT.Texture.data[c( 1:118),4] 
+which(is.na.data.frame(NAPT.Texture.data.norm.2),arr.ind = T)
 
-which(is.na.data.frame(NAPT.Texture.data.norm.1),arr.ind = T)
-
-NAPT<-NAPT.Texture.data.norm.1
+NAPT<-NAPT.Texture.data.norm.2
 
 head(NAPT)
 
@@ -243,7 +251,7 @@ TT.plot(
 
 
 
-ALLP.data.1<-readWorksheetFromFile("Results_data_all.xlsx", sheet="ALP") ;
+ALLP.data.1<-readWorksheetFromFile("Results_data_all.xlsx", sheet="ALP",startCol= 1, endCol=7) ;
 str(ALLP.data.1)
 head(ALLP.data.1)
 
@@ -254,10 +262,16 @@ ALLP.data.2<-ALLP.data.1[,c('Sand_Mean' , 'Silt_Mean' , 'Clay_Mean', 'Sample')] 
 names(ALLP.data.2)[1:3]<-c('SAND' , 'SILT' , 'CLAY')  ;
 
 
-ALLP<-TT.normalise.sum(ALLP.data.2)
+ALLP.norm<-TT.normalise.sum(ALLP.data.2)   ;
 
-ALLP$Sample<-ALLP.data.2$Sample
 
+ALLP<-data.frame(ALLP.norm,ALLP.data.2 )  ;
+
+
+
+
+str(ALLP)
+head(ALLP)
 
 ###########PLot the Data ######################
 
@@ -293,7 +307,7 @@ TT.plot(
   
 TT.points(
   geo,
-  tri.data           = ALLP,
+  tri.data           = ALLP.norm,
   #main               ="NAPT Texture Data",
   #class.p.bg.col     =T,
   col                ="RED",
@@ -337,13 +351,25 @@ ALLP.Texture.clases<-TT.points.in.classes(
 
 ALLP$TextureClass<-ALLP.Texture.clases ;
 
+ALLP$SAMPLE<-ALLP$Sample ;
+
+ALLP$VALUE<-c('Median') ;
+
+ALLP$ANALYSIS<-c('Hydrometer') ;
+
 head(ALLP)
+str(ALLP)
+
+head(NAPT)
+str(NAPT)
+
 
 
 All.Data<-rbind(NAPT,ALLP) ;
 
 head(All.Data)
 tail(All.Data)
+str(All.Data)
 
 All.Data$TextureFactor<-as.factor(All.Data$TextureClass) ;
 levels(All.Data$TextureFactor)
@@ -358,17 +384,18 @@ for (i in levels(All.Data$TextureFactor)) {
 
 ################### Select the Samples
 
-Selected_Samples<-c(Texture_C$Sample, Texture_CL$Sample[1:6] , Texture_L$Sample[1:6], Texture_LS$Sample[1:6], Texture_S$Sample[1:6],Texture_SCL$Sample, Texture_SICL$Sample[1:6],Texture_SIL$Sample[1:6], Texture_SL$Sample[1:6])
+Selected_Samples<-c(Texture_C$SAMPLE, Texture_CL$SAMPLE[1:6] , Texture_L$SAMPLE[1:6], Texture_LS$SAMPLE[1:6], Texture_S$SAMPLE[1:6],Texture_SCL$SAMPLE, Texture_SICL$SAMPLE[1:6],Texture_SIL$SAMPLE[1:6], Texture_SL$SAMPLE[1:6])
 
 
 
-Paper.Samples<-All.Data[All.Data$Sample %in% Selected_Samples, ]
+Paper.Samples<-All.Data[All.Data$SAMPLE %in% Selected_Samples,c(1,2,3,4,5,6,8,9,10,11) ]
 
 
 head(Paper.Samples)
 
+names(Paper.Samples)[1:6]<-c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm', 'SAND' , 'SILT' , 'CLAY')
 
-writeWorksheetToFile("Results_data_all.xlsx",Paper.Samples, sheet="Selected") ;
+writeWorksheetToFile("Results_data_all.xlsx",Paper.Samples, sheet="Selected_Original") ;
 
 
 ################### comine data from selected samples with the original data
@@ -383,3 +410,8 @@ head(Paper.Samples)
 
 str(NAPT.data.n)
 head(NAPT.data.n)
+
+str(NAPT.data.Not_n)
+head(NAPT.data.Not_n)
+
+
