@@ -164,37 +164,62 @@ NAPT.data.Not_n<-NAPT.data[(which(NAPT.data[,1] != 'n')),] ;
 str(NAPT.data.Not_n)
 head(NAPT.data.Not_n)
 
-NAPT.Texture.Hygrom<-NAPT.data.Not_n[-c(1,2),c(2,3,4)]
-names(NAPT.Texture.Hygrom)<-c('SAND' , 'SILT' , 'CLAY') ;
+NAPT.data.nohead<-NAPT.data.Not_n[-c(1,2),]
+head(NAPT.data.nohead)
+
+
+NAPT.data.Median<-NAPT.data.nohead[grep('Median$',NAPT.data.nohead$X),]
+
+NAPT.Texture.Hygrom<-NAPT.data.Median[,c(1,2,3,4)]
+names(NAPT.Texture.Hygrom)<-c('Sample','SAND' , 'SILT' , 'CLAY') ;
+
+
+
 
 str(NAPT.Texture.Hygrom)
 head(NAPT.Texture.Hygrom)
 
-NAPT.Texture.Pipet<-NAPT.data.Not_n[-c(1,2),c(5,6,7)] ;
+NAPT.Texture.Pipet<-NAPT.data.Median[,c(1,5,6,7)] ;
 
 str(NAPT.Texture.Pipet)
-head(NAPT.Texture.Pipet)
+head(NAPT.Texture.Pipet,20)
 
-names(NAPT.Texture.Pipet)<-c('SAND' , 'SILT' , 'CLAY') ;
+names(NAPT.Texture.Pipet)<-c('Sample', 'SAND' , 'SILT' , 'CLAY') ;
 
 
 NAPT.all<-rbind(NAPT.Texture.Hygrom,NAPT.Texture.Pipet)
 
 str(NAPT.all)
-head(NAPT.all)
+head(NAPT.all,20)
 
-NAPT.all.notNA<-NAPT.all[which(!(is.na.data.frame(NAPT.all[,1]))),]
+NAPT.all.notNA<-NAPT.all[which(!(is.na.data.frame(NAPT.all))),]
 
 str(NAPT.all.notNA)
-head(NAPT.all.notNA)
+head(NAPT.all.notNA,20)
 
-NAPT.Texture.data<-data.frame(lapply(NAPT.all.notNA,as.numeric))
+NAPT.Texture.data<-data.frame(as.numeric(NAPT.all.notNA$SAND),as.numeric(NAPT.all.notNA$SILT),as.numeric(NAPT.all.notNA$CLAY)) ;
 
 str(NAPT.Texture.data)
 head(NAPT.Texture.data)
+names(NAPT.Texture.data)<-c('SAND' , 'SILT' , 'CLAY') ;
+NAPT.Texture.data
 
-NAPT<-TT.normalise.sum(NAPT.Texture.data[-c(211,628),])
+NAPT.Texture.data$Sample<-NAPT.all.notNA$Sample ;
 
+
+which(is.na.data.frame(NAPT.Texture.data),arr.ind = T)
+
+
+
+NAPT.Texture.data.norm.1<-TT.normalise.sum(NAPT.Texture.data[c( 1:118),])
+
+NAPT.Texture.data.norm.1$Sample<-NAPT.Texture.data[c( 1:118),4] 
+
+which(is.na.data.frame(NAPT.Texture.data.norm.1),arr.ind = T)
+
+NAPT<-NAPT.Texture.data.norm.1
+
+head(NAPT)
 
 
 ###########PLot the Data ######################
@@ -204,6 +229,157 @@ TT.plot(
   tri.data           = NAPT,
   main               ="NAPT Texture Data",
   #class.p.bg.col     =T,
+  col                ="gray",
+  cex                = 0.5
+)
+
+
+########################################################################################################
+# 
+#                      Get the ALLP soil texture data and format it for plotting
+#
+#########################################################################################################
+
+
+
+
+ALLP.data.1<-readWorksheetFromFile("Results_data_all.xlsx", sheet="ALP") ;
+str(ALLP.data.1)
+head(ALLP.data.1)
+
+
+ALLP.data.2<-ALLP.data.1[,c('Sand_Mean' , 'Silt_Mean' , 'Clay_Mean', 'Sample')] ;
+
+
+names(ALLP.data.2)[1:3]<-c('SAND' , 'SILT' , 'CLAY')  ;
+
+
+ALLP<-TT.normalise.sum(ALLP.data.2)
+
+ALLP$Sample<-ALLP.data.2$Sample
+
+
+###########PLot the Data ######################
+
+
+TT.plot(
+  class.sys          ="USDA-NCSS.TT",
+  tri.data           = ALLP,
+  main               ="NAPT Texture Data",
+  #class.p.bg.col     =T,
+  col                ="gray",
+  cex                = 0.5
+)
+
+########### Plot all the data together the Data ######################
+
+TT.plot(
+  class.sys          ="USDA-NCSS.TT",
+  tri.data           = NAPT,
+  main               ="NAPT Texture Data",
+  #class.p.bg.col     =T,
+  col                ="BLUE",
+  cex                = 0.5
+)
+
+# geo<-TT.plot(
+#   class.sys          ="USDA-NCSS.TT",
+#   #tri.data           = NAPT,
+#   #main               ="NAPT Texture Data"
+#   #class.p.bg.col     =T,
+# )
+
+  
+  
+TT.points(
+  geo,
+  tri.data           = ALLP,
+  #main               ="NAPT Texture Data",
+  #class.p.bg.col     =T,
   col                ="RED",
   cex                = 0.5
 )
+
+
+TT.points(
+  geo,
+  tri.data           = Paper.Samples,
+  #main               ="NAPT Texture Data",
+  #class.p.bg.col     =T,
+  col                ="GREEN",
+  cex                = 0.6
+)
+
+########### Clasiffy the data into textures ######################
+
+
+NAPT.Texture.clases<-TT.points.in.classes(
+  tri.data = NAPT,
+  class.sys = "USDA-NCSS.TT",
+  PiC.type  = "t"
+  
+)
+
+
+NAPT$TextureClass<-NAPT.Texture.clases  ;
+head(NAPT)
+
+
+
+
+ALLP.Texture.clases<-TT.points.in.classes(
+  tri.data = ALLP,
+  class.sys = "USDA-NCSS.TT",
+  PiC.type  = "t"
+  
+)
+
+
+ALLP$TextureClass<-ALLP.Texture.clases ;
+
+head(ALLP)
+
+
+All.Data<-rbind(NAPT,ALLP) ;
+
+head(All.Data)
+tail(All.Data)
+
+All.Data$TextureFactor<-as.factor(All.Data$TextureClass) ;
+levels(All.Data$TextureFactor)
+
+for (i in levels(All.Data$TextureFactor)) {
+  #i=levels(All.Data$TextureFactor)[1]
+  
+  assign(paste0('Texture_',i),All.Data[All.Data$TextureFactor==i,])
+  
+}
+
+
+################### Select the Samples
+
+Selected_Samples<-c(Texture_C$Sample, Texture_CL$Sample[1:6] , Texture_L$Sample[1:6], Texture_LS$Sample[1:6], Texture_S$Sample[1:6],Texture_SCL$Sample, Texture_SICL$Sample[1:6],Texture_SIL$Sample[1:6], Texture_SL$Sample[1:6])
+
+
+
+Paper.Samples<-All.Data[All.Data$Sample %in% Selected_Samples, ]
+
+
+head(Paper.Samples)
+
+
+writeWorksheetToFile("Results_data_all.xlsx",Paper.Samples, sheet="Selected") ;
+
+
+################### comine data from selected samples with the original data
+
+
+str(NAPT.data)
+head(NAPT.data)
+
+str(Paper.Samples)
+head(Paper.Samples)
+
+
+str(NAPT.data.n)
+head(NAPT.data.n)
