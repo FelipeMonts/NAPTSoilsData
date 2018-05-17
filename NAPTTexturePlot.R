@@ -393,25 +393,15 @@ Paper.Samples<-All.Data[All.Data$SAMPLE %in% Selected_Samples,c(1,2,3,4,5,6,8,9,
 
 head(Paper.Samples)
 
-names(Paper.Samples)[1:6]<-c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm', 'SAND' , 'SILT' , 'CLAY')
+names(Paper.Samples)[1:6]<-c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm', 'SAND' , 'SILT' , 'CLAY')  ;
 
-writeWorksheetToFile("Results_data_all.xlsx",Paper.Samples, sheet="Selected_Original") ;
+##### Sample 2011-112 was not available  ######
 
+Paper.Samples[!which(Paper.Samples$SAMPLE == "2011-112"),]
 
-################### comine data from selected samples with the original data
-
-
-str(NAPT.data)
-head(NAPT.data)
-
-str(Paper.Samples)
-head(Paper.Samples)
+writeWorksheetToFile("Results_data_all.xlsx",Paper.Samples[-c(49,113),], sheet="Selected_Original") ;
 
 
-str(NAPT.data.n)
-head(NAPT.data.n)
 
-str(NAPT.data.Not_n)
-head(NAPT.data.Not_n)
 
 
