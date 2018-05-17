@@ -395,9 +395,15 @@ library(XLConnect) ;
 #writeWorksheetToFile("Results_data_all.xlsx",Results.data.all,sheet="Results_data_all_two")
 
 
-
-
-
-
-
-
+# ################## Rename files downloaded from NAPT ####################
+# 
+# str_split(list.files(path='../NAPT_PDFs')," - ", simplify=T)
+# 
+# ARCHIVE.NAPT.PDFS<-list.files(path='../NAPT_ARCHIVE_PDFs');
+# 
+# ARCHIVE.NAPT.names<-paste0()
+# 
+# sort(rep(seq(2008,1999),4))
+# 
+# ARCHIVE.NAPT.PDFS[order(ARCHIVE.NAPT.PDFS)]
+# 

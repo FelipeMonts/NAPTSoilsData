@@ -402,6 +402,24 @@ Paper.Samples[!which(Paper.Samples$SAMPLE == "2011-112"),]
 writeWorksheetToFile("Results_data_all.xlsx",Paper.Samples[-c(49,113),], sheet="Selected_Original") ;
 
 
+##################### PDF that need to be saved for the selected samples ################
+
+Selected_Samples.names<-data.frame(Paper.Samples[-c(49,113,122,121,120), 'SAMPLE'], as.numeric(str_split(Paper.Samples[-c(49,113,122,121,120), 'SAMPLE'], "-", simplify = T) [,1]), as.numeric(str_split(Paper.Samples[-c(49,113,122,121,120), 'SAMPLE'], "-", simplify = T) [,2]), stringsAsFactors = F)  ;
+
+names(Selected_Samples.names)<-c( 'SAMPLE', 'YEAR' , 'No' )
+
+head(Selected_Samples.names,18)
+
+str(Selected_Samples.names)
+
+Selected_Samples.names[order(Selected_Samples.names$YEAR),]
+
+Selected_Samples.names$Quarter<-cut(Selected_Samples.names$No, breaks=c(100,106,111,116,120),labels=c('Q1' , 'Q2' ,'Q3' , 'Q4') ) ;
+
+cut(Selected_Samples.names$No, breaks=c(100,106,111,116,120),labels=c('Q1' , 'Q2' ,'Q3' , 'Q4') )
+
+Selected_Samples.pdfs<-Selected_Samples.names[with(Selected_Samples.names, order(YEAR,Quarter)),]
 
 
 
+writeWorksheetToFile("Results_data_all.xlsx",Selected_Samples.pdfs[-c(49,113),], sheet="Selected_PDF") ;
