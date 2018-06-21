@@ -175,43 +175,64 @@ str(NAPT.data.nohead)
 head(NAPT.data.nohead)
 
 NAPT.data.Median<-NAPT.data.nohead[NAPT.data.nohead$VALUE == 'Median',]
+
 str(NAPT.data.Median)
 head(NAPT.data.Median)
 
-NAPT.Texture.Hydrom<-NAPT.data.Median[,c(1,2,3,4,8,9)] ;
+NAPT.data.MAD<-NAPT.data.nohead[NAPT.data.nohead$VALUE == 'MAD',]
 
-NAPT.Texture.Hydrom$ANALYSIS<-c('Hydrometer') ;
-head(NAPT.Texture.Hydrom)
-
-
-names(NAPT.Texture.Hydrom)[1:4]<-c('Sample','SAND' , 'SILT' , 'CLAY') ;
+str(NAPT.data.MAD)
+head(NAPT.data.MAD)
 
 
-str(NAPT.Texture.Hydrom)
-head(NAPT.Texture.Hydrom)
-
-NAPT.Texture.Pipet<-NAPT.data.Median[,c(1,5,6,7,8,9)] ;
-
-NAPT.Texture.Pipet$ANALYSIS<-c('Pipette')  ;
-
-str(NAPT.Texture.Pipet)
-head(NAPT.Texture.Pipet,20)
-
-names(NAPT.Texture.Pipet)[1:4]<-c('Sample', 'SAND' , 'SILT' , 'CLAY') ;
+NAPT.data.n<-NAPT.data.nohead[NAPT.data.nohead$VALUE == 'n',]
 
 
-NAPT.all<-rbind(NAPT.Texture.Hydrom,NAPT.Texture.Pipet)  ;
+str(NAPT.data.n)
+head(NAPT.data.n)
+
+NAPT.Texture<-merge(NAPT.data.Median,NAPT.data.MAD, by= 'SAMPLE')
+
+str(NAPT.Texture)
+head(NAPT.Texture,30)
+
+NAPT.Texture[which(!is.na(NAPT.Texture$V4.x)),]
+
+NAPT.Texture$ANALYSIS<-'PLACEHOLDER'  ;
+
+NAPT.Texture[which(!is.na(NAPT.Texture$V4.x)),'ANALYSIS']<- 'Pipette'  ;
+
+NAPT.Texture[which(is.na(NAPT.Texture$V4.x)),'ANALYSIS']<- 'Hydrometer'  ;
+
+NAPT.Texture.Hydrom<-NAPT.Texture[,c(1,2,3,4,5,9)] ;
+
+str(NAPT.Texture)
+head(NAPT.Texture,10)
+tail(NAPT.Texture,10)
+
+
+names(NAPT.Texture)<-c('SAMPLE' ,' NAME','SAND_Med' , 'SILT_Med' , 'CLAY_Med','SAND_Med' , 'SILT_Med' , 'CLAY_Med', 'VALUE.X', 'NAME_2' , 'SAND_MAD' , 'SILT_MAD' , 'CLAY_MAD','SAND_MAD' , 'SILT_MAD' , 'CLAY_MAD' , 'VALUE.Y', 'ANALYSIS') ;
+
+
+NAPT.Texture.Hydrometer<-NAPT.Texture[which(NAPT.Texture$ANALYSIS == 'Hydrometer'), c(1,3,4,5,11,12,13,18)] ;
+
+NAPT.Texture.Pipette<-NAPT.Texture[which(NAPT.Texture$ANALYSIS == 'Pipette'), c(1,6,7,8,14,15,16,18)] ;
+
+
+NAPT.all<-rbind(NAPT.Texture.Hydrometer,NAPT.Texture.Pipette)
+
 
 str(NAPT.all)
 head(NAPT.all,20)
+tail(NAPT.all,20)
 
+NAPT.all[which(NAPT.all$ANALYSIS == 'Pipette'),]
 
-
-NAPT.Texture.data<-data.frame(as.numeric(NAPT.all$SAND),as.numeric(NAPT.all$SILT),as.numeric(NAPT.all$CLAY),NAPT.all[,c(1,5,6,7)]) ;
+NAPT.Texture.data<-data.frame(as.numeric(NAPT.all$SAND_Med),as.numeric(NAPT.all$SILT_Med),as.numeric(NAPT.all$CLAY_Med),as.numeric(NAPT.all$SAND_MAD),as.numeric(NAPT.all$SILT_MAD),as.numeric(NAPT.all$CLAY_MAD), NAPT.all$SAMPLE, NAPT.all$ANALYSIS) ;
 
 str(NAPT.Texture.data)
 
-names(NAPT.Texture.data)[c(1,2,3)]<-c('SAND' , 'SILT' , 'CLAY') ;
+names(NAPT.Texture.data)[c(1:6)]<-c('SAND' , 'SILT' , 'CLAY', 'MAD_SAND' , 'MAD_SILT' , 'MAD_CLAY') ;
 
 head(NAPT.Texture.data)
 str(NAPT.Texture.data)
@@ -219,13 +240,13 @@ str(NAPT.Texture.data)
 which(is.na(NAPT.Texture.data$SAND))
 
 
-NAPT.Texture.data.norm.1<-TT.normalise.sum(NAPT.Texture.data[1:511,])
+NAPT.Texture.data.norm<-TT.normalise.sum(NAPT.Texture.data)  ;
 
-NAPT.Texture.data.norm.2<-data.frame(NAPT.Texture.data.norm.1,NAPT.Texture.data[1:511,])
+which(is.na.data.frame(NAPT.Texture.data.norm),arr.ind = T)
 
-which(is.na.data.frame(NAPT.Texture.data.norm.2),arr.ind = T)
+NAPT<-data.frame(NAPT.Texture.data.norm,NAPT.Texture.data)  ;
 
-NAPT<-NAPT.Texture.data.norm.2
+names(NAPT)[c(10,11)]<-c('SAMPLE' , 'ANALYSIS') ;
 
 head(NAPT)
 
@@ -256,10 +277,10 @@ str(ALLP.data.1)
 head(ALLP.data.1)
 
 
-ALLP.data.2<-ALLP.data.1[,c('Sand_Mean' , 'Silt_Mean' , 'Clay_Mean', 'Sample')] ;
+ALLP.data.2<-ALLP.data.1[,c('Sand_Mean' , 'Silt_Mean' , 'Clay_Mean', 'Sand_MAD' ,'Silt_MAD' , 'Clay_MAD' ,'Sample')] ;
 
 
-names(ALLP.data.2)[1:3]<-c('SAND' , 'SILT' , 'CLAY')  ;
+names(ALLP.data.2)<-c('SAND' , 'SILT' , 'CLAY', 'MAD_SAND' , 'MAD_SILT' , 'MAD_CLAY', 'SAMPLE')  ;
 
 
 ALLP.norm<-TT.normalise.sum(ALLP.data.2)   ;
@@ -349,13 +370,15 @@ ALLP.Texture.clases<-TT.points.in.classes(
 )
 
 
+ALLP$ANALYSIS<-c('Hydrometer') ;
+
+
 ALLP$TextureClass<-ALLP.Texture.clases ;
 
-ALLP$SAMPLE<-ALLP$Sample ;
 
-ALLP$VALUE<-c('Median') ;
 
-ALLP$ANALYSIS<-c('Hydrometer') ;
+
+
 
 head(ALLP)
 str(ALLP)
@@ -382,24 +405,31 @@ for (i in levels(All.Data$TextureFactor)) {
 }
 
 
+head(Texture_C)
+
+
+
+
+
+
+
+
+
+
 ################### Select the Samples
 
-Selected_Samples<-c(Texture_C$SAMPLE, Texture_CL$SAMPLE[1:6] , Texture_L$SAMPLE[1:6], Texture_LS$SAMPLE[1:6], Texture_S$SAMPLE[1:6],Texture_SCL$SAMPLE, Texture_SICL$SAMPLE[1:6],Texture_SIL$SAMPLE[1:6], Texture_SL$SAMPLE[1:6])
+Selected_Samples<-rbind(Texture_C, Texture_CL[1:6,] , Texture_LS[1:6,], Texture_S[1:6,],Texture_SCL, Texture_SICL[1:6,],Texture_SIL[1:6,], Texture_SL[1:6,])
 
 
+head(Selected_Samples)
 
-Paper.Samples<-All.Data[All.Data$SAMPLE %in% Selected_Samples,c(1,2,3,4,5,6,8,9,10,11) ]
-
-
-head(Paper.Samples)
-
-names(Paper.Samples)[1:6]<-c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm', 'SAND' , 'SILT' , 'CLAY')  ;
+names(Selected_Samples)[1:6]<-c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm', 'SAND' , 'SILT' , 'CLAY')  ;
 
 ##### Sample 2011-112 was not available  ######
 
-Paper.Samples[!which(Paper.Samples$SAMPLE == "2011-112"),]
+Selected_Samples[!which(Selected_Samples$SAMPLE == "2011-112"),]
 
-writeWorksheetToFile("Results_data_all.xlsx",Paper.Samples[-c(49,113),], sheet="Selected_Original") ;
+writeWorksheetToFile("Results_data_all.xlsx",Selected_Samples, sheet="Selected_Original") ;
 
 
 ##################### PDF that need to be saved for the selected samples ################
@@ -423,3 +453,62 @@ Selected_Samples.pdfs<-Selected_Samples.names[with(Selected_Samples.names, order
 
 
 writeWorksheetToFile("Results_data_all.xlsx",Selected_Samples.pdfs[-c(49,113),], sheet="Selected_PDF") ;
+
+
+#################################### Retrieve Soil organic Matter and Carbonates  from PDFS of selected samples  ############################
+
+# Soil organic Matter and Carbonates were copied into an excell sheet and then read into R for formatting  ###
+
+SoilCarbonCarbonates<-readWorksheetFromFile("Results_data_all.xlsx", sheet="Carbon and carbonates", header=T) ;
+
+head(SoilCarbonCarbonates)
+str(SoilCarbonCarbonates)
+
+# SCC.t<-data.frame(t(SoilCarbonCarbonates[,7:16]), stringsAsFactors = F);
+# str(SCC.t)
+
+#rep(seq(SoilCarbonCarbonates[2,2],SoilCarbonCarbonates[2,3]),each=2)
+
+########### Going  along the analysis direction (Horizontal)  First and then along the year (vertical) second  #########
+
+
+
+SCC.Data<-data.frame(SoilCarbonCarbonates[1,1], rep(seq(SoilCarbonCarbonates[1,2],SoilCarbonCarbonates[1,3]),each=2), SoilCarbonCarbonates[1,4], rep(c('Median', 'MAD'),5),t(SoilCarbonCarbonates[,7:16])[,1] , SoilCarbonCarbonates[1,6] ) ;
+
+names(SCC.Data)<-c('YEAR' , 'SAMPLE' , 'ANALYSIS' ,'TYPE' , 'VALUE' , 'n');
+
+SCC.Data.0<-SCC.Data;
+
+
+
+
+
+for (j in seq(2,12))  {
+  
+  for ( i in seq(2,5) ) {
+    
+    SCC.Data<-data.frame(SoilCarbonCarbonates[j,1], rep(seq(SoilCarbonCarbonates[j,2],SoilCarbonCarbonates[j,3]),each=2), SoilCarbonCarbonates[j,(4+(13*(i-1)))], rep(c('Median', 'MAD'),5),t(SoilCarbonCarbonates[,seq(7+((i-1)*13),7+9+((i-1)*13))])[,1] , SoilCarbonCarbonates[j,6+((i-1)*13)] ) ;
+    
+    names(SCC.Data)<-c('YEAR' , 'SAMPLE' , 'ANALYSIS' ,'TYPE' , 'VALUE' , 'n');
+    
+    SCC.Data
+    
+    SCC.Data.1<-rbind(SCC.Data.0,SCC.Data)
+    
+    SCC.Data.0<-SCC.Data.1
+    
+    rm(SCC.Data,SCC.Data.1)
+    
+  }
+  
+  
+}
+
+##############Printout the results to an excell spreadsheet  ###########
+
+
+
+writeWorksheetToFile("Results_data_all.xlsx",SCC.Data.0, sheet="Carbon and Carbonates table") ;
+
+
+
