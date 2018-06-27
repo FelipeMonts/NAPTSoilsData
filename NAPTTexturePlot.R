@@ -459,7 +459,7 @@ writeWorksheetToFile("Results_data_all.xlsx",Selected_Samples.pdfs[-c(49,113),],
 
 # Soil organic Matter and Carbonates were copied into an excell sheet and then read into R for formatting  ###
 
-SoilCarbonCarbonates<-readWorksheetFromFile("Results_data_all.xlsx", sheet="Carbon and carbonates", header=T) ;
+SoilCarbonCarbonates<-readWorksheetFromFile("Results_data_all.xlsx", sheet="Carbon and carbonates", header=T, startRow=2) ;
 
 head(SoilCarbonCarbonates)
 str(SoilCarbonCarbonates)
@@ -471,27 +471,24 @@ str(SoilCarbonCarbonates)
 
 ########### Going  along the analysis direction (Horizontal)  First and then along the year (vertical) second  #########
 
+i=1
+j=1
 
+SCC.Data.0<-data.frame(SoilCarbonCarbonates[j,1], rep(seq(SoilCarbonCarbonates[j,2],SoilCarbonCarbonates[j,3]),each=2), SoilCarbonCarbonates[j,(4+(13*(i-1)))], rep(c('Median', 'MAD'),5),t(SoilCarbonCarbonates[j,seq(7+((i-1)*13),7+9+((i-1)*13))])[,1] , SoilCarbonCarbonates[j,6+((i-1)*13)] ) ;
 
-SCC.Data<-data.frame(SoilCarbonCarbonates[1,1], rep(seq(SoilCarbonCarbonates[1,2],SoilCarbonCarbonates[1,3]),each=2), SoilCarbonCarbonates[1,4], rep(c('Median', 'MAD'),5),t(SoilCarbonCarbonates[,7:16])[,1] , SoilCarbonCarbonates[1,6] ) ;
+names(SCC.Data.0)<-c('YEAR' , 'SAMPLE' , 'ANALYSIS' ,'TYPE' , 'VALUE' , 'n');
 
-names(SCC.Data)<-c('YEAR' , 'SAMPLE' , 'ANALYSIS' ,'TYPE' , 'VALUE' , 'n');
+SCC.Data.0
 
-SCC.Data.0<-SCC.Data;
-
-
-
-
-
-for (j in seq(2,12))  {
+for (j in seq(1,12))  {
   
-  for ( i in seq(2,5) ) {
+  for ( i in seq(1,5) ) {
     
-    SCC.Data<-data.frame(SoilCarbonCarbonates[j,1], rep(seq(SoilCarbonCarbonates[j,2],SoilCarbonCarbonates[j,3]),each=2), SoilCarbonCarbonates[j,(4+(13*(i-1)))], rep(c('Median', 'MAD'),5),t(SoilCarbonCarbonates[,seq(7+((i-1)*13),7+9+((i-1)*13))])[,1] , SoilCarbonCarbonates[j,6+((i-1)*13)] ) ;
+    SCC.Data<-data.frame(SoilCarbonCarbonates[j,1], rep(seq(SoilCarbonCarbonates[j,2],SoilCarbonCarbonates[j,3]),each=2), SoilCarbonCarbonates[j,(4+(13*(i-1)))], rep(c('Median', 'MAD'),5),t(SoilCarbonCarbonates[j,seq(7+((i-1)*13),7+9+((i-1)*13))])[,1] , SoilCarbonCarbonates[j,6+((i-1)*13)] ) ;
     
     names(SCC.Data)<-c('YEAR' , 'SAMPLE' , 'ANALYSIS' ,'TYPE' , 'VALUE' , 'n');
     
-    SCC.Data
+    print(SCC.Data)
     
     SCC.Data.1<-rbind(SCC.Data.0,SCC.Data)
     
@@ -505,6 +502,7 @@ for (j in seq(2,12))  {
 }
 
 ##############Printout the results to an excell spreadsheet  ###########
+
 
 
 
