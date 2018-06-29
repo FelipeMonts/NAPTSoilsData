@@ -1,3 +1,18 @@
+##############################################################################################################
+# 
+# 
+# Program to Extract soil Texture data from the NAPT pdf document data base and plot texture plots from them.
+# 
+# Felipe Montes 2018 
+# 
+# Uses the  package 'soiltexture' to plot the texture
+# Also uses the package 'XLConnect' to read and write information from excel spreadsheets with soil samples information
+# 
+# 
+############################################################################################################### 
+
+
+
 #  Tell the program where the package libraries are  #####################
 
 
@@ -433,6 +448,8 @@ writeWorksheetToFile("Results_data_all.xlsx",Selected_Samples, sheet="Selected_O
 
 
 ##################### PDF that need to be saved for the selected samples ################
+
+Paper.Samples<-Selected_Samples ;
 
 Selected_Samples.names<-data.frame(Paper.Samples[-c(49,113,122,121,120), 'SAMPLE'], as.numeric(str_split(Paper.Samples[-c(49,113,122,121,120), 'SAMPLE'], "-", simplify = T) [,1]), as.numeric(str_split(Paper.Samples[-c(49,113,122,121,120), 'SAMPLE'], "-", simplify = T) [,2]), stringsAsFactors = F)  ;
 
