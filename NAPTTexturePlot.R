@@ -472,6 +472,8 @@ Selected_Samples.pdfs<-Selected_Samples.names[with(Selected_Samples.names, order
 writeWorksheetToFile("Results_data_all.xlsx",Selected_Samples.pdfs[-c(49,113),], sheet="Selected_PDF") ;
 
 
+
+
 #################################### Retrieve Soil organic Matter and Carbonates  from PDFS of selected samples  ############################
 
 # Soil organic Matter and Carbonates were copied into an excell sheet and then read into R for formatting  ###
@@ -523,7 +525,47 @@ for (j in seq(1,12))  {
 
 
 
-writeWorksheetToFile("Results_data_all.xlsx",SCC.Data.0, sheet="Carbon and Carbonates table") ;
+writeWorksheetToFile("Results_data_all.xlsx",SCC.Data.0[-c(1:10),], sheet="Carbon and Carbonates table") ;
 
 
+############## Format the data into a table that is easy to incorporate into Giovani's data structure ####################################
+
+CarbonANDCarbonates.data<-SCC.Data.0[-c(1:10),] ;
+
+CarbonANDCarbonates.data$Sample.ID<-paste0(CarbonANDCarbonates.data$YEAR,"-",CarbonANDCarbonates.data$SAMPLE) ;
+
+CarbonANDCarbonates.noMAD.data<-CarbonANDCarbonates.data[which(CarbonANDCarbonates.data$TYPE == c('Median')),] ;
+
+str(CarbonANDCarbonates.noMAD.data)
+
+levels(CarbonANDCarbonates.noMAD.data$ANALYSIS)
+
+TOC<-CarbonANDCarbonates.data[which(CarbonANDCarbonates.data$TYPE == c('Median') & CarbonANDCarbonates.data$ANALYSIS == c('Soil TOC (Combustion)')),]  ;
+
+TC<-CarbonANDCarbonates.data[which(CarbonANDCarbonates.data$TYPE == c('Median') & CarbonANDCarbonates.data$ANALYSIS == c('Soil Total C (Combustion)')),]  ;
+
+SOM_Walkley<-CarbonANDCarbonates.data[which(CarbonANDCarbonates.data$TYPE == c('Median') & CarbonANDCarbonates.data$ANALYSIS == c('SOM - Walkley-Black')),]  ;
+
+
+SOM_LOI<-CarbonANDCarbonates.data[which(CarbonANDCarbonates.data$TYPE == c('Median') & CarbonANDCarbonates.data$ANALYSIS == c('SOM - LOI (% Wt loss)')),]  ;
+
+CaCO3<-CarbonANDCarbonates.data[which(CarbonANDCarbonates.data$TYPE == c('Median') & CarbonANDCarbonates.data$ANALYSIS == c('CaCO3 Content')),]  ;
+
+
+##### Agregating the table
+
+Soil_C_CaCO3.1<-merge(TOC[,c('ANALYSIS', 'VALUE' , 'Sample.ID')],TC[,c('ANALYSIS', 'VALUE' , 'Sample.ID')] , by="Sample.ID") ;
+
+Soil_C_CaCO3.2<-merge(SOM_Walkley[,c('ANALYSIS', 'VALUE' , 'Sample.ID')],SOM_LOI[,c('ANALYSIS', 'VALUE' , 'Sample.ID')] , by="Sample.ID") ;
+
+
+Soil_C_CaCO3.3<-merge(Soil_C_CaCO3.2, CaCO3[,c('ANALYSIS', 'VALUE' , 'Sample.ID')] , by="Sample.ID") ;
+
+
+Soil_C_CaCO3<-merge(Soil_C_CaCO3.3, Soil_C_CaCO3.1, by="Sample.ID") ;
+
+
+
+
+######### Need to get the SRS Sample Data  and incorporate it to the Carbonates
 
