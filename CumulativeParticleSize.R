@@ -28,3 +28,97 @@ rm(list = ls())
 # Set your working directory to some place you can find
 
 setwd("C:/Felipe/LaserDifractionSoilTextureAnalysis/NAPTSoilsData") ;
+
+
+#install.packages("soiltexture")
+library('soiltexture')
+
+
+########################################################################################################
+# 
+#                      Get the NAPT soil texture data and format it for plotting
+#
+#########################################################################################################
+
+
+library(XLConnect) ;
+
+
+
+
+
+ALLP.data.1<-readWorksheetFromFile("Results_data_all.xlsx", sheet="ALP",startCol= 1, endCol=7) ;
+str(ALLP.data.1)
+head(ALLP.data.1)
+
+
+ALLP.data.2<-ALLP.data.1[,c('Sand_Mean' , 'Silt_Mean' , 'Clay_Mean', 'Sand_MAD' ,'Silt_MAD' , 'Clay_MAD' ,'Sample')] ;
+
+
+names(ALLP.data.2)<-c('SAND' , 'SILT' , 'CLAY', 'MAD_SAND' , 'MAD_SILT' , 'MAD_CLAY', 'SAMPLE')  ;
+
+
+ALLP.norm<-TT.normalise.sum(ALLP.data.2)   ;
+
+
+ALLP<-data.frame(ALLP.norm,ALLP.data.2 )  ;
+
+
+
+
+str(ALLP)
+head(ALLP)
+
+###########PLot the Data ######################
+
+
+TT.plot(
+  class.sys          ="USDA-NCSS.TT",
+  tri.data           = ALLP,
+  main               ="NAPT Texture Data",
+  #class.p.bg.col     =T,
+  col                ="gray",
+  cex                = 0.5
+)
+
+########### Plot all the data together the Data ######################
+
+TT.plot(
+  class.sys          ="USDA-NCSS.TT",
+  tri.data           = NAPT,
+  main               ="NAPT Texture Data",
+  #class.p.bg.col     =T,
+  col                ="BLUE",
+  cex                = 0.5
+)
+
+# geo<-TT.plot(
+#   class.sys          ="USDA-NCSS.TT",
+#   #tri.data           = NAPT,
+#   #main               ="NAPT Texture Data"
+#   #class.p.bg.col     =T,
+# )
+
+
+
+TT.points(
+  geo,
+  tri.data           = ALLP.norm,
+  #main               ="NAPT Texture Data",
+  #class.p.bg.col     =T,
+  col                ="RED",
+  cex                = 0.5
+)
+
+
+TT.points(
+  geo,
+  tri.data           = Paper.Samples,
+  #main               ="NAPT Texture Data",
+  #class.p.bg.col     =T,
+  col                ="GREEN",
+  cex                = 0.6
+)
+
+
+
