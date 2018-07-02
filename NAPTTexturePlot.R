@@ -520,23 +520,42 @@ for (j in seq(1,12))  {
   
 }
 
+
+################### Add The SRS-1604 SRS1508 sample data ####################################################
+
+SCC.Data.0
+
+head(SCC.Data.0)
+
+
+SRS_Samples<-readWorksheetFromFile("Results_data_all.xlsx", sheet="Carbon and carbonatesOriginal", header=T, startRow=1, endRow=25, startCol=42, endCol=48 ) ;
+
+
+SCC.Data.all<-rbind(SCC.Data.0, SRS_Samples)
+
+tail(SCC.Data.all,30)
+
 ##############Printout the results to an excell spreadsheet  ###########
 
 
 
 
-writeWorksheetToFile("Results_data_all.xlsx",SCC.Data.0[-c(1:10),], sheet="Carbon and Carbonates table") ;
+writeWorksheetToFile("Results_data_all.xlsx",SCC.Data.all[-c(1:10),], sheet="Carbon and Carbonates table") ;
 
 
 ############## Format the data into a table that is easy to incorporate into Giovani's data structure ####################################
 
-CarbonANDCarbonates.data<-SCC.Data.0[-c(1:10),] ;
+CarbonANDCarbonates.data<-SCC.Data.all[-c(1:10),] ;
 
 CarbonANDCarbonates.data$Sample.ID<-paste0(CarbonANDCarbonates.data$YEAR,"-",CarbonANDCarbonates.data$SAMPLE) ;
 
 CarbonANDCarbonates.noMAD.data<-CarbonANDCarbonates.data[which(CarbonANDCarbonates.data$TYPE == c('Median')),] ;
 
 str(CarbonANDCarbonates.noMAD.data)
+
+head(CarbonANDCarbonates.noMAD.data)
+
+tail(CarbonANDCarbonates.noMAD.data)
 
 levels(CarbonANDCarbonates.noMAD.data$ANALYSIS)
 
@@ -554,20 +573,37 @@ CaCO3<-CarbonANDCarbonates.data[which(CarbonANDCarbonates.data$TYPE == c('Median
 
 ##### Agregating the table
 
-Soil_C_CaCO3.1<-merge(TOC[,c('ANALYSIS', 'VALUE' , 'Sample.ID')],TC[,c('ANALYSIS', 'VALUE' , 'Sample.ID')] , by="Sample.ID") ;
+Soil_C_CaCO3.1<-merge(TOC[,c('ANALYSIS', 'VALUE' , 'Sample.ID')],TC[,c('ANALYSIS', 'VALUE' , 'Sample.ID')] , by="Sample.ID", all= T) ;
 
-Soil_C_CaCO3.2<-merge(SOM_Walkley[,c('ANALYSIS', 'VALUE' , 'Sample.ID')],SOM_LOI[,c('ANALYSIS', 'VALUE' , 'Sample.ID')] , by="Sample.ID") ;
-
-
-Soil_C_CaCO3.3<-merge(Soil_C_CaCO3.2, CaCO3[,c('ANALYSIS', 'VALUE' , 'Sample.ID')] , by="Sample.ID") ;
+Soil_C_CaCO3.2<-merge(SOM_Walkley[,c('ANALYSIS', 'VALUE' , 'Sample.ID')],SOM_LOI[,c('ANALYSIS', 'VALUE' , 'Sample.ID')] , by="Sample.ID", all= T ) ;
 
 
-Soil_C_CaCO3<-merge(Soil_C_CaCO3.3, Soil_C_CaCO3.1, by="Sample.ID") ;
+Soil_C_CaCO3.3<-merge(Soil_C_CaCO3.2, CaCO3[,c('ANALYSIS', 'VALUE' , 'Sample.ID')] , by="Sample.ID", all= T) ;
+
+
+Soil_C_CaCO3.4<-merge(Soil_C_CaCO3.3, Soil_C_CaCO3.1, by="Sample.ID", all= T) ;
+
+head(Soil_C_CaCO3.4)
+
+tail(Soil_C_CaCO3.4)
+
+Soil_C_CaCO3<-Soil_C_CaCO3.4[,c('Sample.ID', 'VALUE.x.x' , 'VALUE.y.x' , 'VALUE' , 'VALUE.x.y' , 'VALUE.y.y')] ;
+
+names(Soil_C_CaCO3)<-c('Sample.ID','SOM - Walkley-Black', 'SOM - LOI (% Wt loss)','CaCO3 Content' ,'Soil TOC (Combustion)' , 'Soil Total C (Combustion)')
+
+head(Soil_C_CaCO3)
+
+tail(Soil_C_CaCO3,20)
 
 
 
 
-######### Need to get the SRS Sample Data  and incorporate it to the Carbonates
+writeWorksheetToFile("Results_data_all.xlsx",Soil_C_CaCO3, sheet="C_CaCO3") ;
+
+
+###### Check with the data that Giovani has
+
+Giovani_C_CaCO3<-readWorksheetFromFile("../Manuscript/Location of samples completed FM 20180629.xlsx", 'Sheet1', header=T ) ;
 
 
 
