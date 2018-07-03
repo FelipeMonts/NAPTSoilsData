@@ -101,3 +101,6 @@ head(LassDiff.1)
 tail(LassDiff.1)
 
 names(LassDiff.1)<-c('Size (??m)',sapply(strsplit(as.character(LassDiff.name[1,]),"/"),"[", 1))
+
+barplot(LassDiff.1[,2],names.arg =LassDiff.1[,1], horiz = T )
+
