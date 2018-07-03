@@ -499,7 +499,7 @@ names(SCC.Data.0)<-c('YEAR' , 'SAMPLE' , 'ANALYSIS' ,'TYPE' , 'VALUE' , 'n');
 
 SCC.Data.0
 
-for (j in seq(1,12))  {
+for (j in seq(1,20))  {
   
   for ( i in seq(1,5) ) {
     
@@ -532,6 +532,8 @@ SRS_Samples<-readWorksheetFromFile("Results_data_all.xlsx", sheet="Carbon and ca
 
 
 SCC.Data.all<-rbind(SCC.Data.0, SRS_Samples)
+
+head(SCC.Data.all,20)
 
 tail(SCC.Data.all,30)
 
@@ -605,6 +607,13 @@ writeWorksheetToFile("Results_data_all.xlsx",Soil_C_CaCO3, sheet="C_CaCO3") ;
 
 Giovani_C_CaCO3<-readWorksheetFromFile("../Manuscript/Location of samples completed FM 20180629.xlsx", 'Sheet1', header=T ) ;
 
+str(Giovani_C_CaCO3)
+str(Soil_C_CaCO3)
+
+Soil_C_CaCO3[which(!Soil_C_CaCO3$Sample.ID %in% Giovani_C_CaCO3$Sample),'Sample.ID']
+
+Soil_C_CaCO3[which(Soil_C_CaCO3$Sample.ID == c('2016-111')),]
 
 
+Soil_C_CaCO3[which(Soil_C_CaCO3$Sample.ID == c('2016-114')),]
 
