@@ -81,44 +81,23 @@ TT.plot(
   cex                = 0.5
 )
 
-########### Plot all the data together the Data ######################
+########################################################################################################
+# 
+#                      Get the data from the lasser diffraction instrument for plotting
+#
+#########################################################################################################
 
-TT.plot(
-  class.sys          ="USDA-NCSS.TT",
-  tri.data           = NAPT,
-  main               ="NAPT Texture Data",
-  #class.p.bg.col     =T,
-  col                ="BLUE",
-  cex                = 0.5
-)
+LassDiff.name<-readWorksheetFromFile("../Manuscript/USDA Standards_PSA_Mastersizer_FM20180702.xlsx", sheet="correct (6)",startRow=1, endRow=1, header=F)[,-1] ; 
 
-# geo<-TT.plot(
-#   class.sys          ="USDA-NCSS.TT",
-#   #tri.data           = NAPT,
-#   #main               ="NAPT Texture Data"
-#   #class.p.bg.col     =T,
-# )
+str(LassDiff.name[1,1])
+head(LassDiff.name)
+
+sapply(strsplit(as.character(LassDiff.name[1,]),"/"),"[", 1)
+
+LassDiff.1<-readWorksheetFromFile("../Manuscript/USDA Standards_PSA_Mastersizer_FM20180702.xlsx", sheet="correct (6)",startRow=4, endRow=103, header=F) ; 
 
 
+head(LassDiff.1)
+tail(LassDiff.1)
 
-TT.points(
-  geo,
-  tri.data           = ALLP.norm,
-  #main               ="NAPT Texture Data",
-  #class.p.bg.col     =T,
-  col                ="RED",
-  cex                = 0.5
-)
-
-
-TT.points(
-  geo,
-  tri.data           = Paper.Samples,
-  #main               ="NAPT Texture Data",
-  #class.p.bg.col     =T,
-  col                ="GREEN",
-  cex                = 0.6
-)
-
-
-
+names(LassDiff.1)<-c('Size (??m)',sapply(strsplit(as.character(LassDiff.name[1,]),"/"),"[", 1))
