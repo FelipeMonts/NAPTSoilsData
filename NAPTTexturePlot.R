@@ -271,10 +271,12 @@ head(NAPT)
 TT.plot(
   class.sys          ="USDA-NCSS.TT",
   tri.data           = NAPT,
-  main               ="NAPT Texture Data",
+  main               ="NAPT  and ALP Samples Texture Data",
   #class.p.bg.col     =T,
-  col                ="gray",
-  cex                = 0.5
+  #pch                = "circles",
+  #col                ="black",
+  #cex                = 1,
+  frame.bg.col       ="gray85"
 )
 
 
@@ -312,53 +314,16 @@ head(ALLP)
 ###########PLot the Data ######################
 
 
-TT.plot(
+geo.ALLP<-TT.plot(
   class.sys          ="USDA-NCSS.TT",
-  tri.data           = ALLP,
-  main               ="NAPT Texture Data",
-  #class.p.bg.col     =T,
-  col                ="gray",
-  cex                = 0.5
-)
-
-########### Plot all the data together the Data ######################
-
-TT.plot(
-  class.sys          ="USDA-NCSS.TT",
-  tri.data           = NAPT,
-  main               ="NAPT Texture Data",
-  #class.p.bg.col     =T,
-  col                ="BLUE",
-  cex                = 0.5
-)
-
-# geo<-TT.plot(
-#   class.sys          ="USDA-NCSS.TT",
-#   #tri.data           = NAPT,
-#   #main               ="NAPT Texture Data"
-#   #class.p.bg.col     =T,
-# )
-
-  
-  
-TT.points(
-  geo,
-  tri.data           = ALLP.norm,
-  #main               ="NAPT Texture Data",
-  #class.p.bg.col     =T,
-  col                ="RED",
-  cex                = 0.5
+  # tri.data           = ALLP,
+  # #class.p.bg.col     =T,
+  # pch                = "O",
+  # col                ="white",
+  # cex                = 1,
 )
 
 
-TT.points(
-  geo,
-  tri.data           = Paper.Samples,
-  #main               ="NAPT Texture Data",
-  #class.p.bg.col     =T,
-  col                ="GREEN",
-  cex                = 0.6
-)
 
 ########### Clasiffy the data into textures ######################
 
@@ -442,9 +407,57 @@ names(Selected_Samples)[1:6]<-c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm', 'SAND' 
 
 ##### Sample 2011-112 was not available  ######
 
+
 Selected_Samples[!which(Selected_Samples$SAMPLE == "2011-112"),]
 
-writeWorksheetToFile("Results_data_all.xlsx",Selected_Samples, sheet="Selected_Original") ;
+Paper.Samples<-Selected_Samples[!which(Selected_Samples$SAMPLE == "2011-112"),c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm')] ;
+
+
+
+# writeWorksheetToFile("Results_data_all.xlsx",Selected_Samples, sheet="Selected_Original") ;
+
+########### Plot all the data together the Data ######################
+
+geo.ALLP<-TT.plot(
+  class.sys          ="USDA-NCSS.TT",
+  class.p.bg.col     =T
+)
+
+
+
+TT.plot(
+  geo.ALLP,
+  tri.data           = NAPT,
+  main               ="NAPT Texture Data",
+  class.p.bg.col     =c('gray90'),
+  pch                = 2,
+  col                ="black",
+  cex                = 1.2,
+  lwd                = 0.5
+)
+
+
+TT.points(
+  geo.ALLP,
+  tri.data           = ALLP.norm,
+  #main               ="NAPT Texture Data",
+  #class.p.bg.col     =T,
+  pch                = 6,
+  col                ="black",
+  cex                = 1.2,
+)
+
+TT.points(
+  geo.ALLP,
+  tri.data           = Paper.Samples,
+  css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
+  pch                = 1,
+  col                ="BLACK",
+  cex                = 2
+)
+
+
+
 
 
 ##################### PDF that need to be saved for the selected samples ################
