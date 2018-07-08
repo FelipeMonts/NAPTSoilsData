@@ -276,7 +276,7 @@ TT.plot(
   #pch                = "circles",
   #col                ="black",
   #cex                = 1,
-  frame.bg.col       ="gray85"
+  frame.bg.col       ="gray75"
 )
 
 
@@ -314,9 +314,9 @@ head(ALLP)
 ###########PLot the Data ######################
 
 
-geo.ALLP<-TT.plot(
+TT.plot(
   class.sys          ="USDA-NCSS.TT",
-  # tri.data           = ALLP,
+  tri.data           = ALLP,
   # #class.p.bg.col     =T,
   # pch                = "O",
   # col                ="white",
@@ -407,10 +407,7 @@ names(Selected_Samples)[1:6]<-c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm', 'SAND' 
 
 ##### Sample 2011-112 was not available  ######
 
-
-Selected_Samples[!which(Selected_Samples$SAMPLE == "2011-112"),]
-
-Paper.Samples<-Selected_Samples[!which(Selected_Samples$SAMPLE == "2011-112"),c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm')] ;
+Paper.Samples<-Selected_Samples[,c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm')] ;
 
 
 
@@ -419,18 +416,36 @@ Paper.Samples<-Selected_Samples[!which(Selected_Samples$SAMPLE == "2011-112"),c(
 ########### Plot all the data together the Data ######################
 
 geo.ALLP<-TT.plot(
-  class.sys          ="USDA-NCSS.TT",
-  class.p.bg.col     =T
+  class.sys          ="USDA-NCSS.TT"
 )
+
+###### Plot Option 1 ##################
 
 
 
 TT.plot(
+  #geo.ALLP,
+  class.sys          ="USDA-NCSS.TT",
+  main               ="Texture data for the NAPT, ALP and Selected soil samples",
+  tri.data           = Paper.Samples,
+  css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
+  pch                =1,
+  #bg                 =1,
+  col                ="black",
+  cex                = 2,
+  lwd                = 1,
+  frame.bg.col       ="gray75"
+  )
+
+
+
+TT.points(
   geo.ALLP,
+  # class.sys          ="USDA-NCSS.TT",
   tri.data           = NAPT,
-  main               ="NAPT Texture Data",
-  class.p.bg.col     =c('gray90'),
-  pch                = 2,
+  #main               ="NAPT Texture Data",
+  pch                = 24,
+  bg                 ="white",
   col                ="black",
   cex                = 1.2,
   lwd                = 0.5
@@ -440,24 +455,63 @@ TT.plot(
 TT.points(
   geo.ALLP,
   tri.data           = ALLP.norm,
-  #main               ="NAPT Texture Data",
   #class.p.bg.col     =T,
-  pch                = 6,
+  pch                = 25,
+  bg                 ="grey50",
   col                ="black",
   cex                = 1.2,
+  lwd                = 0.5
 )
+
+
+#############  Plot option 2 ############# 
+
+
+
+
+TT.plot(
+  #geo.ALLP,
+  class.sys          ="USDA-NCSS.TT",
+  main               ="Texture data for the NAPT, ALP and selected soil samples",
+  tri.data           = NAPT,
+  #main               ="NAPT Texture Data",
+  pch                = 24,
+  bg                 ="white",
+  col                ="black",
+  cex                = 1.5,
+  lwd                = 0.5,
+  frame.bg.col       ="gray75"
+)
+
+
+
+
+TT.points(
+  geo.ALLP,
+  tri.data           = ALLP.norm,
+  #class.p.bg.col     =T,
+  pch                = 25,
+  bg                 ="grey50",
+  col                ="black",
+  cex                = 1.5,
+  lwd                = 0.5
+)
+
+
 
 TT.points(
   geo.ALLP,
   tri.data           = Paper.Samples,
   css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
-  pch                = 1,
-  col                ="BLACK",
-  cex                = 2
+  pch                =21,
+  bg                 ="RED",
+  col                ="black",
+  cex                = 1.2,
+  lwd                = 1,
 )
 
 
-
+legend("topleft", legend = c("NAPT", "ALP", "This Study"), pch=c( 24, 25, 21), pt.bg = c("white", "grey50", "red"))
 
 
 ##################### PDF that need to be saved for the selected samples ################
