@@ -158,14 +158,14 @@ head(ScaledLD.data)
 ClayScaled.data<-ScaledLD.data ;
 ClayScaled.data[55:74,-1]<-0 ;
 
-
+head(ClayScaled.data)
 # create a data series only with silt
 
 SiltScaled.data<-ScaledLD.data ;
 SiltScaled.data[1:54,-1]<-0 ;
 
 
-################Ploting the scaled fraction with sand ##########
+################ Ploting the scaled fraction with sand ##########  
 
 ######## changing the margin parameter prr mar
 par(mar=c(5.1, 10, 4.1, 2.1))
@@ -173,20 +173,87 @@ par(mar=c(5.1, 10, 4.1, 2.1))
 # creating an adequate size labels numbering for the bar plot
 SizeLabels<-c(as.character(signif(ScaledLD.data[1:18,1],2)), as.character(signif(ScaledLD.data[19:38,1],2)), as.character(signif(ScaledLD.data[39:55,1],2)), as.character(signif(ScaledLD.data[56:74,1],2)))  ;
 
+i=2
 
 
 # plotting the figures as a high resolution tiff
 
-tiff(filename="LDPArticleSizeDist.tiff", width=3840 , height=3840, pointsize = 80  )
+for (i in seq(2,length(MassANDSand))) {
+  
+  tiff(filename=paste0("../Manuscript/Figures/LDPArticleSizeDist_", i,".tiff"), width=3840 , height=3840, pointsize = 80  )
+  
+  #initilaizing the horizontal bar plot with the first scaled LD results
+  
+  barplot(height=ClayScaled.data[,i], width=rep(1.4,74),names.arg=SizeLabels[seq(1,74)], space=0.2, col=rgb(1,0,0,0.5), horiz = T, ylim=c(0.01,110),las=1,cex.names = 0.5, cex.axis=1,xlab="Particle Size Fraction (%)", ylab=expression(paste("Equivalent particle size ( ", mu, "m)")))
+  
+  barplot(height=SiltScaled.data[,i], width=rep(1.4,74), space=0.2, col=rgb(0,0,1,0.5), horiz = T,las=1,add=T)
+  
+  
+  
+  dev.off()
+
+}
+
+# # ############################################################################################################################
+# 
+# 
+# 
+#                   Plotting sample comparisons for the LDM
+# 
+# 
+# # ############################################################################################################################
+
+
+# Original c('2011-118' ,'2011-119' , '2017-113' , '2012-103' , '2013-119' , 'SRS1709' , ' SRSSRS1508')
+
+#SamplesToCompare<-c('2011-106' ,'2011-109' , '2016-111' , '2012-101' , '2013-109' , 'SRS1709' , ' SRSSRS1508') ;
+
+############################################# PLot 1  2013-109 and 2016-111 #################################################################
+
+tiff(filename=paste0("../Manuscript/Figures/Comparison", 1,".tiff"), width=3840 , height=3840, pointsize = 80  )
 
 #initilaizing the horizontal bar plot with the first scaled LD results
 
-barplot(height=ClayScaled.data[,2], width=rep(1.4,74),names.arg=SizeLabels[seq(1,74)], space=0.2, col=rgb(1,0,0,0.5), horiz = T, ylim=c(0.01,110),las=1,cex.names = 0.5, cex.axis=1,xlim=c(0,2.5),xlab="Particle Size Fraction (%)", ylab=expression(paste("Equivalent particle size ( ", mu, "m)")))
+barplot(height=ClayScaled.data[,16], width=rep(1.4,74),names.arg=SizeLabels[seq(1,74)], space=0.2, col=rgb(1,1,1,0.5), horiz = T, ylim=c(0.01,110),las=1,cex.names = 0.5, cex.axis=1,xlab="Particle Size Fraction (%)", ylab=expression(paste("Equivalent particle size ( ", mu, "m)")))
 
-barplot(height=SiltScaled.data[,2], width=rep(1.4,74), space=0.2, col=rgb(0,0,1,0.5), horiz = T,las=1,add=T)
+barplot(height=SiltScaled.data[,16], width=rep(1.4,74), space=0.2, col=rgb(1,1,1,0.5), horiz = T,las=1,add=T)
 
-barplot(height=ClayScaled.data[,3], width=rep(1.4,74), space=0.2, col=rgb(1,0,0,0.5), horiz = T,las=1,add=T)
-barplot(height=SiltScaled.data[,3], width=rep(1.4,74), space=0.2, col=rgb(0,0,1,0.5), horiz = T,las=1,add=T)
+barplot(height=ClayScaled.data[,14], width=rep(1.4,74), space=0.2, col=rgb(1,0,0,0.5), horiz = T,las=1,add=T)
+
+barplot(height=SiltScaled.data[,14], width=rep(1.4,74), space=0.2, col=rgb(1,0,0,0.5), horiz = T,las=1,add=T)
+
+legend("bottomright", legend = c('2013-111','2016-111'), pch=c( 22, 22), pt.bg = c(rgb(1,1,1,0.5), rgb(1,0,0,0.5)), pt.lwd=3)
+
+text(2.5,112, "SILT", col="black")
+
+text(2.5,40, "CLAY", col="black")
+
+abline(h=91,lty=2, col=rgb(1,0,0,1), lwd=10)
+
+
+dev.off()
+
+############################################# PLot 2  SRS-1508  and SRS-1604 ####################################################################
+
+tiff(filename=paste0("../Manuscript/Figures/Comparison", 2,".tiff"), width=3840 , height=3840, pointsize = 80  )
+
+#initilaizing the horizontal bar plot with the first scaled LD results
+
+barplot(height=ClayScaled.data[,24], width=rep(1.4,74),names.arg=SizeLabels[seq(1,74)], space=0.2, col=rgb(0,0,1,0.5), horiz = T, ylim=c(0.01,110),las=1,cex.names = 0.5, cex.axis=1,xlab="Particle Size Fraction (%)", ylab=expression(paste("Equivalent particle size ( ", mu, "m)")))
+
+barplot(height=SiltScaled.data[,24], width=rep(1.4,74), space=0.2, col=rgb(0,0,1,0.5), horiz = T,las=1,add=T)
+
+barplot(height=ClayScaled.data[,20], width=rep(1.4,74), space=0.2, col=rgb(0,1,0,0.5), horiz = T,las=1,add=T)
+
+barplot(height=SiltScaled.data[,20], width=rep(1.4,74), space=0.2, col=rgb(0,1,0,0.5), horiz = T,las=1,add=T)
+
+legend("bottomright", legend = c('SRS-1508','SRS-1604'), pch=c( 22, 22), pt.bg = c(rgb(0,0,1,0.5), rgb(0,1,0,0.5)), pt.lwd=3)
+
+text(2.5,112, "SILT", col="black")
+
+text(2.5,40, "CLAY", col="black")
+
+abline(h=91,lty=2, col=rgb(1,0,0,1), lwd=10)
 
 
 dev.off()
@@ -194,6 +261,55 @@ dev.off()
 
 
 
+############################################# PLot 3  2013-109 and SRS-1604 ####################################################################
 
+tiff(filename=paste0("../Manuscript/Figures/Comparison", 3,".tiff"), width=3840 , height=3840, pointsize = 80  )
+
+#initilaizing the horizontal bar plot with the first scaled LD results
+
+barplot(height=ClayScaled.data[,14], width=rep(1.4,74),names.arg=SizeLabels[seq(1,74)], space=0.2, col=rgb(1,1,0,0.5), horiz = T, ylim=c(0.01,110),las=1,cex.names = 0.5, cex.axis=1,xlab="Particle Size Fraction (%)", ylab=expression(paste("Equivalent particle size ( ", mu, "m)")))
+
+barplot(height=SiltScaled.data[,14], width=rep(1.4,74), space=0.2, col=rgb(1,1,0,0.5), horiz = T,las=1,add=T)
+
+barplot(height=ClayScaled.data[,20], width=rep(1.4,74), space=0.2, col=rgb(1,0,1,0.5), horiz = T,las=1,add=T)
+
+barplot(height=SiltScaled.data[,20], width=rep(1.4,74), space=0.2, col=rgb(1,0,1,0.5), horiz = T,las=1,add=T)
+
+legend("bottomright", legend = c('2013-109','SRS-1604'), pch=c( 22, 22), pt.bg = c(rgb(1,1,0,0.5), rgb(1,0,1,0.5)), pt.lwd=3)
+
+text(2.5,112, "SILT", col="black")
+
+text(2.5,40, "CLAY", col="black")
+
+abline(h=91,lty=2, col=rgb(1,0,0,1), lwd=10)
+
+
+dev.off()
+
+
+############################################# PLot 4  SRS-1508  and SRS-1604 ####################################################################
+
+tiff(filename=paste0("../Manuscript/Figures/Comparison", 2,".tiff"), width=3840 , height=3840, pointsize = 80  )
+
+#initilaizing the horizontal bar plot with the first scaled LD results
+
+barplot(height=ClayScaled.data[,24], width=rep(1.4,74),names.arg=SizeLabels[seq(1,74)], space=0.2, col=rgb(0,0,1,0.5), horiz = T, ylim=c(0.01,110),las=1,cex.names = 0.5, cex.axis=1,xlab="Particle Size Fraction (%)", ylab=expression(paste("Equivalent particle size ( ", mu, "m)")))
+
+barplot(height=SiltScaled.data[,24], width=rep(1.4,74), space=0.2, col=rgb(0,0,1,0.5), horiz = T,las=1,add=T)
+
+barplot(height=ClayScaled.data[,20], width=rep(1.4,74), space=0.2, col=rgb(0,1,0,0.5), horiz = T,las=1,add=T)
+
+barplot(height=SiltScaled.data[,20], width=rep(1.4,74), space=0.2, col=rgb(0,1,0,0.5), horiz = T,las=1,add=T)
+
+legend("bottomright", legend = c('2013-111','2016-111'), pch=c( 22, 22), pt.bg = c(rgb(0,0,1,0.5), rgb(0,1,0,0.5)), pt.lwd=3)
+
+text(2.5,112, "SILT", col="black")
+
+text(2.5,40, "CLAY", col="black")
+
+abline(h=91,lty=2, col=rgb(1,0,0,1), lwd=10)
+
+
+dev.off()
 
 

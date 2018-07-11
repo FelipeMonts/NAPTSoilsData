@@ -32,6 +32,8 @@ setwd("C:/Felipe/LaserDifractionSoilTextureAnalysis/NAPTSoilsData") ;
 # if they are not already installed on your computer).
 # install.packages("httr", dependencies = TRUE)
 # install.packages("stringr", dependencies = TRUE)
+# install.packages("soiltexture")
+
 
 # httr is a package for downloading html
 library(httr)
@@ -45,6 +47,13 @@ library(XML)
 library(rvest)
 library(magrittr)
 
+# Package for soil texture plotting
+
+library('soiltexture')
+
+# Package for writing and reading excel files
+
+library(XLConnect) ;
 
 
 
@@ -91,8 +100,7 @@ library(magrittr)
 
 ##########################################################################################################################
 
-#install.packages("soiltexture")
-library('soiltexture')
+
 
 TT.plot(class.sys ='none' )
 
@@ -162,8 +170,6 @@ TT.plot(
 #
 #########################################################################################################
 
-
-library(XLConnect) ;
 
 NAPT.data<-readWorksheetFromFile("Results_data_all.xlsx", sheet="Combined", startRow=1, endRow=864) ;
 str(NAPT.data)
@@ -316,7 +322,7 @@ head(ALLP)
 
 TT.plot(
   class.sys          ="USDA-NCSS.TT",
-  tri.data           = ALLP,
+  tri.data           = ALLP
   # #class.p.bg.col     =T,
   # pch                = "O",
   # col                ="white",
@@ -416,7 +422,10 @@ Paper.Samples<-Selected_Samples[,c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm')] ;
 ########### Plot all the data together the Data ######################
 
 geo.ALLP<-TT.plot(
-  class.sys          ="USDA-NCSS.TT"
+  class.sys          ="USDA-NCSS.TT",
+  frame.bg.col       ="gray75",
+  bg                 ="white"
+  
 )
 
 ###### Plot Option 1 ##################
@@ -507,7 +516,7 @@ TT.points(
   bg                 ="RED",
   col                ="black",
   cex                = 1.2,
-  lwd                = 1,
+  lwd                = 1
 )
 
 
@@ -684,3 +693,104 @@ Soil_C_CaCO3[which(Soil_C_CaCO3$Sample.ID == c('2016-111')),]
 
 Soil_C_CaCO3[which(Soil_C_CaCO3$Sample.ID == c('2016-114')),]
 
+
+# ##########################################################################################################################################
+# 
+# 
+# 
+#                 Plot Texture data for samples selected for comparison between sedimentation and LDM
+# 
+# 
+# 
+# 
+##########################################################################################################################################
+
+###### Select the interesting samples to compare
+
+# Original c('2011-118' ,'2011-119' , '2017-113' , '2012-103' , '2013-119' , 'SRS1709' , ' SRSSRS1508')
+
+SamplesToCompare<-c('2011-106' ,'2011-109' , '2016-111' , '2012-101' , '2013-109' , 'SRS1709' , ' SRSSRS1508') ;
+
+Comparing.Samples<-Paper.Samples[which(Paper.Samples$SAMPLE %in% SamplesToCompare),]
+
+Comparing.Samples
+
+Paper.Samples$SAMPLE
+
+#############  Plot  ############# 
+
+
+tiff(filename="../Manuscript/Figures/ComparisonTexture.tiff", width=3840 , height=3840, pointsize = 80  )
+
+TT.plot(
+  class.sys          ="USDA-NCSS.TT",
+  main               ="Sample selected for comparison",
+  tri.data           = Comparing.Samples[1,],
+  css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
+  frame.bg.col       ="gray75",
+  pch                =21,
+  bg                 ="white",
+  cex                = 1.5,
+  lwd                = 1
+)
+
+
+TT.points(
+  geo.ALLP,
+  tri.data           = Comparing.Samples[2,],
+  css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
+  pch                = 21, 
+  bg                 ="Blue",
+  col                ="BLUE",
+  cex                = 1.2,
+  lwd                = 0.5
+)
+
+
+
+TT.points(
+  geo.ALLP,
+  tri.data           = Comparing.Samples[3,],
+  css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
+  pch                = 21, 
+  bg                 ="GREEN",
+  cex                = 1.2,
+  lwd                = 0.5
+)
+
+
+
+
+TT.points(
+  geo.ALLP,
+  tri.data           = Comparing.Samples[4,],
+  css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
+  pch                = 21, 
+  bg                 ="Yellow",
+  cex                = 1.2,
+  lwd                = 0.5
+)
+
+
+TT.points(
+  geo.ALLP,
+  tri.data           = Comparing.Samples[5,],
+  css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
+  pch                = 21, 
+  bg                 ="MAGENTA",
+  cex                = 1.2,
+  lwd                = 0.5
+)
+
+
+TT.points(
+  geo.ALLP,
+  tri.data           = Comparing.Samples[6,],
+  css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
+  pch                = 21, 
+  bg                 ="BLACK",
+  cex                = 1.2,
+  lwd                = 0.5
+)
+
+dev.off()
