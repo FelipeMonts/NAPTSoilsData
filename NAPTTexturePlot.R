@@ -413,11 +413,31 @@ names(Selected_Samples)[1:6]<-c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm', 'SAND' 
 
 ##### Sample 2011-112 was not available  ######
 
-Paper.Samples<-Selected_Samples[,c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm')] ;
-
+#Paper.Samples<-Selected_Samples[,c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm')] ;
 
 
 # writeWorksheetToFile("Results_data_all.xlsx",Selected_Samples, sheet="Selected_Original") ;
+
+
+########################################################################################################################################
+# 
+# 
+#                     !IMPORTANT NOTE!
+#       AFTER WORKING ON THE CODE TO GET THE MOST OF THE DATA READ, AFEW POINTS AND SUMARIES COULD NOT BE READ FOMR THE
+#       DO TO THE QUALITY OF THE PDF'S.  THEREFORE THE "Selected_Original" SPREADSHEET IN EXCELL WAS UPDATED AND SAVED WITH 
+#       THE NAME "Selected_Final".  THAT IS THE TABLE THAT HAS THE FI]NAL SAMPLE SELECTION
+# 
+# 
+########################################################################################################################################
+
+
+
+##### Reading the table with the final seltion of the samples and their data ################################
+
+
+Paper.Samples<-readWorksheetFromFile("Results_data_all.xlsx", sheet="Selected_Final",startCol= 1, endCol=10) ;
+
+head(Paper.Samples)
 
 ########### Plot all the data together the Data ######################
 
@@ -475,7 +495,9 @@ TT.points(
 
 #############  Plot option 2 ############# 
 
+# This is the beter option and therefore will be created as tiff 
 
+tiff(filename="../Manuscript/Figures/AllData.tiff", width=3840 , height=3840, pointsize = 80  )
 
 
 TT.plot(
@@ -521,6 +543,8 @@ TT.points(
 
 
 legend("topleft", legend = c("NAPT", "ALP", "This Study"), pch=c( 24, 25, 21), pt.bg = c("white", "grey50", "red"))
+
+dev.off()
 
 
 ##################### PDF that need to be saved for the selected samples ################
