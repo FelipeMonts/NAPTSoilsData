@@ -733,13 +733,17 @@ Soil_C_CaCO3[which(Soil_C_CaCO3$Sample.ID == c('2016-114')),]
 
 # Original c('2011-118' ,'2011-119' , '2017-113' , '2012-103' , '2013-119' , 'SRS1709' , ' SRSSRS1508')
 
-SamplesToCompare<-c('2011-106' ,'2011-109' , '2016-111' , '2012-101' , '2013-109' , 'SRS1709' , ' SRSSRS1508') ;
+SamplesToCompare<-c('2011-118' , '2017-113' , '2011-119' , '2012-103' , '2013-119' , 'SRS1709' , ' SRSSRS1508' ) ;
 
-Comparing.Samples<-Paper.Samples[which(Paper.Samples$SAMPLE %in% SamplesToCompare),]
+#SamplesToCompare<-c('2011-106' ,'2011-109' , '2016-111' , '2012-101' , '2013-109' , 'SRS1709' , ' SRSSRS1508') ;
+
+Comparing.Samples.all<-Paper.Samples[which(Paper.Samples$SAMPLE %in% SamplesToCompare),]
+
+Comparing.Samples<-unique(Comparing.Samples.all[which(Comparing.Samples.all$ANALYSIS == 'Hydrometer'), ])
 
 Comparing.Samples
 
-Paper.Samples$SAMPLE
+
 
 #############  Plot  ############# 
 
@@ -761,11 +765,10 @@ TT.plot(
 
 TT.points(
   geo.ALLP,
-  tri.data           = Comparing.Samples[2,],
+  tri.data           = Comparing.Samples[3,],
   css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
   pch                = 21, 
   bg                 ="Blue",
-  col                ="BLUE",
   cex                = 1.2,
   lwd                = 0.5
 )
@@ -774,7 +777,7 @@ TT.points(
 
 TT.points(
   geo.ALLP,
-  tri.data           = Comparing.Samples[3,],
+  tri.data           = Comparing.Samples[2,],
   css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
   pch                = 21, 
   bg                 ="GREEN",
@@ -809,12 +812,26 @@ TT.points(
 
 TT.points(
   geo.ALLP,
-  tri.data           = Comparing.Samples[6,],
+  tri.data           = Comparing.Samples[7,],
   css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
   pch                = 21, 
   bg                 ="BLACK",
   cex                = 1.2,
   lwd                = 0.5
 )
+
+
+TT.points(
+  geo.ALLP,
+  tri.data           = Comparing.Samples[6,],
+  css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
+  pch                = 21, 
+  bg                 ="RED",
+  cex                = 1.2,
+  lwd                = 0.5
+)
+
+
+
 
 dev.off()
