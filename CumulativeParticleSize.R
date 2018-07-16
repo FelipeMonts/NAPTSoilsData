@@ -44,32 +44,33 @@ library('soiltexture')
 library(XLConnect) ;
 
 
-LassDiff.name<-readWorksheetFromFile("../Manuscript/USDA Standards_PSA_Mastersizer_FM20180702.xlsx", sheet="correct (6)",startRow=1, endRow=1, header=F)[,-1] ; 
+LassDiff.name<-readWorksheetFromFile("../Manuscript/USDA Standards_PSA_Mastersizer_FM20180713.xlsx", sheet="correct (6)",startRow=2, endRow=2, header=F) ; 
 
 str(LassDiff.name[1,1])
 head(LassDiff.name)
 
 sapply(strsplit(as.character(LassDiff.name[1,]),"/"),"[", 1)
 
-LassDiff.1<-readWorksheetFromFile("../Manuscript/USDA Standards_PSA_Mastersizer_FM20180702.xlsx", sheet="correct (6)",startRow=4, endRow=103, header=F) ; 
+LassDiff.1<-readWorksheetFromFile("../Manuscript/USDA Standards_PSA_Mastersizer_FM20180713.xlsx", sheet="correct (6)",startRow=5, endRow=104, header=F) ; 
+
+
+names(LassDiff.1)<-c('Row','Size', 'nothing' ,sapply(strsplit(as.character(LassDiff.name[1,]),"/"),"[", 1))
 
 head(LassDiff.1)
 tail(LassDiff.1)
 
 
-
 ################ getting the total sample mass and the mass of Sand #################
 
 
-MassANDSand<-readWorksheetFromFile("../Manuscript/USDA Standards_PSA_Mastersizer_FM20180702.xlsx", sheet="correct (6)",startRow=109, endRow=110, startCol=3, header=F) ;
+MassANDSand<-readWorksheetFromFile("../Manuscript/USDA Standards_PSA_Mastersizer_FM20180702.xlsx", sheet="correct (6)",startRow=109, endRow=110, startCol=4, header=F) ;
 
 
 
-names(LassDiff.1)<-c('Size',sapply(strsplit(as.character(LassDiff.name[1,]),"/"),"[", 1))
 
 head(MassANDSand)
 
-barplot(LassDiff.1[,2],names.arg =LassDiff.1[,1], horiz = F)
+barplot(LassDiff.1[,4],names.arg =LassDiff.1[,2], horiz = F)
 
 
 
@@ -82,35 +83,35 @@ barplot(LassDiff.1[,2],names.arg =LassDiff.1[,1], horiz = F)
 
 ###### Trying cumulative distribution
 
-cumsum(LassDiff.1[1:74,2])
+cumsum(LassDiff.1[1:74,4])
 
 
-barplot(cumsum(LassDiff.1[1:74,2]),names.arg =LassDiff.1[1:74,1], horiz = T, xlim=c(0,100))
+barplot(cumsum(LassDiff.1[1:74,4]),names.arg =LassDiff.1[1:74,2], horiz = T, xlim=c(0,100))
 
 
 
 ###### Trying size distribution
 
+head(LassDiff.1)
+
+
+LassDiff.1[1:51,c(2,4)]
+
+LassDiff.1[52:74,c(2,4)]
+
+max(LassDiff.1[52:74,c(2,5)])
+
+barplot(height=LassDiff.1[1:74,4],width=rep(1,74), names.arg=LassDiff.1[1:74,2], col=NA, border=gray(0.5), horiz = T, ylim=c(0.01,100), xlim=c(0,5))
+barplot(height=LassDiff.1[1:74,4],width=rep(1,74), names.arg=LassDiff.1[1:74,2],beside=T, col=gray(0.3,alpha=0.5), horiz = T, ylim=c(0.01,100), xlim=c(0,max(LassDiff.1[52:74,c(2,3)])),add=T)
+barplot(as.matrix(LassDiff.1[1:74,5]), beside=T,add=T, col=rgb(1,0,1, alpha=0.5) , horiz = T)
 
 
 
-LassDiff.1[1:51,c(1,2)]
+barplot(height=LassDiff.1[1:74,4],width=diff(LassDiff.1[1:74,2],differences = 1), names.arg=LassDiff.1[1:74,2],beside=T, col=rgb(0,0,1, alpha=0.5), horiz = T, ylim=c(0.01,100), xlim=c(0,max(LassDiff.1[52:74,c(2,4)])))
+barplot(height=LassDiff.1[1:74,4],width=diff(LassDiff.1[1:74,2],differences = 1), names.arg=LassDiff.1[1:74,2],beside=T, col=rgb(1,0,0, alpha=0.5), horiz = T, ylim=c(0.01,100), xlim=c(0,max(LassDiff.1[52:74,c(2,3)])),add=T)
+barplot(as.matrix(LassDiff.1[1:74,5]),beside=T,add=T, col=rgb(1,0,1, alpha=0.5) , horiz = T)
 
-LassDiff.1[52:74,c(1,2)]
-
-max(LassDiff.1[52:74,c(2,3)])
-
-barplot(height=LassDiff.1[1:74,2],width=rep(1,74), names.arg=LassDiff.1[1:74,1], col=NA, border=gray(0.5), horiz = T, ylim=c(0.01,100), xlim=c(0,5))
-barplot(height=LassDiff.1[1:74,3],width=rep(1,74), names.arg=LassDiff.1[1:74,1],beside=T, col=gray(0.3,alpha=0.5), horiz = T, ylim=c(0.01,100), xlim=c(0,max(LassDiff.1[52:74,c(2,3)])),add=T)
-barplot(as.matrix(LassDiff.1[1:74,3]),beside=T,add=T, col=rgb(1,0,1, alpha=0.5) , horiz = T)
-
-
-
-barplot(height=LassDiff.1[1:74,2],width=diff(LassDiff.1[1:74,1],differences = 1), names.arg=LassDiff.1[1:74,1],beside=T, col=rgb(0,0,1, alpha=0.5), horiz = T, ylim=c(0.01,100), xlim=c(0,max(LassDiff.1[52:74,c(2,3)])))
-barplot(height=LassDiff.1[1:74,3],width=diff(LassDiff.1[1:74,1],differences = 1), names.arg=LassDiff.1[1:74,1],beside=T, col=rgb(1,0,0, alpha=0.5), horiz = T, ylim=c(0.01,100), xlim=c(0,max(LassDiff.1[52:74,c(2,3)])),add=T)
-barplot(as.matrix(LassDiff.1[1:74,3]),beside=T,add=T, col=rgb(1,0,1, alpha=0.5) , horiz = T)
-
-diff(LassDiff.1[1:74,1],differences = 1)
+diff(LassDiff.1[1:74,2],differences = 1)
 
 
 
@@ -139,15 +140,16 @@ diff(LassDiff.1[1:74,1],differences = 1)
 # ############################################################################################################################
 
 length(MassANDSand)
+head(MassANDSand)
 
-ScalingFactor<-(1-(MassANDSand[2,2:length(MassANDSand)]/MassANDSand[1,2:length(MassANDSand)]))  ;
-
-
-
-ScaledLD.data<-data.frame(LassDiff.1[1:74,1],as.matrix(LassDiff.1[1:74,2:length(MassANDSand)]) %*% diag(ScalingFactor));
+ScalingFactor<-(1-(MassANDSand[2,1:length(MassANDSand)]/MassANDSand[1,1:length(MassANDSand)]))  ;
 
 
-names(ScaledLD.data)<-c('Size',LassDiff.name)
+
+ScaledLD.data<-data.frame(LassDiff.1[1:74,2],as.matrix(LassDiff.1[1:74,seq(4,length(MassANDSand)+3)]) %*% diag(ScalingFactor));
+
+
+names(ScaledLD.data)<-c('Size',LassDiff.name[1:51])
 
 head(ScaledLD.data)
 
@@ -309,4 +311,103 @@ abline(h=91,lty=2, col=rgb(1,0,0,1), lwd=10)
 
 dev.off()
 
+########################################## PLot 5  SRS-1709, 2013-119 and  2011-118  ######################################################
 
+
+tiff(filename=paste0("../Manuscript/Figures/Comparison", 5,".tiff"), width=3840 , height=3840, pointsize = 80  )
+
+#initilaizing the horizontal bar plot with the first scaled LD results
+
+barplot(height=ScaledLD.data[,19], width=rep(1.4,74),names.arg=SizeLabels[seq(1,74)], space=0.2, col=rgb(0,0,0,0.8), horiz = T, ylim=c(0.01,110),las=1,cex.names = 0.5, cex.axis=1,xlab="Particle Size Fraction (%)", ylab=expression(paste("Equivalent particle size ( ", mu, "m)")), xlim=c(0,3.0))
+
+barplot(height=ScaledLD.data[,18], width=rep(1.4,74), space=0.2, col=rgb(0,1,0,0.8), horiz = T,las=1,add=T)
+
+barplot(height=ScaledLD.data[,21], width=rep(1.4,74), space=0.2, col=rgb(0,0,1,0.5), horiz = T,las=1,add=T)
+
+legend("bottomright", legend = c('SRS-1709', '2013-119', '2011-118' ), pch=c( 22, 22, 22), pt.bg = c(rgb(0,0,0,0.8) , rgb(0,1,0,0.8), rgb(0,0,1,0.5) ), pt.lwd=3)
+
+text(2.5,112, "SILT", col="black")
+
+text(2.5,40, "CLAY", col="black")
+
+abline(h=91,lty=2, col=rgb(1,0,0,1), lwd=10)
+
+
+dev.off()
+
+
+########################################## PLot 6  SRS-1709, 2013-119 and  2011-118  ######################################################
+
+
+tiff(filename=paste0("../Manuscript/Figures/Comparison", 6,".tiff"), width=3840 , height=3840, pointsize = 80  )
+
+#initilaizing the horizontal bar plot with the first scaled LD results
+
+barplot(height=ScaledLD.data[,19], width=rep(1.4,74),names.arg=SizeLabels[seq(1,74)], space=0.2, col=rgb(1,0,0,0.8), horiz = T, ylim=c(0.01,110),las=1,cex.names = 0.5, cex.axis=1,xlab="Particle Size Fraction (%)", ylab=expression(paste("Equivalent particle size ( ", mu, "m)")), xlim=c(0,3.0))
+
+barplot(height=ScaledLD.data[,18], width=rep(1.4,74), space=0.2, col=rgb(1,1,0,0.8), horiz = T,las=1,add=T)
+
+barplot(height=ScaledLD.data[,21], width=rep(1.4,74), space=0.2, col=rgb(0,0,0,1), horiz = T,las=1,add=T)
+
+legend("bottomright", legend = c('SRS-1709', '2013-119', '2011-118' ), pch=c( 22, 22, 22), pt.bg = c(rgb(1,0,0,0.8) , rgb(1,1,0,0.8), rgb(0,0,0,1) ), pt.lwd=3)
+
+text(2.5,112, "SILT", col="black")
+
+text(2.5,40, "CLAY", col="black")
+
+abline(h=91,lty=2, col=rgb(1,0,0,1), lwd=10)
+
+
+dev.off()
+
+
+
+########################################## PLot 7  2011-119 2012-103 SRS-1709 ######################################################
+
+
+tiff(filename=paste0("../Manuscript/Figures/Comparison", 7,".tiff"), width=3840 , height=3840, pointsize = 80  )
+
+#initilaizing the horizontal bar plot with the first scaled LD results
+
+barplot(height=ScaledLD.data[,19], width=rep(1.4,74),names.arg=SizeLabels[seq(1,74)], space=0.2, col=rgb(0,0,0,0.8), horiz = T, ylim=c(0.01,110),las=1,cex.names = 0.5, cex.axis=1,xlab="Particle Size Fraction (%)", ylab=expression(paste("Equivalent particle size ( ", mu, "m)")), xlim=c(0,3.0))
+
+barplot(height=ScaledLD.data[,3], width=rep(1.4,74), space=0.2, col=rgb(0,1,0,0.8), horiz = T,las=1,add=T)
+
+barplot(height=ScaledLD.data[,47], width=rep(1.4,74), space=0.2, col=rgb(0,0,1,0.5), horiz = T,las=1,add=T)
+
+legend("bottomright", legend = c('SRS-1709', '2011-119', '2012-103' ), pch=c( 22, 22, 22), pt.bg = c(rgb(0,0,0,0.8) , rgb(0,1,0,0.8), rgb(0,0,1,0.5) ), pt.lwd=3)
+
+text(2.5,112, "SILT", col="black")
+
+text(2.5,40, "CLAY", col="black")
+
+abline(h=91,lty=2, col=rgb(1,0,0,1), lwd=10)
+
+
+dev.off()
+
+
+
+########################################## PLot 8  2011-119 2012-103 SRS-1709 ######################################################
+
+
+tiff(filename=paste0("../Manuscript/Figures/Comparison", 8,".tiff"), width=3840 , height=3840, pointsize = 80  )
+
+#initilaizing the horizontal bar plot with the first scaled LD results
+
+barplot(height=ScaledLD.data[,19], width=rep(1.4,74),names.arg=SizeLabels[seq(1,74)], space=0.2, col=rgb(0,0,0,0.8), horiz = T, ylim=c(0.01,110),las=1,cex.names = 0.5, cex.axis=1,xlab="Particle Size Fraction (%)", ylab=expression(paste("Equivalent particle size ( ", mu, "m)")), xlim=c(0,3.0))
+
+barplot(height=ScaledLD.data[,3], width=rep(1.4,74), space=0.2, col=rgb(1,0,0,0.8), horiz = T,las=1,add=T)
+
+barplot(height=ScaledLD.data[,47], width=rep(1.4,74), space=0.2, col=rgb(1,1,0,0.8), horiz = T,las=1,add=T)
+
+legend("bottomright", legend = c('SRS-1709', '2011-119', '2012-103' ), pch=c( 22, 22, 22), pt.bg = c(rgb(0,0,0,0.8) , rgb(1,0,0,0.8), rgb(1,1,0,0.8) ), pt.lwd=3)
+
+text(2.5,112, "SILT", col="black")
+
+text(2.5,40, "CLAY", col="black")
+
+abline(h=91,lty=2, col=rgb(1,0,0,1), lwd=10)
+
+
+dev.off()

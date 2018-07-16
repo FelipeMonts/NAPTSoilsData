@@ -425,7 +425,7 @@ names(Selected_Samples)[1:6]<-c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm', 'SAND' 
 #                     !IMPORTANT NOTE!
 #       AFTER WORKING ON THE CODE TO GET THE MOST OF THE DATA READ, AFEW POINTS AND SUMARIES COULD NOT BE READ FOMR THE
 #       DO TO THE QUALITY OF THE PDF'S.  THEREFORE THE "Selected_Original" SPREADSHEET IN EXCELL WAS UPDATED AND SAVED WITH 
-#       THE NAME "Selected_Final".  THAT IS THE TABLE THAT HAS THE FI]NAL SAMPLE SELECTION
+#       THE NAME "Selected_Final".  THAT IS THE TABLE THAT HAS THE FINAL SAMPLE SELECTION
 # 
 # 
 ########################################################################################################################################
@@ -745,7 +745,7 @@ Comparing.Samples
 
 
 
-#############  Plot  ############# 
+#############  Plot   Updated ############# 
 
 
 tiff(filename="../Manuscript/Figures/ComparisonTexture.tiff", width=3840 , height=3840, pointsize = 80  )
@@ -753,11 +753,11 @@ tiff(filename="../Manuscript/Figures/ComparisonTexture.tiff", width=3840 , heigh
 TT.plot(
   class.sys          ="USDA-NCSS.TT",
   main               ="Sample selected for comparison",
-  tri.data           = Comparing.Samples[1,],
+  tri.data           = Comparing.Samples[7,],
   css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
   frame.bg.col       ="gray75",
-  pch                =21,
-  bg                 ="white",
+  pch                =16,
+  col                 ="Black",
   cex                = 1.5,
   lwd                = 1
 )
@@ -765,10 +765,10 @@ TT.plot(
 
 TT.points(
   geo.ALLP,
-  tri.data           = Comparing.Samples[3,],
+  tri.data           = Comparing.Samples[5,],
   css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
   pch                = 21, 
-  bg                 ="Blue",
+  bg                 ="GREEN",
   cex                = 1.2,
   lwd                = 0.5
 )
@@ -780,7 +780,7 @@ TT.points(
   tri.data           = Comparing.Samples[2,],
   css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
   pch                = 21, 
-  bg                 ="GREEN",
+  bg                 ="BLUE",
   cex                = 1.2,
   lwd                = 0.5
 )
@@ -788,50 +788,52 @@ TT.points(
 
 
 
-TT.points(
-  geo.ALLP,
-  tri.data           = Comparing.Samples[4,],
-  css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
-  pch                = 21, 
-  bg                 ="Yellow",
-  cex                = 1.2,
-  lwd                = 0.5
-)
+# TT.points(
+#   geo.ALLP,
+#   tri.data           = Comparing.Samples[1,],
+#   css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
+#   pch                = 21, 
+#   bg                 ="Yellow",
+#   cex                = 1.2,
+#   lwd                = 0.5
+# )
+# 
+# 
+# TT.points(
+#   geo.ALLP,
+#   tri.data           = Comparing.Samples[5,],
+#   css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
+#   pch                = 21, 
+#   bg                 ="MAGENTA",
+#   cex                = 1.2,
+#   lwd                = 0.5
+# )
+# 
+# 
+# TT.points(
+#   geo.ALLP,
+#   tri.data           = Comparing.Samples[7,],
+#   css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
+#   pch                = 21, 
+#   bg                 ="BLACK",
+#   cex                = 1.2,
+#   lwd                = 0.5
+# )
+# 
+# 
+# TT.points(
+#   geo.ALLP,
+#   tri.data           = Comparing.Samples[6,],
+#   css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
+#   pch                = 21, 
+#   bg                 ="RED",
+#   cex                = 1.2,
+#   lwd                = 0.5
+# )
+# 
+# 
 
-
-TT.points(
-  geo.ALLP,
-  tri.data           = Comparing.Samples[5,],
-  css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
-  pch                = 21, 
-  bg                 ="MAGENTA",
-  cex                = 1.2,
-  lwd                = 0.5
-)
-
-
-TT.points(
-  geo.ALLP,
-  tri.data           = Comparing.Samples[7,],
-  css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
-  pch                = 21, 
-  bg                 ="BLACK",
-  cex                = 1.2,
-  lwd                = 0.5
-)
-
-
-TT.points(
-  geo.ALLP,
-  tri.data           = Comparing.Samples[6,],
-  css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
-  pch                = 21, 
-  bg                 ="RED",
-  cex                = 1.2,
-  lwd                = 0.5
-)
-
-
+legend("topright", legend = c('SRS-1709', '2013-119', '2011-118' ), pch=c( 22, 22, 22), pt.bg = c(rgb(0,0,0,1) , rgb(0,1,0,1), rgb(0,0,1,1) ), pt.lwd=3)
 
 
 dev.off()
