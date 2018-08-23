@@ -423,7 +423,7 @@ names(Selected_Samples)[1:6]<-c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm', 'SAND' 
 # 
 # 
 #                     !IMPORTANT NOTE!
-#       AFTER WORKING ON THE CODE TO GET THE MOST OF THE DATA READ, AFEW POINTS AND SUMARIES COULD NOT BE READ FOMR THE
+#       AFTER WORKING ON THE CODE TO GET THE MOST OF THE DATA READ, A FEW POINTS AND SUMARIES COULD NOT BE READ FOMR THE
 #       DO TO THE QUALITY OF THE PDF'S.  THEREFORE THE "Selected_Original" SPREADSHEET IN EXCELL WAS UPDATED AND SAVED WITH 
 #       THE NAME "Selected_Final".  THAT IS THE TABLE THAT HAS THE FINAL SAMPLE SELECTION
 # 
@@ -432,7 +432,7 @@ names(Selected_Samples)[1:6]<-c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm', 'SAND' 
 
 
 
-##### Reading the table with the final seltion of the samples and their data ################################
+##### Reading the table with the final selection of the samples and their data ################################
 
 
 Paper.Samples<-readWorksheetFromFile("Results_data_all.xlsx", sheet="Selected_Final",startCol= 1, endCol=10) ;
@@ -549,28 +549,30 @@ dev.off()
 
 ##################### PDF that need to be saved for the selected samples ################
 
-Paper.Samples<-Selected_Samples ;
-
-Selected_Samples.names<-data.frame(Paper.Samples[-c(49,113,122,121,120), 'SAMPLE'], as.numeric(str_split(Paper.Samples[-c(49,113,122,121,120), 'SAMPLE'], "-", simplify = T) [,1]), as.numeric(str_split(Paper.Samples[-c(49,113,122,121,120), 'SAMPLE'], "-", simplify = T) [,2]), stringsAsFactors = F)  ;
-
-names(Selected_Samples.names)<-c( 'SAMPLE', 'YEAR' , 'No' )
-
-head(Selected_Samples.names,18)
-
-str(Selected_Samples.names)
-
-Selected_Samples.names[order(Selected_Samples.names$YEAR),]
-
-Selected_Samples.names$Quarter<-cut(Selected_Samples.names$No, breaks=c(100,106,111,116,120),labels=c('Q1' , 'Q2' ,'Q3' , 'Q4') ) ;
-
-cut(Selected_Samples.names$No, breaks=c(100,106,111,116,120),labels=c('Q1' , 'Q2' ,'Q3' , 'Q4') )
-
-Selected_Samples.pdfs<-Selected_Samples.names[with(Selected_Samples.names, order(YEAR,Quarter)),]
-
-
-
-writeWorksheetToFile("Results_data_all.xlsx",Selected_Samples.pdfs[-c(49,113),], sheet="Selected_PDF") ;
-
+# Paper.Samples<-Selected_Samples ;
+# 
+# str(Paper.Samples)
+# 
+# Selected_Samples.names<-data.frame(Paper.Samples[-c(49,113,120), 'SAMPLE'], as.numeric(str_split(Paper.Samples[-c(49,113,120), 'SAMPLE'], "-", simplify = T) [,1]), as.numeric(str_split(Paper.Samples[-c(49,113,120), 'SAMPLE'], "-", simplify = T) [,2]), stringsAsFactors = F)  ;
+# 
+# names(Selected_Samples.names)<-c( 'SAMPLE', 'YEAR' , 'No' )
+# 
+# head(Selected_Samples.names,18)
+# 
+# str(Selected_Samples.names)
+# 
+# Selected_Samples.names[order(Selected_Samples.names$YEAR),]
+# 
+# Selected_Samples.names$Quarter<-cut(Selected_Samples.names$No, breaks=c(100,106,111,116,120),labels=c('Q1' , 'Q2' ,'Q3' , 'Q4') ) ;
+# 
+# cut(Selected_Samples.names$No, breaks=c(100,106,111,116,120),labels=c('Q1' , 'Q2' ,'Q3' , 'Q4') )
+# 
+# Selected_Samples.pdfs<-Selected_Samples.names[with(Selected_Samples.names, order(YEAR,Quarter)),]
+# 
+# 
+# 
+# writeWorksheetToFile("Results_data_all.xlsx",Selected_Samples.pdfs[-c(49,113),], sheet="Selected_PDF") ;
+# 
 
 
 
@@ -758,7 +760,7 @@ TT.plot(
   frame.bg.col       ="gray75",
   pch                =16,
   col                 ="Black",
-  cex                = 1.5,
+  cex                = 3,
   lwd                = 1
 )
 
@@ -769,7 +771,7 @@ TT.points(
   css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
   pch                = 21, 
   bg                 ="GREEN",
-  cex                = 1.2,
+  cex                = 3,
   lwd                = 0.5
 )
 
@@ -781,7 +783,7 @@ TT.points(
   css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
   pch                = 21, 
   bg                 ="BLUE",
-  cex                = 1.2,
+  cex                = 3,
   lwd                = 0.5
 )
 
@@ -833,7 +835,7 @@ TT.points(
 # 
 # 
 
-legend("topright", legend = c('SRS-1709', '2013-119', '2011-118' ), pch=c( 22, 22, 22), pt.bg = c(rgb(0,0,0,1) , rgb(0,1,0,1), rgb(0,0,1,1) ), pt.lwd=3)
+#legend("topright", legend = c('SRS-1709', '2013-119', '2011-118' ), pch=c( 22, 22, 22), pt.bg = c(rgb(0,0,0,1) , rgb(0,1,0,1), rgb(0,0,1,1) ), pt.lwd=3)
 
 
 dev.off()
