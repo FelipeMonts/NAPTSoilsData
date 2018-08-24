@@ -440,17 +440,29 @@ abline(h=91,lty=2, col=rgb(1,0,0,1), lwd=10)
 
 par(fig = c(0.6,0.95, 0.1, 0.6 ), new=T)
 
+
+# dev.off()
+
+
+################################## Trial of insert Texture picture ######################
+#par(fig = c(0,1,0,1))
+par(fig = c(0.6,0.95, 0.1, 0.6 ), new=T)
+
 # barplot(height=ScaledLD.data[,18], width=rep(1.4,74), space=0.2, col=rgb(0,1,0,0.6), horiz = T,las=1,add=T)
 TT.plot(
   class.sys          ="USDA-NCSS.TT",
-  # main               ="Sample selected for comparison",
+  main               =NA,
   tri.data           = Comparing.Samples[7,],
   css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
   frame.bg.col       ="gray75",
   pch                =16,
   col                 ="Black",
-  cex                = 3,
-  lwd                = 1
+  cex                = 1.5,
+  lwd                = 1,
+  cex.axis           = 0.8,
+  lwd.axis           = 0.8,
+  lwd.lab            = 0.8,
+  cex.lab            =0.8
 )
 
 
@@ -460,7 +472,7 @@ TT.points(
   css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
   pch                = 21, 
   bg                 ="GREEN",
-  cex                = 3,
+  cex                = 1.5,
   lwd                = 0.5
 )
 
@@ -468,16 +480,118 @@ TT.points(
 
 TT.points(
   geo.ALLP,
-  tri.data           = Comparing.Samples[2,],
+  tri.data           = Comparing.Samples[1,],
   css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
   pch                = 21, 
   bg                 ="BLUE",
-  cex                = 3,
+  cex                = 1.5,
+  lwd                = 0.5
+)
+
+
+TT.text(
+  tri.data           = Comparing.Samples[c(7,5,1),],
+  geo                = geo.ALLP,
+  css.names          = c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
+  labels             = Comparing.Samples[c(7,5,1),"SAMPLE"],
+  pos                = 3,
+  cex                = 1,
+  offset             = 1
+)
+ 
+dev.off()   
+
+
+
+
+
+
+    
+################################### Final Manuscript plot 2 pannels, verticla bars. SRS-1709, 2013-119 and 2011-118 ###################################
+
+
+
+tiff(filename=paste0("../Manuscript/Figures/HorizontalDist",".tiff"), width=3840 , height=3840, pointsize = 80  )
+
+#initilaizing the horizontal bar plot with the first scaled LD results
+
+par(fig = c(0,1,0,1))
+
+barplot(height=ScaledLD.data[,19],names.arg=SizeLabels[seq(1,74)], space=0.2, col=rgb(0,0,0,0.8),las=1,cex.names = 0.8, cex.axis=1,ylab="Particle Size Fraction (%)", xlab=expression(paste("Equivalent particle size ( ", mu, "m)")),xlim=c(0.01,110))
+
+barplot(height=ScaledLD.data[,18], space=0.2, col=rgb(0,1,0,0.6),las=1,add=T)
+
+barplot(height=ScaledLD.data[,21], space=0.2, col=rgb(0,0,1,0.7),las=1,add=T)
+
+#legend("bottomright", legend = c('SRS-1709', '2013-119', '2011-118' ), pch=c( 22, 22, 22), pt.bg = c(rgb(0,0,0,0.8) , rgb(0,1,0,0.8), rgb(0,0,1,1) ), pt.lwd=3)
+
+text(2.5,96, "SILT", col="black")
+
+text(2.5,87, "CLAY", col="black")
+
+abline(h=91,lty=2, col=rgb(1,0,0,1), lwd=10)
+
+
+par(fig = c(0.6,0.95, 0.1, 0.6 ), new=T)
+
+
+# dev.off()
+
+
+################################## Trial of insert Texture picture ######################
+#par(fig = c(0,1,0,1))
+par(fig = c(0.6,0.95, 0.1, 0.6 ), new=T)
+
+# barplot(height=ScaledLD.data[,18], width=rep(1.4,74), space=0.2, col=rgb(0,1,0,0.6), horiz = T,las=1,add=T)
+TT.plot(
+  class.sys          ="USDA-NCSS.TT",
+  main               =NA,
+  tri.data           = Comparing.Samples[7,],
+  css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
+  frame.bg.col       ="gray75",
+  pch                =16,
+  col                 ="Black",
+  cex                = 1.5,
+  lwd                = 1,
+  cex.axis           = 0.8,
+  lwd.axis           = 0.8,
+  lwd.lab            = 0.8,
+  cex.lab            =0.8
+)
+
+
+TT.points(
+  geo.ALLP,
+  tri.data           = Comparing.Samples[5,],
+  css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
+  pch                = 21, 
+  bg                 ="GREEN",
+  cex                = 1.5,
   lwd                = 0.5
 )
 
 
 
+TT.points(
+  geo.ALLP,
+  tri.data           = Comparing.Samples[1,],
+  css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
+  pch                = 21, 
+  bg                 ="BLUE",
+  cex                = 1.5,
+  lwd                = 0.5
+)
 
 
-dev.off()
+TT.text(
+  tri.data           = Comparing.Samples[c(7,5,1),],
+  geo                = geo.ALLP,
+  css.names          = c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
+  labels             = Comparing.Samples[c(7,5,1),"SAMPLE"],
+  pos                = 3,
+  cex                = 1,
+  offset             = 1
+)
+
+dev.off()   
+
