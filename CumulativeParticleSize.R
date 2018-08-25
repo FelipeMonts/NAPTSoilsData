@@ -520,34 +520,54 @@ geo.ALLP<-TT.plot(
   
 )
 
-tiff(filename=paste0("../Manuscript/Figures/HorizontalDist",".tiff"), width=3840 , height=1920, pointsize = 80  )
+tiff(filename=paste0("../Manuscript/Figures/HorizontalDist",".tiff"), width=3840 , height=3840, pointsize = 80)
+
+par(mfrow=c(2,1))
 
 #initilaizing the horizontal bar plot with the first scaled LD results
 
-par(fig = c(0,1,0,1))
-par(plt=c(0.1,0.9,0.2,0.9))
+# par(fig = c(0,1,0,1))
+# par(plt=c(0.1,0.9,0.2,0.9))
 
-barplot( height=t(ScaledLD.data[,c(18,19,21)]), beside=T, col= c('GREEN','BLACK','BLUE'), names.arg=SizeLabels[seq(1,74)], ylim=c(0,0.025), cex.names =0.5, cex.axis=0.5, cex.lab= 0.7, ylab="Particle Size Fraction", xlab=expression(paste("Equivalent particle size ( ", mu, "m)")), space=c(0,0.1),las=2)
+# par(mar= c(5.1 4.1 4.1 2.1))
+
+par(mar= c(1, 4.1 ,2.1, 2.1))
 
 
-text(177,0.024, "SILT", col="BLACK", cex=0.8)
+barplot( height=t(ScaledLD.data[,c(18,19,21)]), beside=T, col= c('GREEN','BLACK','BLUE'), names.arg=SizeLabels[seq(1,74)], axisnames= F, ylim=c(0,0.035), cex.names =0.5, cex.axis=0.5, cex.lab= 0.7, ylab="Particle Size Fraction", xlab=NA, space=c(0,0.1),las=2)
 
-text(137,0.024, "CLAY", col="BLACK", cex=0.8)
+
+text(182,0.034, "SILT", col="BLACK", cex=0.8)
+
+text(132,0.034, "CLAY", col="BLACK", cex=0.8)
+
+abline(v=157,lty=2, col="RED", lwd=5)
+
+par(mar= c(4.1, 4.1, 0, 2.1))
+
+barplot( height=t(ScaledLD.data[,c(8,12,16)]), beside=T, col= c('BLACK','BLUE','GREEN'), names.arg=SizeLabels[seq(1,74)], ylim=c(0,0.035), cex.names =0.5, cex.axis=0.5, cex.lab= 0.7, ylab="Particle Size Fraction", xlab=expression(paste("Equivalent particle size ( ", mu, "m)")), space=c(0,0.1),las=2)
+
+
+text(182,0.034, "SILT", col="BLACK", cex=0.8)
+
+text(132,0.034, "CLAY", col="BLACK", cex=0.8)
 
 abline(v=157,lty=2, col="RED", lwd=5)
 
 
 
 
-################################## Trial of insert Texture picture ######################
+##################################  insert Texture picture in first panel ######################
 
-par(fig = c(0.12, 0.3, 0.35, 0.95 ), new=T)
+par(fig = c(0.12, 0.35, 0.62, 0.98 ), new=T)
+
+par(mar= c(5.1, 4.1, 4.1, 2.1))
 
 # barplot(height=ScaledLD.data[,18], width=rep(1.4,74), space=0.2, col=rgb(0,1,0,0.6), horiz = T,las=1,add=T)
 TT.plot(
   class.sys          ="USDA-NCSS.TT",
   main               =NA,
-  tri.data           = Comparing.Samples[7,],
+  tri.data           = Comparing.Samples[12,],
   css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
   frame.bg.col       ="gray75",
   pch                =16,
@@ -566,7 +586,7 @@ TT.points(
   geo.ALLP,
   tri.data           = Comparing.Samples[5,],
   css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
-  pch                = 21, 
+  pch                = 21,
   bg                 ="GREEN",
   cex                = 0.5,
   lwd                = 0.5
@@ -578,7 +598,7 @@ TT.points(
   geo.ALLP,
   tri.data           = Comparing.Samples[1,],
   css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
-  pch                = 21, 
+  pch                = 21,
   bg                 ="BLUE",
   cex                = 0.5,
   lwd                = 0.5
@@ -586,10 +606,93 @@ TT.points(
 
 
 TT.text(
-  tri.data           = Comparing.Samples[c(7,5,1),],
+  tri.data           = Comparing.Samples[c(1,5,12),],
   geo                = geo.ALLP,
   css.names          = c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
-  labels             = Comparing.Samples[c(7,5,1),"SAMPLE"],
+  labels             = Comparing.Samples[c(1,5,12),"SAMPLE"],
+  pos                = 3,
+  cex                = 0.4,
+  offset             = 0.2,
+  font               =2
+)
+
+
+
+##################################  insert Texture picture in second panel ######################
+
+par(fig = c(0.12, 0.35, 0.18, 0.54 ), new=T)
+
+par(mar= c(5.1, 4.1, 4.1, 2.1))
+
+# barplot(height=ScaledLD.data[,18], width=rep(1.4,74), space=0.2, col=rgb(0,1,0,0.6), horiz = T,las=1,add=T)
+TT.plot(
+  class.sys          ="USDA-NCSS.TT",
+  main               =NA,
+  tri.data           = Comparing.Samples[8,],
+  css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
+  frame.bg.col       ="gray75",
+  pch                =16,
+  col                 ="BLACK",
+  cex                = 0.5,
+  lwd                = 0.3,
+  cex.axis           = 0.3,
+  lwd.axis           = 0.3,
+  lwd.lab            = 0.4,
+  cex.lab            =0.4,
+  class.lab.show     ='none'
+)
+
+
+TT.points(
+  geo.ALLP,
+  tri.data           = Comparing.Samples[10,],
+  css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
+  pch                = 21,
+  bg                 ="GREEN",
+  cex                = 0.5,
+  lwd                = 0.5
+)
+
+
+
+TT.points(
+  geo.ALLP,
+  tri.data           = Comparing.Samples[9,],
+  css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
+  pch                = 21,
+  bg                 ="BLUE",
+  cex                = 0.5,
+  lwd                = 0.5
+)
+
+
+TT.text(
+  tri.data           = Comparing.Samples[8,],
+  geo                = geo.ALLP,
+  css.names          = c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
+  labels             = Comparing.Samples[8,"SAMPLE"],
+  pos                = 4,
+  cex                = 0.4,
+  offset             = 0.2,
+  font               =2
+)
+
+TT.text(
+  tri.data           = Comparing.Samples[9,],
+  geo                = geo.ALLP,
+  css.names          = c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
+  labels             = Comparing.Samples[9,"SAMPLE"],
+  pos                = 2,
+  cex                = 0.4,
+  offset             = 0.2,
+  font               =2
+)
+
+TT.text(
+  tri.data           = Comparing.Samples[10,],
+  geo                = geo.ALLP,
+  css.names          = c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
+  labels             = Comparing.Samples[10,"SAMPLE"],
   pos                = 3,
   cex                = 0.4,
   offset             = 0.2,
@@ -601,6 +704,48 @@ dev.off()
 
 
 
+
+
+
+
+
+
+
+
+##########################################################################################################################################
+
+barplot( height=t(ScaledLD.data[,c(8,12,13,16)]), beside=T, col= c('GREEN','BLACK','BLUE','RED'), names.arg=SizeLabels[seq(1,74)], ylim=c(0,0.035), cex.names =0.5, cex.axis=0.5, cex.lab= 0.7, ylab="Particle Size Fraction", xlab=expression(paste("Equivalent particle size ( ", mu, "m)")), space=c(0,0.1),las=2, border=NA)
+
+
+TT.plot(
+  class.sys          ="USDA-NCSS.TT",
+  main               =NA,
+  tri.data           = Comparing.Samples[7,],
+  css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
+  frame.bg.col       ="gray75",
+  pch                =16,
+  col                 ="Black",
+  cex                = 0.5,
+  lwd                = 0.3,
+  cex.axis           = 0.3,
+  lwd.axis           = 0.3,
+  lwd.lab            = 0.4,
+  cex.lab            =0.4,
+  class.lab.show     ='none'
+)
+
+
+
+TT.text(
+  tri.data           = Comparing.Samples,
+  geo                = geo.ALLP,
+  css.names          = c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
+  labels             = Comparing.Samples[,"SAMPLE"],
+  pos                = 3,
+  cex                = 0.8,
+  offset             = 0.2,
+  font               =2
+)
 
 
         
