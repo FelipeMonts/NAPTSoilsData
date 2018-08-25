@@ -29,6 +29,8 @@ rm(list = ls())
 
 setwd("C:/Felipe/LaserDifractionSoilTextureAnalysis/NAPTSoilsData") ;
 
+load('NAPTTexturePlot.RData') ;
+
 
 #install.packages("soiltexture")
 library('soiltexture')
@@ -146,7 +148,7 @@ ScalingFactor<-(1-(MassANDSand[2,1:length(MassANDSand)]/MassANDSand[1,1:length(M
 
 
 
-ScaledLD.data<-data.frame(LassDiff.1[1:74,2],as.matrix(LassDiff.1[1:74,seq(4,length(MassANDSand)+3)]) %*% diag(ScalingFactor));
+ScaledLD.data<-data.frame(LassDiff.1[1:74,2],as.matrix(LassDiff.1[1:74,seq(4,length(MassANDSand)+3)]) %*% diag(ScalingFactor/100));
 
 
 names(ScaledLD.data)<-c('Size',LassDiff.name[1:51])
@@ -422,8 +424,9 @@ tiff(filename=paste0("../Manuscript/Figures/Figure.2",".tiff"), width=3840 , hei
 #initilaizing the horizontal bar plot with the first scaled LD results
 
 par(fig = c(0,1,0,1))
+par(plt=c(0.1,0.9,0.1,0.9))
 
-barplot(height=ScaledLD.data[,19], width=rep(1.4,74),names.arg=SizeLabels[seq(1,74)], space=0.2, col=rgb(0,0,0,0.8), horiz = T, ylim=c(0.01,110),las=1,cex.names = 0.5, cex.axis=1,xlab="Particle Size Fraction (%)", ylab=expression(paste("Equivalent particle size ( ", mu, "m)")), xlim=c(0,3.0))
+barplot(height=ScaledLD.data[,19], width=rep(1.4,74),names.arg=SizeLabels[seq(1,74)], space=0.2, col=rgb(0,0,0,0.8), horiz = T, ylim=c(0.01,110),las=1,cex.names = 0.5, cex.axis=0.5,xlab="Particle Size Fraction (%)", ylab=expression(paste("Equivalent particle size ( ", mu, "m)")), xlim=c(0,3.0))
 
 barplot(height=ScaledLD.data[,18], width=rep(1.4,74), space=0.2, col=rgb(0,1,0,0.6), horiz = T,las=1,add=T)
 
@@ -447,6 +450,7 @@ par(fig = c(0.6,0.95, 0.1, 0.6 ), new=T)
 ################################## Trial of insert Texture picture ######################
 #par(fig = c(0,1,0,1))
 par(fig = c(0.6,0.95, 0.1, 0.6 ), new=T)
+
 
 # barplot(height=ScaledLD.data[,18], width=rep(1.4,74), space=0.2, col=rgb(0,1,0,0.6), horiz = T,las=1,add=T)
 TT.plot(
@@ -507,40 +511,37 @@ dev.off()
 
 
     
-################################### Final Manuscript plot 2 pannels, verticla bars. SRS-1709, 2013-119 and 2011-118 ###################################
+################################### Final Manuscript plot 2 pannels, vertical bars. SRS-1709, 2013-119 and 2011-118 ###################################
 
+geo.ALLP<-TT.plot(
+  class.sys          ="USDA-NCSS.TT",
+  frame.bg.col       ="gray75",
+  bg                 ="white"
+  
+)
 
-
-tiff(filename=paste0("../Manuscript/Figures/HorizontalDist",".tiff"), width=3840 , height=3840, pointsize = 80  )
+tiff(filename=paste0("../Manuscript/Figures/HorizontalDist",".tiff"), width=3840 , height=1920, pointsize = 80  )
 
 #initilaizing the horizontal bar plot with the first scaled LD results
 
 par(fig = c(0,1,0,1))
+par(plt=c(0.1,0.9,0.2,0.9))
 
-barplot(height=ScaledLD.data[,19],names.arg=SizeLabels[seq(1,74)], space=0.2, col=rgb(0,0,0,0.8),las=1,cex.names = 0.8, cex.axis=1,ylab="Particle Size Fraction (%)", xlab=expression(paste("Equivalent particle size ( ", mu, "m)")),xlim=c(0.01,110))
-
-barplot(height=ScaledLD.data[,18], space=0.2, col=rgb(0,1,0,0.6),las=1,add=T)
-
-barplot(height=ScaledLD.data[,21], space=0.2, col=rgb(0,0,1,0.7),las=1,add=T)
-
-#legend("bottomright", legend = c('SRS-1709', '2013-119', '2011-118' ), pch=c( 22, 22, 22), pt.bg = c(rgb(0,0,0,0.8) , rgb(0,1,0,0.8), rgb(0,0,1,1) ), pt.lwd=3)
-
-text(2.5,96, "SILT", col="black")
-
-text(2.5,87, "CLAY", col="black")
-
-abline(h=91,lty=2, col=rgb(1,0,0,1), lwd=10)
+barplot( height=t(ScaledLD.data[,c(18,19,21)]), beside=T, col= c('GREEN','BLACK','BLUE'), names.arg=SizeLabels[seq(1,74)], ylim=c(0,0.025), cex.names =0.5, cex.axis=0.5, cex.lab= 0.7, ylab="Particle Size Fraction", xlab=expression(paste("Equivalent particle size ( ", mu, "m)")), space=c(0,0.1),las=2)
 
 
-par(fig = c(0.6,0.95, 0.1, 0.6 ), new=T)
+text(177,0.024, "SILT", col="BLACK", cex=0.8)
+
+text(137,0.024, "CLAY", col="BLACK", cex=0.8)
+
+abline(v=157,lty=2, col="RED", lwd=5)
 
 
-# dev.off()
 
 
 ################################## Trial of insert Texture picture ######################
-#par(fig = c(0,1,0,1))
-par(fig = c(0.6,0.95, 0.1, 0.6 ), new=T)
+
+par(fig = c(0.12, 0.3, 0.35, 0.95 ), new=T)
 
 # barplot(height=ScaledLD.data[,18], width=rep(1.4,74), space=0.2, col=rgb(0,1,0,0.6), horiz = T,las=1,add=T)
 TT.plot(
@@ -551,12 +552,13 @@ TT.plot(
   frame.bg.col       ="gray75",
   pch                =16,
   col                 ="Black",
-  cex                = 1.5,
-  lwd                = 1,
-  cex.axis           = 0.8,
-  lwd.axis           = 0.8,
-  lwd.lab            = 0.8,
-  cex.lab            =0.8
+  cex                = 0.5,
+  lwd                = 0.3,
+  cex.axis           = 0.3,
+  lwd.axis           = 0.3,
+  lwd.lab            = 0.4,
+  cex.lab            =0.4,
+  class.lab.show     ='none'
 )
 
 
@@ -566,7 +568,7 @@ TT.points(
   css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
   pch                = 21, 
   bg                 ="GREEN",
-  cex                = 1.5,
+  cex                = 0.5,
   lwd                = 0.5
 )
 
@@ -578,7 +580,7 @@ TT.points(
   css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
   pch                = 21, 
   bg                 ="BLUE",
-  cex                = 1.5,
+  cex                = 0.5,
   lwd                = 0.5
 )
 
@@ -589,9 +591,16 @@ TT.text(
   css.names          = c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
   labels             = Comparing.Samples[c(7,5,1),"SAMPLE"],
   pos                = 3,
-  cex                = 1,
-  offset             = 1
+  cex                = 0.4,
+  offset             = 0.2,
+  font               =2
 )
 
 dev.off()   
 
+
+
+
+
+
+        
