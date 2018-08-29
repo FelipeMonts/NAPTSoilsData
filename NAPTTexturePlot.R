@@ -55,115 +55,6 @@ library('soiltexture')
 
 library(XLConnect) ;
 
-
-
-
-
-
-
-##########################################################################################################################
-# 
-#       Gaylon S. Campbell;John M. Norman. An Introduction to Environmental Biophysics (p. 131). Kindle Edition. 
-# 
-# 
-# TABLE 9.1.     Hydraulic properties of soils as a function of soil texture 
-# (recomputed  from Rawls et al. 1992).
-# 
-# Texture                 Silt     Clay     - Y,e       b     Ks
-# sand                   0.05     0.03      0.7      1.7     0.0058           0.09        0.03
-# loamy sand           0.12     0.07      0.9      2.1     0.0017          0.13        0.06
-# sandy loam            0.25     0.10      1.5     3.1     0.00072         0.21        0.1
-# loam                   0.40     0.18      I.I  4 . 5   0.00037        0.27        0.12
-# silt loam              0.65     0.15     2.1     4.7     0.00019         0.33        0.13
-# sandy clay loam    0.13     0.27      2.8     4        0.00012         0.26        0.15
-# clay loam             0.34     0.34      2.6     5.2     0.000064       0.32        0.2
-# silty clay loam      0.58     0.33      3.3      6.6     0.000042       0.37        0.32
-# sandy clay           0.07     0.40      2.9     6        0.000033      0.34        0.24
-# silty clay             0.45     0.45      3.4      7.9     0.000025      0.39        0.25
-# clay                    0.20     0.60      3.7      7.6     0.000017      0.4          0.27
-# 
-# TABLE 9.1. Hydraulic properties of soils as a function of soil texture
-# (recomputed from Rawls et al. 1992).
-# Texture Silt Clay - Y,e b Ks 8_33 0_ 1500
-# J/kg kg s m-3 ml/ml ml/ml
-# sand 0.05 0.03 0.7 1.7 0.0058 0.09 0.03
-# loamy sand 0.12 0.07 0.9 2.1 0.0017 0. I 3 0.06
-# sandy loam 0.25 0.10 1.5 3.1 0.00072 0.21 0.1
-# loam 0.40 0.18 I.I 4.5 0.00037 0.27 0.12
-# silt loam 0.65 0.15 2.1 4.7 0.00019 0.33 0.13
-# sandy clay loam 0.13 0.27 2.8 4 0.00012 0.26 0.15
-# clay loam 0.34 0.34 2.6 5.2 0.000064 0.32 0.2
-# silty clay loam 0.58 0.33 3.3 6.6 0.000042 0.37 0.32
-# sandy clay 0.07 0.40 2.9 6 0.000033 0.34 0.24
-# silty clay 0.45 0.45 3.4 7.9 0.000025 0.39 0.25
-# clay 0.20 0.60 3.7 7.6 0.000017 0.4 0.27
-
-##########################################################################################################################
-
-
-
-TT.plot(class.sys ='none' )
-
-TT.plot(class.sys="USDA.TT")
-
-TT.plot(class.sys = "USDA-NCSS.TT",
-        class.p.bg.col=T
-)
-
-#######Cambell Soil Texture Data##############
-
-silt<-c(0.05,
-        0.12,
-        0.25,
-        0.4,
-        0.65,
-        0.13,
-        0.34,
-        0.58,
-        0.07,
-        0.45,
-        0.2
-)
-clay<-c(0.03,
-        0.07,
-        0.1,
-        0.18,
-        0.15,
-        0.27,
-        0.34,
-        0.33,
-        0.4,
-        0.45,
-        0.6
-)
-
-Campbell.Soil<-data.frame(clay*100, silt*100) ;
-Campbell.Soil.2<-data.frame(clay*101, silt*101) ;
-
-Campbell.Soil$sand<-100-(Campbell.Soil$silt+Campbell.Soil$clay);
-Campbell.Soil.2$sand<-100-(Campbell.Soil.2$silt+Campbell.Soil.2$clay);
-names(Campbell.Soil)<-c('CLAY', 'SILT' , 'SAND')
-names(Campbell.Soil.2)<-c('CLAY', 'SILT' , 'SAND')
-
-TT.plot(
-  class.sys          ="USDA-NCSS.TT",
-  tri.data           = Campbell.Soil,
-  main               ="Campbell & NAPT Texture Data",
-  #class.p.bg.col     =T,
-  col                ="RED",
-  cex                = 0.5
-  )
-
-TT.plot(
-  class.sys          ="USDA-NCSS.TT",
-  add                = T,
-  tri.data           = Campbell.Soil.2,
-  main               ="Campbell & NAPT Texture Data",
-  #class.p.bg.col     =T,
-  col                ="BLUE",
-  cex                = 0.5
-)
-
 ########################################################################################################
 # 
 #                      Get the NAPT soil texture data and format it for plotting
@@ -181,9 +72,17 @@ NAPT.data.nohead<-NAPT.data[-c(1,2),] ;
 
 head(NAPT.data.nohead)
 
+############################## Separate the data into different samples and Values per sample ###########################
+
+#### Get the sample and the value names separated
+
 NAPT.data.nohead$SAMPLE<-str_split(str_split(NAPT.data.nohead$X, " ", simplify = T)[,2], "_" ,simplify = T)[,1] ;
 
 NAPT.data.nohead$VALUE<-str_split(str_split(NAPT.data.nohead$X, " ", simplify = T)[,2], "_" ,simplify = T)[,2] ;
+
+
+#### Get the rows with n 
+
 
 
 NAPT.data.nohead.n_rows<-which(NAPT.data.nohead[,1] == 'n', arr.ind = T)  ;
@@ -195,6 +94,12 @@ NAPT.data.nohead[NAPT.data.nohead.n_rows, 'VALUE']<-NAPT.data.nohead[NAPT.data.n
 
 str(NAPT.data.nohead)
 head(NAPT.data.nohead)
+
+
+
+##### separate the Median, MAD and N rows into different groups
+
+
 
 NAPT.data.Median<-NAPT.data.nohead[NAPT.data.nohead$VALUE == 'Median',]
 
@@ -213,71 +118,79 @@ NAPT.data.n<-NAPT.data.nohead[NAPT.data.nohead$VALUE == 'n',]
 str(NAPT.data.n)
 head(NAPT.data.n)
 
-NAPT.Texture<-merge(NAPT.data.Median,NAPT.data.MAD, by= 'SAMPLE')
+#### Merge the groups back together by SAMPLE
 
-str(NAPT.Texture)
-head(NAPT.Texture,30)
+#### First Merge the Hydrometer group of measurements
 
-NAPT.Texture[which(!is.na(NAPT.Texture$V4.x)),]
-
-NAPT.Texture$ANALYSIS<-'PLACEHOLDER'  ;
-
-NAPT.Texture[which(!is.na(NAPT.Texture$V4.x)),'ANALYSIS']<- 'Pipette'  ;
-
-NAPT.Texture[which(is.na(NAPT.Texture$V4.x)),'ANALYSIS']<- 'Hydrometer'  ;
-
-NAPT.Texture.Hydrom<-NAPT.Texture[,c(1,2,3,4,5,9)] ;
-
-str(NAPT.Texture)
-head(NAPT.Texture,10)
-tail(NAPT.Texture,10)
+NAPT.Texture.Hydrometer<-merge(NAPT.data.Median[,c('X', 'V1' , 'V2' , 'V3' , 'SAMPLE' , 'VALUE')],NAPT.data.MAD[,c('X', 'V1' , 'V2' , 'V3' , 'SAMPLE' , 'VALUE')], by= 'SAMPLE');
 
 
-names(NAPT.Texture)<-c('SAMPLE' ,' NAME','SAND_Med' , 'SILT_Med' , 'CLAY_Med','SAND_Med' , 'SILT_Med' , 'CLAY_Med', 'VALUE.X', 'NAME_2' , 'SAND_MAD' , 'SILT_MAD' , 'CLAY_MAD','SAND_MAD' , 'SILT_MAD' , 'CLAY_MAD' , 'VALUE.Y', 'ANALYSIS') ;
+NAPT.Texture.Hydrometer$ANALYSIS<-c('Hydrometer') ;
+names(NAPT.Texture.Hydrometer)[c(3,4,5,8,9,10)]<-c('SAND.Med', 'SILT.Med','CLAY.Med' ,'SAND.MAD', 'SILT.MAD','CLAY.MAD' )
+
+str(NAPT.Texture.Hydrometer)
+head(NAPT.Texture.Hydrometer,30)
+
+which(is.na(NAPT.Texture.Hydrometer),arr.ind = T)
+
+#### Second Merge the Pipette group of measurements
+
+NAPT.Texture.Pipette<-merge(NAPT.data.Median[,c('X', 'V4' , 'V5' , 'V6' , 'SAMPLE' , 'VALUE')],NAPT.data.MAD[,c('X', 'V4' , 'V5' , 'V6' , 'SAMPLE' , 'VALUE')], by= 'SAMPLE');
+
+NAPT.Texture.Pipette$ANALYSIS<-c('Pipette') ;
+
+names(NAPT.Texture.Pipette)[c(3,4,5,8,9,10)]<-c('SAND.Med', 'SILT.Med','CLAY.Med' ,'SAND.MAD', 'SILT.MAD','CLAY.MAD' )
+
+str(NAPT.Texture.Pipette)
+head(NAPT.Texture.Pipette,30)
 
 
-NAPT.Texture.Hydrometer<-NAPT.Texture[which(NAPT.Texture$ANALYSIS == 'Hydrometer'), c(1,3,4,5,11,12,13,18)] ;
+#### Find the rows with NA in the texture analysis and exclude them ###
 
-NAPT.Texture.Pipette<-NAPT.Texture[which(NAPT.Texture$ANALYSIS == 'Pipette'), c(1,6,7,8,14,15,16,18)] ;
+NAPT.Texture.Pipette.NA_rows<-unique(which(is.na(NAPT.Texture.Pipette),arr.ind = T)[,1]);
 
 
-NAPT.all<-rbind(NAPT.Texture.Hydrometer,NAPT.Texture.Pipette)
+NAPT.Texture.Pipette[-NAPT.Texture.Pipette.NA_rows,]
+
+
+#### Combine the Hydrometer and pipette data into one 
+
+
+NAPT.all<-rbind(NAPT.Texture.Hydrometer,NAPT.Texture.Pipette[-NAPT.Texture.Pipette.NA_rows,])
+
+str(NAPT.all)
+head(NAPT.all,20)
+tail(NAPT.all,20)
+
+### Convert character data to numeric data 
+
+str(NAPT.all)
+head(NAPT.all,20)
+tail(NAPT.all,20)
+
+NAPT.all$SAND.Med<-as.numeric(NAPT.all$SAND.Med) ;
+NAPT.all$SILT.Med<-as.numeric(NAPT.all$SILT.Med) ;
+NAPT.all$CLAY.Med<-as.numeric(NAPT.all$CLAY.Med) ;
+
+NAPT.all$SAND.MAD<-as.numeric(NAPT.all$SAND.MAD) ;
+NAPT.all$SILT.MAD<-as.numeric(NAPT.all$SILT.MAD) ;
+NAPT.all$CLAY.MAD<-as.numeric(NAPT.all$CLAY.MAD) ;
 
 
 str(NAPT.all)
 head(NAPT.all,20)
 tail(NAPT.all,20)
 
-NAPT.all[which(NAPT.all$ANALYSIS == 'Pipette'),]
 
-NAPT.Texture.data<-data.frame(as.numeric(NAPT.all$SAND_Med),as.numeric(NAPT.all$SILT_Med),as.numeric(NAPT.all$CLAY_Med),as.numeric(NAPT.all$SAND_MAD),as.numeric(NAPT.all$SILT_MAD),as.numeric(NAPT.all$CLAY_MAD), NAPT.all$SAMPLE, NAPT.all$ANALYSIS) ;
-
-str(NAPT.Texture.data)
-
-names(NAPT.Texture.data)[c(1:6)]<-c('SAND' , 'SILT' , 'CLAY', 'MAD_SAND' , 'MAD_SILT' , 'MAD_CLAY') ;
-
-head(NAPT.Texture.data)
-str(NAPT.Texture.data)
-
-which(is.na(NAPT.Texture.data$SAND))
-
-
-NAPT.Texture.data.norm<-TT.normalise.sum(NAPT.Texture.data)  ;
-
-which(is.na.data.frame(NAPT.Texture.data.norm),arr.ind = T)
-
-NAPT<-data.frame(NAPT.Texture.data.norm,NAPT.Texture.data)  ;
-
-names(NAPT)[c(10,11)]<-c('SAMPLE' , 'ANALYSIS') ;
-
-head(NAPT)
 
 
 ###########PLot the Data ######################
 
 TT.plot(
   class.sys          ="USDA-NCSS.TT",
-  tri.data           = NAPT,
+  tri.data           = NAPT.all,
+  css.names          =c('CLAY.Med' , 'SILT.Med' , 'SAND.Med'),
+  tri.sum.tst        =F,
   main               ="NAPT  and ALP Samples Texture Data",
   #class.p.bg.col     =T,
   #pch                = "circles",
@@ -296,34 +209,26 @@ TT.plot(
 
 
 
-ALLP.data.1<-readWorksheetFromFile("Results_data_all.xlsx", sheet="ALP",startCol= 1, endCol=7) ;
-str(ALLP.data.1)
-head(ALLP.data.1)
+ALLP.data<-readWorksheetFromFile("Results_data_all.xlsx", sheet="ALP",startCol= 1, endCol=7) ;
+str(ALLP.data)
+head(ALLP.data)
 
 
-ALLP.data.2<-ALLP.data.1[,c('Sand_Mean' , 'Silt_Mean' , 'Clay_Mean', 'Sand_MAD' ,'Silt_MAD' , 'Clay_MAD' ,'Sample')] ;
-
-
-names(ALLP.data.2)<-c('SAND' , 'SILT' , 'CLAY', 'MAD_SAND' , 'MAD_SILT' , 'MAD_CLAY', 'SAMPLE')  ;
-
-
-ALLP.norm<-TT.normalise.sum(ALLP.data.2)   ;
-
-
-ALLP<-data.frame(ALLP.norm,ALLP.data.2 )  ;
+names(ALLP.data)<-c('SAMPLE', 'SAND.MEAN' , 'SAND.MAD', 'SILT.MEAN' ,  'SILT.MAD',  'CLAY.MEAN', 'CLAY.MAD' )  ;
 
 
 
-
-str(ALLP)
-head(ALLP)
+str(ALLP.data)
+head(ALLP.data)
 
 ###########PLot the Data ######################
 
 
 TT.plot(
   class.sys          ="USDA-NCSS.TT",
-  tri.data           = ALLP
+  tri.data           = ALLP.data,
+  css.names          =c('CLAY.MEAN' , 'SILT.MEAN' , 'SAND.MEAN'),
+  tri.sum.tst        =F
   # #class.p.bg.col     =T,
   # pch                = "O",
   # col                ="white",
@@ -336,42 +241,46 @@ TT.plot(
 
 
 NAPT.Texture.clases<-TT.points.in.classes(
-  tri.data = NAPT,
+  tri.data = NAPT.all,
   class.sys = "USDA-NCSS.TT",
+  css.names = c('CLAY.Med' , 'SILT.Med' , 'SAND.Med'),
+  tri.sum.tst = F,
   PiC.type  = "t"
   
 )
 
 
-NAPT$TextureClass<-NAPT.Texture.clases  ;
-head(NAPT)
+NAPT.all$TextureClass<-NAPT.Texture.clases  ;
+head(NAPT.all)
 
 
 
 
 ALLP.Texture.clases<-TT.points.in.classes(
-  tri.data = ALLP,
+  tri.data = ALLP.data,
   class.sys = "USDA-NCSS.TT",
+  css.names = c('CLAY.MEAN' , 'SILT.MEAN' , 'SAND.MEAN'),
+  tri.sum.tst = F,
   PiC.type  = "t"
   
 )
 
 
-ALLP$ANALYSIS<-c('Hydrometer') ;
+ALLP.data$ANALYSIS<-c('Hydrometer') ;
 
 
-ALLP$TextureClass<-ALLP.Texture.clases ;
-
-
-
+ALLP.data$TextureClass<-ALLP.Texture.clases ;
 
 
 
-head(ALLP)
-str(ALLP)
 
-head(NAPT)
-str(NAPT)
+
+
+head(ALLP.data)
+str(ALLP.data)
+
+head(NAPT.all)
+str(NAPT.all)
 
 
 
