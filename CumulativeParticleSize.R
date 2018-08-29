@@ -46,14 +46,17 @@ library('soiltexture')
 library(XLConnect) ;
 
 
-LassDiff.name<-readWorksheetFromFile("../Manuscript/USDA Standards_PSA_Mastersizer_FM20180713.xlsx", sheet="correct (6)",startRow=2, endRow=2, header=F) ; 
+
+LassDiff.name<-readWorksheetFromFile("../Manuscript/USDA Standards_PSA_Mastersizer_Felipe_20180824.xlsx", sheet="correct (6) fraction",startRow=2, endRow=2, header=F) ; 
+
 
 str(LassDiff.name[1,1])
 head(LassDiff.name)
 
+
 sapply(strsplit(as.character(LassDiff.name[1,]),"/"),"[", 1)
 
-LassDiff.1<-readWorksheetFromFile("../Manuscript/USDA Standards_PSA_Mastersizer_FM20180713.xlsx", sheet="correct (6)",startRow=5, endRow=104, header=F) ; 
+LassDiff.1<-readWorksheetFromFile("../Manuscript/USDA Standards_PSA_Mastersizer_Felipe_20180824.xlsx", sheet="correct (6) fraction",startRow=5, endRow=104, header=F) ; 
 
 
 names(LassDiff.1)<-c('Row','Size', 'nothing' ,sapply(strsplit(as.character(LassDiff.name[1,]),"/"),"[", 1))
@@ -65,7 +68,7 @@ tail(LassDiff.1)
 ################ getting the total sample mass and the mass of Sand #################
 
 
-MassANDSand<-readWorksheetFromFile("../Manuscript/USDA Standards_PSA_Mastersizer_FM20180702.xlsx", sheet="correct (6)",startRow=109, endRow=110, startCol=4, header=F) ;
+MassANDSand<-readWorksheetFromFile("../Manuscript/USDA Standards_PSA_Mastersizer_Felipe_20180824.xlsx", sheet="correct (6) fraction",startRow=111, endRow=112, startCol=4, header=F) ;
 
 
 
@@ -144,11 +147,21 @@ diff(LassDiff.1[1:74,2],differences = 1)
 length(MassANDSand)
 head(MassANDSand)
 
+
+
+
+
 ScalingFactor<-(1-(MassANDSand[2,1:length(MassANDSand)]/MassANDSand[1,1:length(MassANDSand)]))  ;
 
+#  some of the ScalingFactor calculation below produces NA as a result that theres in A 'NA' value in the cell, therefore the result need to be filtered for 'it'NA values.
+ 
+is.na(ScalingFactor)
 
 
-ScaledLD.data<-data.frame(LassDiff.1[1:74,2],as.matrix(LassDiff.1[1:74,seq(4,length(MassANDSand)+3)]) %*% diag(ScalingFactor/100));
+ScalingFactor.Not_NA<-ScalingFactor[!is.na(ScalingFactor)]
+
+ScaledLD.data<-data.frame(LassDiff.1[1:74,2],as.matrix(LassDiff.1[1:74,seq(4,length(MassANDSand)-1)]) %*% diag(ScalingFactor.Not_NA/100));
+
 
 
 names(ScaledLD.data)<-c('Size',LassDiff.name[1:51])
@@ -176,10 +189,11 @@ names(ScaledLD.data)
 ################ Ploting the scaled fraction with sand ##########  
 
 ######## changing the margin parameter prr mar
-par(mar=c(5.1, 10, 4.1, 2.1))
+#par(mar=c(5.1, 10, 4.1, 2.1))
 
 # creating an adequate size labels numbering for the bar plot
 SizeLabels<-c(as.character(signif(ScaledLD.data[1:18,1],2)), as.character(signif(ScaledLD.data[19:38,1],2)), as.character(signif(ScaledLD.data[39:55,1],2)), as.character(signif(ScaledLD.data[56:74,1],2)))  ;
+
 
 i=2
 
@@ -545,7 +559,7 @@ abline(v=157,lty=2, col="RED", lwd=5)
 
 par(mar= c(4.1, 4.1, 0, 2.1))
 
-barplot( height=t(ScaledLD.data[,c(8,12,16)]), beside=T, col= c('BLACK','BLUE','GREEN'), names.arg=SizeLabels[seq(1,74)], ylim=c(0,0.035), cex.names =0.5, cex.axis=0.5, cex.lab= 0.7, ylab="Particle Size Fraction", xlab=expression(paste("Equivalent particle size ( ", mu, "m)")), space=c(0,0.1),las=2)
+barplot( height=t(ScaledLD.data[,c(9,13,16)]), beside=T, col= c('BLACK','BLUE','GREEN'), names.arg=SizeLabels[seq(1,74)], ylim=c(0,0.035), cex.names =0.5, cex.axis=0.5, cex.lab= 0.7, ylab="Particle Size Fraction", xlab=expression(paste("Equivalent particle size ( ", mu, "m)")), space=c(0,0.1),las=2)
 
 
 text(182,0.034, "SILT", col="BLACK", cex=0.8)
@@ -711,41 +725,6 @@ dev.off()
 
 
 
-
-##########################################################################################################################################
-
-barplot( height=t(ScaledLD.data[,c(8,12,13,16)]), beside=T, col= c('GREEN','BLACK','BLUE','RED'), names.arg=SizeLabels[seq(1,74)], ylim=c(0,0.035), cex.names =0.5, cex.axis=0.5, cex.lab= 0.7, ylab="Particle Size Fraction", xlab=expression(paste("Equivalent particle size ( ", mu, "m)")), space=c(0,0.1),las=2, border=NA)
-
-
-TT.plot(
-  class.sys          ="USDA-NCSS.TT",
-  main               =NA,
-  tri.data           = Comparing.Samples[7,],
-  css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
-  frame.bg.col       ="gray75",
-  pch                =16,
-  col                 ="Black",
-  cex                = 0.5,
-  lwd                = 0.3,
-  cex.axis           = 0.3,
-  lwd.axis           = 0.3,
-  lwd.lab            = 0.4,
-  cex.lab            =0.4,
-  class.lab.show     ='none'
-)
-
-
-
-TT.text(
-  tri.data           = Comparing.Samples,
-  geo                = geo.ALLP,
-  css.names          = c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
-  labels             = Comparing.Samples[,"SAMPLE"],
-  pos                = 3,
-  cex                = 0.8,
-  offset             = 0.2,
-  font               =2
-)
 
 
         
