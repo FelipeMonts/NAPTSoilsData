@@ -179,6 +179,7 @@ NAPT.data.head<-NAPT.data[c(1,2),] ;
 
 NAPT.data.nohead<-NAPT.data[-c(1,2),] ;
 
+head(NAPT.data.nohead)
 
 NAPT.data.nohead$SAMPLE<-str_split(str_split(NAPT.data.nohead$X, " ", simplify = T)[,2], "_" ,simplify = T)[,1] ;
 
@@ -505,6 +506,8 @@ TT.plot(
   class.sys          ="USDA-NCSS.TT",
   main               ="Texture data for the NAPT, ALP and selected soil samples",
   tri.data           = NAPT,
+  css.names          =c('CLAY.1', 'SILT.1' , 'SAND.1'),
+  tri.sum.tst        =F, # allows toplot texture fraction that do not all to 100 as in the NAPT and ALP databases
   #main               ="NAPT Texture Data",
   pch                = 24,
   bg                 ="white",
@@ -519,7 +522,9 @@ TT.plot(
 
 TT.points(
   geo.ALLP,
-  tri.data           = ALLP.norm,
+  tri.data           = ALLP,
+  css.names          =c('CLAY.1', 'SILT.1' , 'SAND.1'),
+  tri.sum.tst        =F, # allows toplot texture fraction that do not all to 100 as in the NAPT and ALP databases
   #class.p.bg.col     =T,
   pch                = 25,
   bg                 ="grey50",
@@ -533,7 +538,8 @@ TT.points(
 TT.points(
   geo.ALLP,
   tri.data           = Paper.Samples,
-  css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
+  css.names          =c('CLAY', 'SILT' , 'SAND'),
+  tri.sum.tst        =F, # allows toplot texture fraction that do not all to 100 as in the NAPT and ALP databases
   pch                =21,
   bg                 ="RED",
   col                ="black",

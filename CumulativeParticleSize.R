@@ -45,16 +45,31 @@ library('soiltexture')
 
 library(XLConnect) ;
 
-
+############################################## REad the names of the samples from the spreadsheet ######################################
 
 LassDiff.name<-readWorksheetFromFile("../Manuscript/USDA Standards_PSA_Mastersizer_Felipe_20180824.xlsx", sheet="correct (6) fraction",startRow=2, endRow=2, header=F) ; 
 
 
-str(LassDiff.name[1,1])
-head(LassDiff.name)
+############################################# Compare seleted samples with the origonal data from NAPT and ALP ##########################
 
 
-sapply(strsplit(as.character(LassDiff.name[1,]),"/"),"[", 1)
+# Use the LassDiff.name to get the name of the samples selected in the apropriate format to compare with other sample selection
+
+LDRunSamples.all<-sapply(strsplit(sapply(strsplit(names(LassDiff.1)," "), "[",2), "-5"), '[',1) ;
+
+LDRunSamples.Not_NA<-LDRunSamples.all[!is.na(LDRunSamples)] [1:51];
+
+
+LDRunSamples<-data.frame(LDRunSamples.Not_NA,c("Pipette"),c("Hydrometer"))  ;
+
+match(LDRunSamples[,1:2],NAPT[,c("SAMPLE", "ANALYSIS")])
+
+
+
+
+############################################# Read the LD data from the spreadsheet  ########################################################
+
+
 
 LassDiff.1<-readWorksheetFromFile("../Manuscript/USDA Standards_PSA_Mastersizer_Felipe_20180824.xlsx", sheet="correct (6) fraction",startRow=5, endRow=104, header=F) ; 
 
@@ -643,7 +658,9 @@ TT.plot(
   class.sys          ="USDA-NCSS.TT",
   main               =NA,
   tri.data           = Comparing.Samples[8,],
-  css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
+  #css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
+  css.names          =c('CLAY', 'SILT' , 'SAND'),
+  tri.sum.tst        =F, 
   frame.bg.col       ="gray75",
   pch                =16,
   col                 ="BLACK",
@@ -660,7 +677,8 @@ TT.plot(
 TT.points(
   geo.ALLP,
   tri.data           = Comparing.Samples[10,],
-  css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
+  css.names          =c('CLAY', 'SILT' , 'SAND'),
+  tri.sum.tst        =F, 
   pch                = 21,
   bg                 ="GREEN",
   cex                = 0.5,
@@ -672,7 +690,8 @@ TT.points(
 TT.points(
   geo.ALLP,
   tri.data           = Comparing.Samples[9,],
-  css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
+  css.names          =c('CLAY', 'SILT' , 'SAND'),
+  tri.sum.tst        =F, 
   pch                = 21,
   bg                 ="BLUE",
   cex                = 0.5,
@@ -683,7 +702,8 @@ TT.points(
 TT.text(
   tri.data           = Comparing.Samples[8,],
   geo                = geo.ALLP,
-  css.names          = c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
+  css.names          =c('CLAY', 'SILT' , 'SAND'),
+  tri.sum.tst        =F, 
   labels             = Comparing.Samples[8,"SAMPLE"],
   pos                = 4,
   cex                = 0.4,
@@ -694,7 +714,8 @@ TT.text(
 TT.text(
   tri.data           = Comparing.Samples[9,],
   geo                = geo.ALLP,
-  css.names          = c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
+  css.names          =c('CLAY', 'SILT' , 'SAND'),
+  tri.sum.tst        =F, 
   labels             = Comparing.Samples[9,"SAMPLE"],
   pos                = 2,
   cex                = 0.4,
@@ -705,7 +726,8 @@ TT.text(
 TT.text(
   tri.data           = Comparing.Samples[10,],
   geo                = geo.ALLP,
-  css.names          = c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
+  css.names          =c('CLAY', 'SILT' , 'SAND'),
+  tri.sum.tst        =F, 
   labels             = Comparing.Samples[10,"SAMPLE"],
   pos                = 3,
   cex                = 0.4,
