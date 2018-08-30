@@ -274,6 +274,7 @@ ALLP.data$TextureClass<-ALLP.Texture.clases ;
 
 
 
+####### Get all the data together to plot
 
 
 head(ALLP.data)
@@ -284,11 +285,31 @@ str(NAPT.all)
 
 
 
+NAPT<-NAPT.all[,c('SAMPLE', 'SAND.Med' , 'SILT.Med', 'CLAY.Med', 'TextureClass')];
+
+names(NAPT)<-c('SAMPLE', 'SAND' , 'SILT', 'CLAY', 'TextureClass' );
+
+head(NAPT)
+
+
+ALLP<-ALLP.data[,c('SAMPLE', 'SAND.MEAN' , 'SILT.MEAN', 'CLAY.MEAN', 'TextureClass')];
+
+names(ALLP)<-c('SAMPLE', 'SAND' , 'SILT', 'CLAY', 'TextureClass');
+
+head(ALLP)
+
+
+
+
 All.Data<-rbind(NAPT,ALLP) ;
 
 head(All.Data)
 tail(All.Data)
 str(All.Data)
+
+
+######Transform the Texture Class variabl into a Factor 
+
 
 All.Data$TextureFactor<-as.factor(All.Data$TextureClass) ;
 levels(All.Data$TextureFactor)
@@ -367,7 +388,8 @@ TT.plot(
   class.sys          ="USDA-NCSS.TT",
   main               ="Texture data for the NAPT, ALP and Selected soil samples",
   tri.data           = Paper.Samples,
-  css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
+  css.names          =c('CLAY' , 'SILT' , 'SAND'),
+  tri.sum.tst        =F, # allows toplot texture fraction that do not all to 100 as in the NAPT and ALP databases
   pch                =1,
   #bg                 =1,
   col                ="black",
@@ -382,6 +404,8 @@ TT.points(
   geo.ALLP,
   # class.sys          ="USDA-NCSS.TT",
   tri.data           = NAPT,
+  css.names          =c('CLAY' , 'SILT' , 'SAND'),
+  tri.sum.tst        =F, # allows toplot texture fraction that do not all to 100 as in the NAPT and ALP databases
   #main               ="NAPT Texture Data",
   pch                = 24,
   bg                 ="white",
@@ -393,7 +417,10 @@ TT.points(
 
 TT.points(
   geo.ALLP,
-  tri.data           = ALLP.norm,
+  tri.data           = ALLP,
+  css.names          =c('CLAY' , 'SILT' , 'SAND'),
+  tri.sum.tst        =F, # allows toplot texture fraction that do not all to 100 as in the NAPT and ALP databases
+  #main               ="NAPT Texture Data",
   #class.p.bg.col     =T,
   pch                = 25,
   bg                 ="grey50",
@@ -415,12 +442,12 @@ TT.plot(
   class.sys          ="USDA-NCSS.TT",
   main               ="Texture data for the NAPT, ALP and selected soil samples",
   tri.data           = NAPT,
-  css.names          =c('CLAY.1', 'SILT.1' , 'SAND.1'),
+  css.names          =c('CLAY', 'SILT' , 'SAND'),
   tri.sum.tst        =F, # allows toplot texture fraction that do not all to 100 as in the NAPT and ALP databases
   #main               ="NAPT Texture Data",
   pch                = 24,
-  bg                 ="white",
-  col                ="black",
+  bg                 ="WHITE",
+  col                ="BLACK",
   cex                = 1.5,
   lwd                = 0.5,
   frame.bg.col       ="gray75"
@@ -432,7 +459,7 @@ TT.plot(
 TT.points(
   geo.ALLP,
   tri.data           = ALLP,
-  css.names          =c('CLAY.1', 'SILT.1' , 'SAND.1'),
+  css.names          =c('CLAY', 'SILT' , 'SAND'),
   tri.sum.tst        =F, # allows toplot texture fraction that do not all to 100 as in the NAPT and ALP databases
   #class.p.bg.col     =T,
   pch                = 25,
@@ -450,14 +477,14 @@ TT.points(
   css.names          =c('CLAY', 'SILT' , 'SAND'),
   tri.sum.tst        =F, # allows toplot texture fraction that do not all to 100 as in the NAPT and ALP databases
   pch                =21,
-  bg                 ="RED",
-  col                ="black",
-  cex                = 1.2,
-  lwd                = 1
+  bg                 =NA,
+  col                ="RED",
+  cex                = 2.5,
+  lwd                = 4
 )
 
 
-legend("topleft", legend = c("NAPT", "ALP", "This Study"), pch=c( 24, 25, 21), pt.bg = c("white", "grey50", "red"))
+legend("topleft", legend = c("NAPT", "ALP", "This Study"), pch=c(24, 25, 21), col=c( 'BLACK', 'BLACK', 'RED'), pt.bg = c("white", "grey50", NA), pt.cex=c(1.5,1.5,2.5), pt.lwd=c(0.5,0.5,4))
 
 dev.off()
 
