@@ -115,6 +115,14 @@ head(NAPT.data.MAD)
 NAPT.data.n<-NAPT.data.nohead[NAPT.data.nohead$VALUE == 'n',]
 
 
+#### Caluclate the mode of the number of samples reported for each method
+
+names(table(unlist(NAPT.data.n[,c('V1' , 'V2' , 'V3')])))[table(unlist(NAPT.data.n[,c('V1' , 'V2' , 'V3')]))==max(table(unlist(NAPT.data.n[,c('V1' , 'V2' , 'V3')])))]
+
+
+names(table(unlist(NAPT.data.n[,c('V4' , 'V5' , 'V6')])))[table(unlist(NAPT.data.n[,c(c('V4' , 'V5' , 'V6'))]))==max(table(unlist(NAPT.data.n[,c(c('V4' , 'V5' , 'V6'))])))]
+
+
 str(NAPT.data.n)
 head(NAPT.data.n)
 
@@ -386,7 +394,7 @@ geo.ALLP<-TT.plot(
 TT.plot(
   #geo.ALLP,
   class.sys          ="USDA-NCSS.TT",
-  main               ="Texture data for the NAPT, ALP and Selected soil samples",
+  main               ="USDA - NCRCS Texture classification for the NAPT, ALP and selected soil samples",
   tri.data           = Paper.Samples,
   css.names          =c('CLAY' , 'SILT' , 'SAND'),
   tri.sum.tst        =F, # allows toplot texture fraction that do not all to 100 as in the NAPT and ALP databases
@@ -440,7 +448,7 @@ tiff(filename="../Manuscript/Figures/AllData.tiff", width=3840 , height=3840, po
 TT.plot(
   #geo.ALLP,
   class.sys          ="USDA-NCSS.TT",
-  main               ="Texture data for the NAPT, ALP and selected soil samples",
+  main               ='USDA - NCRCS Texture classification for the NAPT, \nALP and selected soil samples',
   tri.data           = NAPT,
   css.names          =c('CLAY', 'SILT' , 'SAND'),
   tri.sum.tst        =F, # allows toplot texture fraction that do not all to 100 as in the NAPT and ALP databases
