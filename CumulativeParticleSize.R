@@ -55,14 +55,14 @@ LassDiff.name<-readWorksheetFromFile("../Manuscript/USDA Standards_PSA_Mastersiz
 
 # Use the LassDiff.name to get the name of the samples selected in the apropriate format to compare with other sample selection
 
-LDRunSamples.all<-sapply(strsplit(sapply(strsplit(names(LassDiff.1)," "), "[",2), "-5"), '[',1) ;
+LDRunSamples.all<-sapply(strsplit(sapply(strsplit(unlist(LassDiff.name[1,1:51]), " "), "[",2), "-5"), '[',1) ;
 
-LDRunSamples.Not_NA<-LDRunSamples.all[!is.na(LDRunSamples)] [1:51];
+LDRunSamples.Not_NA<-LDRunSamples.all[!is.na(LDRunSamples.all)];
 
 
-LDRunSamples<-data.frame(LDRunSamples.Not_NA,c("Pipette"),c("Hydrometer"))  ;
-
-match(LDRunSamples[,1:2],NAPT[,c("SAMPLE", "ANALYSIS")])
+# LDRunSamples<-data.frame(LDRunSamples.Not_NA,c("Pipette"),c("Hydrometer"))  ;
+# 
+# match(LDRunSamples[,1:3],NAPT.all[,c("SAMPLE", "ANALYSIS")])
 
 
 
@@ -127,11 +127,11 @@ barplot(as.matrix(LassDiff.1[1:74,5]), beside=T,add=T, col=rgb(1,0,1, alpha=0.5)
 
 
 
-barplot(height=LassDiff.1[1:74,4],width=diff(LassDiff.1[1:74,2],differences = 1), names.arg=LassDiff.1[1:74,2],beside=T, col=rgb(0,0,1, alpha=0.5), horiz = T, ylim=c(0.01,100), xlim=c(0,max(LassDiff.1[52:74,c(2,4)])))
-barplot(height=LassDiff.1[1:74,4],width=diff(LassDiff.1[1:74,2],differences = 1), names.arg=LassDiff.1[1:74,2],beside=T, col=rgb(1,0,0, alpha=0.5), horiz = T, ylim=c(0.01,100), xlim=c(0,max(LassDiff.1[52:74,c(2,3)])),add=T)
-barplot(as.matrix(LassDiff.1[1:74,5]),beside=T,add=T, col=rgb(1,0,1, alpha=0.5) , horiz = T)
-
-diff(LassDiff.1[1:74,2],differences = 1)
+# barplot(height=LassDiff.1[1:74,4],width=diff(LassDiff.1[1:74,2],differences = 1), names.arg=LassDiff.1[1:74,2],beside=T, col=rgb(0,0,1, alpha=0.5), horiz = T, ylim=c(0.01,100), xlim=c(0,max(LassDiff.1[52:74,c(2,4)])))
+# barplot(height=LassDiff.1[1:74,4],width=diff(LassDiff.1[1:74,2],differences = 1), names.arg=LassDiff.1[1:74,2],beside=T, col=rgb(1,0,0, alpha=0.5), horiz = T, ylim=c(0.01,100), xlim=c(0,max(LassDiff.1[52:74,c(2,3)])),add=T)
+# barplot(as.matrix(LassDiff.1[1:74,5]),beside=T,add=T, col=rgb(1,0,1, alpha=0.5) , horiz = T)
+# 
+# diff(LassDiff.1[1:74,2],differences = 1)
 
 
 
@@ -221,10 +221,11 @@ for (i in seq(2,length(MassANDSand))) {
   
   #initilaizing the horizontal bar plot with the first scaled LD results
   
-  barplot(height=ClayScaled.data[,i], width=rep(1.4,74),names.arg=SizeLabels[seq(1,74)], space=0.2, col=rgb(1,0,0,0.5), horiz = T, ylim=c(0.01,110),las=1,cex.names = 0.5, cex.axis=1,xlab="Particle Size Fraction (%)", ylab=expression(paste("Equivalent particle size ( ", mu, "m)")))
+  barplot(height=ScaledLD.data[,i], width=rep(1.4,74),names.arg=SizeLabels[seq(1,74)], space=0.2, col=rgb(1,0,0,0.5), horiz = T, ylim=c(0.01,110),las=1,cex.names = 0.5, cex.axis=1,xlab="Particle Size Fraction (%)", ylab=expression(paste("Equivalent particle size ( ", mu, "m)")))
   
-  barplot(height=SiltScaled.data[,i], width=rep(1.4,74), space=0.2, col=rgb(0,0,1,0.5), horiz = T,las=1,add=T)
+  abline(h=85,lty=2, col=rgb(1,0,0,1), lwd=10)
   
+  text(0.01,40, "CLAY", col="black")
   
   
   dev.off()
@@ -563,23 +564,23 @@ par(mfrow=c(2,1))
 par(mar= c(1, 4.1 ,2.1, 2.1))
 
 
-barplot( height=t(ScaledLD.data[,c(18,19,21)]), beside=T, col= c('GREEN','BLACK','BLUE'), names.arg=SizeLabels[seq(1,74)], axisnames= F, ylim=c(0,0.035), cex.names =0.5, cex.axis=0.5, cex.lab= 0.7, ylab="Particle Size Fraction", xlab=NA, space=c(0,0.1),las=2)
+barplot( height=t(ScaledLD.data[,c(27,15,25)]), beside=T, col= c('GREEN','BLACK','BLUE'), names.arg=SizeLabels[seq(1,74)], axisnames= F, ylim=c(0,0.04), cex.names =0.5, cex.axis=0.5, cex.lab= 0.7, ylab="Particle Size Fraction", xlab=NA, space=c(0,0.1),las=2)
 
 
-text(182,0.034, "SILT", col="BLACK", cex=0.8)
+text(182,0.038, "SILT", col="BLACK", cex=0.8)
 
-text(132,0.034, "CLAY", col="BLACK", cex=0.8)
+text(120,0.038, "CLAY", col="BLACK", cex=0.8)
 
 abline(v=157,lty=2, col="RED", lwd=5)
 
 par(mar= c(4.1, 4.1, 0, 2.1))
 
-barplot( height=t(ScaledLD.data[,c(9,13,16)]), beside=T, col= c('BLACK','BLUE','GREEN'), names.arg=SizeLabels[seq(1,74)], ylim=c(0,0.035), cex.names =0.5, cex.axis=0.5, cex.lab= 0.7, ylab="Particle Size Fraction", xlab=expression(paste("Equivalent particle size ( ", mu, "m)")), space=c(0,0.1),las=2)
+barplot( height=t(ScaledLD.data[,c(19,8,13)]), beside=T, col= c('BLACK','BLUE','GREEN'), names.arg=SizeLabels[seq(1,74)], ylim=c(0,0.04), cex.names =0.5, cex.axis=0.5, cex.lab= 0.7, ylab="Particle Size Fraction", xlab=expression(paste("Equivalent particle size ( ", mu, "m)")), space=c(0,0.1),las=2)
 
 
-text(182,0.034, "SILT", col="BLACK", cex=0.8)
+text(182,0.038, "SILT", col="BLACK", cex=0.8)
 
-text(132,0.034, "CLAY", col="BLACK", cex=0.8)
+text(120,0.038, "CLAY", col="BLACK", cex=0.8)
 
 abline(v=157,lty=2, col="RED", lwd=5)
 
@@ -596,8 +597,9 @@ par(mar= c(5.1, 4.1, 4.1, 2.1))
 TT.plot(
   class.sys          ="USDA-NCSS.TT",
   main               =NA,
-  tri.data           = Comparing.Samples[12,],
-  css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
+  tri.data           = Comparing.Samples[10,],
+  css.names          =c('CLAY', 'SILT' , 'SAND'),
+  tri.sum.tst        =F, # allows toplot texture fraction that do not all to 100 as in the NAPT and ALP databases
   frame.bg.col       ="gray75",
   pch                =16,
   col                 ="Black",
@@ -613,8 +615,9 @@ TT.plot(
 
 TT.points(
   geo.ALLP,
-  tri.data           = Comparing.Samples[5,],
-  css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
+  tri.data           = Comparing.Samples[9,],
+  css.names          =c('CLAY', 'SILT' , 'SAND'),
+  tri.sum.tst        =F, # allows toplot texture fraction that do not all to 100 as in the NAPT and ALP databases
   pch                = 21,
   bg                 ="GREEN",
   cex                = 0.5,
@@ -625,20 +628,23 @@ TT.points(
 
 TT.points(
   geo.ALLP,
-  tri.data           = Comparing.Samples[1,],
-  css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
+  tri.data           = Comparing.Samples[14,],
+  css.names          =c('CLAY', 'SILT' , 'SAND'),
+  tri.sum.tst        =F, # allows toplot texture fraction that do not all to 100 as in the NAPT and ALP databases
   pch                = 21,
   bg                 ="BLUE",
   cex                = 0.5,
   lwd                = 0.5
 )
 
+Comparing.Samples[14,"SAMPLE"]<-c('SRS1604') ;
 
 TT.text(
-  tri.data           = Comparing.Samples[c(1,5,12),],
+  tri.data           = Comparing.Samples[c(10,9,14),],
   geo                = geo.ALLP,
-  css.names          = c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
-  labels             = Comparing.Samples[c(1,5,12),"SAMPLE"],
+  css.names          =c('CLAY', 'SILT' , 'SAND'),
+  tri.sum.tst        =F, # allows toplot texture fraction that do not all to 100 as in the NAPT and ALP databases
+  labels             = Comparing.Samples[c(10,9,14),"SAMPLE"],
   pos                = 3,
   cex                = 0.4,
   offset             = 0.2,
@@ -657,7 +663,7 @@ par(mar= c(5.1, 4.1, 4.1, 2.1))
 TT.plot(
   class.sys          ="USDA-NCSS.TT",
   main               =NA,
-  tri.data           = Comparing.Samples[8,],
+  tri.data           = Comparing.Samples[15,],
   #css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
   css.names          =c('CLAY', 'SILT' , 'SAND'),
   tri.sum.tst        =F, 
@@ -676,7 +682,7 @@ TT.plot(
 
 TT.points(
   geo.ALLP,
-  tri.data           = Comparing.Samples[10,],
+  tri.data           = Comparing.Samples[6,],
   css.names          =c('CLAY', 'SILT' , 'SAND'),
   tri.sum.tst        =F, 
   pch                = 21,
@@ -689,7 +695,7 @@ TT.points(
 
 TT.points(
   geo.ALLP,
-  tri.data           = Comparing.Samples[9,],
+  tri.data           = Comparing.Samples[11,],
   css.names          =c('CLAY', 'SILT' , 'SAND'),
   tri.sum.tst        =F, 
   pch                = 21,
@@ -700,11 +706,11 @@ TT.points(
 
 
 TT.text(
-  tri.data           = Comparing.Samples[8,],
+  tri.data           = Comparing.Samples[15,],
   geo                = geo.ALLP,
   css.names          =c('CLAY', 'SILT' , 'SAND'),
   tri.sum.tst        =F, 
-  labels             = Comparing.Samples[8,"SAMPLE"],
+  labels             = Comparing.Samples[15,"SAMPLE"],
   pos                = 4,
   cex                = 0.4,
   offset             = 0.2,
@@ -712,11 +718,11 @@ TT.text(
 )
 
 TT.text(
-  tri.data           = Comparing.Samples[9,],
+  tri.data           = Comparing.Samples[6,],
   geo                = geo.ALLP,
   css.names          =c('CLAY', 'SILT' , 'SAND'),
   tri.sum.tst        =F, 
-  labels             = Comparing.Samples[9,"SAMPLE"],
+  labels             = Comparing.Samples[6,"SAMPLE"],
   pos                = 2,
   cex                = 0.4,
   offset             = 0.2,
@@ -724,11 +730,11 @@ TT.text(
 )
 
 TT.text(
-  tri.data           = Comparing.Samples[10,],
+  tri.data           = Comparing.Samples[11,],
   geo                = geo.ALLP,
   css.names          =c('CLAY', 'SILT' , 'SAND'),
   tri.sum.tst        =F, 
-  labels             = Comparing.Samples[10,"SAMPLE"],
+  labels             = Comparing.Samples[11,"SAMPLE"],
   pos                = 3,
   cex                = 0.4,
   offset             = 0.2,
