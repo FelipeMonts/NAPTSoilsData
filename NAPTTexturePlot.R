@@ -486,13 +486,13 @@ TT.points(
   tri.sum.tst        =F, # allows toplot texture fraction that do not all to 100 as in the NAPT and ALP databases
   pch                =21,
   bg                 =NA,
-  col                ="RED",
+  col                ="BLACK",
   cex                = 2.5,
   lwd                = 4
 )
 
 
-legend("topleft", legend = c("NAPT", "ALP", "This Study"), pch=c(24, 25, 21), col=c( 'BLACK', 'BLACK', 'RED'), pt.bg = c("white", "grey50", NA), pt.cex=c(1.5,1.5,2.5), pt.lwd=c(0.5,0.5,4))
+legend("topleft", legend = c("NAPT", "ALP", "This Study"), pch=c(24, 25, 21), col=c( 'BLACK', 'BLACK', 'BLACK'), pt.bg = c("white", "grey50", NA), pt.cex=c(1.5,1.5,2.5), pt.lwd=c(0.5,0.5,4))
 
 dev.off()
 
