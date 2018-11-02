@@ -584,7 +584,7 @@ par(mar= c(4.1, 4.1, 0, 2.1))
 
 # barplot( height=t(ScaledLD.data[,c(19,8,13)]), beside=T, col= c('BLACK','GREEN', 'BLUE'), names.arg=SizeLabels[seq(1,74)], ylim=c(0,0.04), cex.names =0.5, cex.axis=0.5, cex.lab= 0.7, ylab="Particle Size Fraction", xlab=expression(paste("Equivalent particle size ( ", mu, "m)")), space=c(0,0.1),las=2)
 
-barplot( height=t(ScaledLD.data[,c(19,8,13)]), beside=T,col=c('GREY50', 'BLACK', 'WHITE'), names.arg=SizeLabels[seq(1,74)], ylim=c(0,0.04), cex.names =0.6, cex.axis=0.8, cex.lab= 0.8, ylab="Particle Size Fraction", xlab=expression(paste("Particle size ( ", mu, "m)")), space=c(0,0.1),las=2, lwd=2)
+barplot( height=t(ScaledLD.data[,c(19,8,13)]), beside=T,col=c('GREY50', 'BLACK', 'WHITE'), names.arg=SizeLabels[seq(1,74)], ylim=c(0,0.04), cex.names =0.6, cex.axis=0.8, cex.lab= 0.8, ylab="Particle Size Fraction", xlab=expression(paste("Particle size (", mu, "m)")), space=c(0,0.1),las=2, lwd=2)
 
 
 
@@ -811,7 +811,7 @@ par(mar= c(4.1, 4.1, 0, 2.1))
 
 # barplot( height=t(ScaledLD.data[,c(19,8,13)]), beside=T, col= c('BLACK','GREEN', 'BLUE'), names.arg=SizeLabels[seq(1,74)], ylim=c(0,0.04), cex.names =0.5, cex.axis=0.5, cex.lab= 0.7, ylab="Particle Size Fraction", xlab=expression(paste("Equivalent particle size ( ", mu, "m)")), space=c(0,0.1),las=2)
 
-barplot( height=t(ScaledLD.data[,c(19,8,13)]), beside=T, names.arg=SizeLabels[seq(1,74)], ylim=c(0,0.04), cex.names =0.5, cex.axis=0.5, cex.lab= 0.7, ylab="Particle Size Fraction", xlab=expression(paste("Equivalent particle size ( ", mu, "m)")), space=c(0,0.1),las=2)
+barplot( height=t(ScaledLD.data[,c(19,8,13)]), beside=T, names.arg=SizeLabels[seq(1,74)], ylim=c(0,0.04), cex.names =0.5, cex.axis=0.5, cex.lab= 0.7, ylab="Particle Size Fraction", xlab=expression(paste("Equivalent particle size (", mu, "m)")), space=c(0,0.1),las=2)
 
 
 
