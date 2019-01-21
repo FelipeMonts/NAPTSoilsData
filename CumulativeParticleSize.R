@@ -42,12 +42,17 @@ library('soiltexture')
 #
 #########################################################################################################
 
+# The package XLConnect has have problems with the java dependencies and therefore I replaced with openxlsx. 
+# library(XLConnect) ;
 
-library(XLConnect) ;
+#install.packages("openxlsx", dependencies = TRUE)
+library('openxlsx')
+
+
 
 ############################################## REad the names of the samples from the spreadsheet ######################################
 
-LassDiff.name<-readWorksheetFromFile("../Manuscript/USDA Standards_PSA_Mastersizer_Felipe_20180824.xlsx", sheet="correct (6) fraction",startRow=2, endRow=2, header=F) ; 
+LassDiff.name<-read.xlsx("../Manuscript/USDA Standards_PSA_Mastersizer_Felipe_20180824.xlsx", sheet="correct (6) fraction",startRow=2, colNames=F, rows=c(2)) ; 
 
 
 ############################################# Compare seleted samples with the origonal data from NAPT and ALP ##########################
@@ -71,8 +76,10 @@ LDRunSamples.Not_NA<-LDRunSamples.all[!is.na(LDRunSamples.all)];
 
 
 
-LassDiff.1<-readWorksheetFromFile("../Manuscript/USDA Standards_PSA_Mastersizer_Felipe_20180824.xlsx", sheet="correct (6) fraction",startRow=5, endRow=104, header=F) ; 
+LassDiff.1<-read.xlsx("../Manuscript/USDA Standards_PSA_Mastersizer_Felipe_20180824.xlsx", sheet="correct (6) fraction",startRow=5, colNames=F, rows=c(5:104),skipEmptyCols=F) ; 
 
+tail(LassDiff.1)
+str(LassDiff.1)
 
 names(LassDiff.1)<-c('Row','Size', 'nothing' ,sapply(strsplit(as.character(LassDiff.name[1,]),"/"),"[", 1))
 
@@ -83,7 +90,7 @@ tail(LassDiff.1)
 ################ getting the total sample mass and the mass of Sand #################
 
 
-MassANDSand<-readWorksheetFromFile("../Manuscript/USDA Standards_PSA_Mastersizer_Felipe_20180824.xlsx", sheet="correct (6) fraction",startRow=111, endRow=112, startCol=4, header=F) ;
+MassANDSand<-read.xlsx("../Manuscript/USDA Standards_PSA_Mastersizer_Felipe_20180824.xlsx", sheet="correct (6) fraction",startRow=111, rows=c(111,112), cols=(4:55), colNames=F) ;
 
 
 
@@ -173,9 +180,14 @@ ScalingFactor<-(1-(MassANDSand[2,1:length(MassANDSand)]/MassANDSand[1,1:length(M
 is.na(ScalingFactor)
 
 
-ScalingFactor.Not_NA<-ScalingFactor[!is.na(ScalingFactor)]
+ScalingFactor.Not_NA<-ScalingFactor[!is.na(ScalingFactor)];
+str(ScalingFactor.Not_NA)
 
-ScaledLD.data<-data.frame(LassDiff.1[1:74,2],as.matrix(LassDiff.1[1:74,seq(4,length(MassANDSand)-1)]) %*% diag(ScalingFactor.Not_NA/100));
+str(as.matrix(LassDiff.1[1:74,seq(4,length(MassANDSand))]));
+
+str(diag(ScalingFactor.Not_NA/100))
+
+ScaledLD.data<-data.frame(LassDiff.1[1:74,2],as.matrix(LassDiff.1[1:74,seq(4,length(MassANDSand)+3)]) %*% diag(ScalingFactor.Not_NA/100));
 
 
 
@@ -781,7 +793,7 @@ geo.ALLP<-TT.plot(
   
 )
 
-tiff(filename=paste0("../Manuscript/Figures/HorizontalDist",".tiff"), width=3840 , height=3840, pointsize = 80)
+tiff(filename=paste0("../Manuscript/Figures/HorizontalDist_2",".tiff"), width=3840 , height=3840, pointsize = 80)
 
 par(mfrow=c(2,1))
 
@@ -987,7 +999,231 @@ dev.off()
 
 
 
+################################### Final Manuscript Revised plot 1 pannel, vertical bars. SRS-1709, 2013-119 and 2011-118 ###################################
 
+geo.ALLP<-TT.plot(
+  class.sys          ="USDA-NCSS.TT",
+  frame.bg.col       ="gray75",
+  bg                 ="white"
+  
+)
+
+tiff(filename=paste0("../Manuscript/Figures/HorizontalDist_REV",".tiff"), width=5760 , height=3840, pointsize = 80)
+
+# #par(mfrow=c(2,1))
+# 
+# #initilaizing the horizontal bar plot with the first scaled LD results
+# 
+# # par(fig = c(0,1,0,1))
+# # par(plt=c(0.1,0.9,0.2,0.9))
+# 
+# # par(mar= c(5.1 4.1 4.1 2.1))
+# 
+par(mar= c(5.1, 4.1, 2.1, 5.1))
+# par(lwd=3)
+# 
+# 
+# # barplot( height=t(ScaledLD.data[,c(27,15,25)]), beside=T, col= c('GREEN','BLACK', 'BLUE' ), names.arg=SizeLabels[seq(1,74)], axisnames= F, ylim=c(0,0.04), cex.names =0.5, cex.axis=0.5, cex.lab= 0.7, ylab="Particle Size Fraction", xlab=NA, space=c(0,0.15),las=2,lwd=1.1)
+# 
+# barplot( height=t(ScaledLD.data[,c(27,15,25)]), beside=T, col=c('GREY50', 'WHITE','BLACK'),names.arg=SizeLabels[seq(1,74)], axisnames= F, ylim=c(0,0.04), cex.names =0.6, cex.axis=0.8, cex.lab= 0.8, ylab="Particle Size Fraction", xlab=NA, space=c(0,0.1),las=2, lwd=2)
+# 
+# 
+# 
+# 
+# text(182,0.038, "SILT", col="BLACK", cex=0.8)
+# 
+# text(120,0.038, "CLAY", col="BLACK", cex=0.8)
+# 
+# text(5,0.038, "A)")
+# 
+# abline(v=157,lty=2, col="BLACK", lwd=7)
+# 
+# par(mar= c(4.1, 4.1, 0, 2.1))
+# 
+# barplot( height=t(ScaledLD.data[,c(19,8,13)]), beside=T, col= c('BLACK','GREEN', 'BLUE'), names.arg=SizeLabels[seq(1,74)], ylim=c(0,0.04), cex.names =0.5, cex.axis=0.5, cex.lab= 0.7, ylab="Particle Size Fraction", xlab=expression(paste("Equivalent particle size ( ", mu, "m)")), space=c(0,0.1),las=2)
+
+barplot( height=t(ScaledLD.data[,c(19,8,13)]), beside=T,col=c('GREY50', 'BLACK', 'WHITE'), names.arg=SizeLabels[seq(1,74)], ylim=c(0,0.04), cex.names =1, cex.axis=1.0, cex.lab= 1.2, ylab="Particle Size Fraction", xlab=expression(paste("Particle size (", mu, "m)")), space=c(0,0.1),las=2, lwd=2)
+
+
+
+text(182,0.038, "SILT", col="BLACK", cex=1.0)
+
+text(120,0.038, "CLAY", col="BLACK", cex=1.0)
+
+#text(5,0.038, "B)")
+
+abline(v=157,lty=2, col="BLACK", lwd=7)
+
+
+
+
+# ##################################  insert Texture picture in first panel ######################
+# 
+# #par(fig = c(0.12, 0.35, 0.62, 0.98 ), new=T)
+# 
+# par(fig = c(0.12, 0.40, 0.60, 1.0 ), new=T)
+# 
+# par(mar= c(5.1, 4.1, 4.1, 2.1))
+# 
+# # barplot(height=ScaledLD.data[,18], width=rep(1.4,74), space=0.2, col=rgb(0,1,0,0.6), horiz = T,las=1,add=T)
+# TT.plot(
+#   class.sys          ="USDA-NCSS.TT",
+#   main               =NA,
+#   tri.data           = Comparing.Samples[10,],
+#   css.names          =c('CLAY', 'SILT' , 'SAND'),
+#   tri.sum.tst        =F, # allows toplot texture fraction that do not all to 100 as in the NAPT and ALP databases
+#   frame.bg.col       = 'WHITE', #"gray75",
+#   pch                =19,
+#   # bg                 = "WHITE",
+#   col                ="GREY50",
+#   cex                = 1,
+#   lwd                = 1.5,
+#   cex.axis           = 0.5,
+#   col.axis           ='BLACK',
+#   lwd.axis           = 0.8,
+#   lwd.lab            = 0.8,
+#   cex.lab            = 0.5,
+#   class.lab.show     ='none'
+# )
+# 
+# 
+# TT.points(
+#   geo.ALLP,
+#   tri.data           = Comparing.Samples[9,],
+#   css.names          =c('CLAY', 'SILT' , 'SAND'),
+#   tri.sum.tst        =F, # allows toplot texture fraction that do not all to 100 as in the NAPT and ALP databases
+#   pch                = 21,
+#   bg                 ="WHITE",
+#   cex                = 1,
+#   lwd                = 1.5
+# )
+# 
+# 
+# 
+# TT.points(
+#   geo.ALLP,
+#   tri.data           = Comparing.Samples[14,],
+#   css.names          =c('CLAY', 'SILT' , 'SAND'),
+#   tri.sum.tst        =F, # allows toplot texture fraction that do not all to 100 as in the NAPT and ALP databases
+#   pch                = 21,
+#   bg                 ="BLACK",
+#   cex                = 1,
+#   lwd                = 0.7
+# )
+# 
+# Comparing.Samples[14,"SAMPLE"]<-c('SRS1604') ;
+# 
+# TT.text(
+#   tri.data           = Comparing.Samples[c(10,9,14),],
+#   geo                = geo.ALLP,
+#   css.names          =c('CLAY', 'SILT' , 'SAND'),
+#   tri.sum.tst        =F, # allows toplot texture fraction that do not all to 100 as in the NAPT and ALP databases
+#   labels             = Comparing.Samples[c(10,9,14),"SAMPLE"],
+#   pos                = 3,
+#   cex                = 0.6,
+#   offset             = 0.2,
+#   font               =2
+# )
+
+
+
+##################################  insert Texture picture in second panel ######################
+
+# par(fig = c(0.12, 0.35, 0.18, 0.54 ), new=T)
+
+par(fig = c(0.12, 0.36, 0.50 , 0.98), new=T)
+
+par(mar= c(5.1, 4.1, 4.1, 2.1))
+
+
+TT.plot(
+  class.sys          ="USDA-NCSS.TT",
+  main               =NA,
+  tri.data           = Comparing.Samples[15,],
+  #css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
+  css.names          =c('CLAY', 'SILT' , 'SAND'),
+  tri.sum.tst        =F, 
+  frame.bg.col       ="WHITE",
+  pch                =19,
+  col                = "GREY50",
+  cex                = 1.5,
+  lwd                = 1.5,
+  cex.axis           = 1.0,
+  lwd.axis           = 2.5,
+  lwd.lab            = 1.0,
+  arrows.show        = F,
+  grid.col           = 'GREY75',
+  class.line.col     = 'BLACK',
+  
+  
+  #cex.lab            =0.8
+  class.lab.show     ='none'
+  
+)
+
+
+TT.points(
+  geo.ALLP,
+  tri.data           = Comparing.Samples[6,],
+  css.names          =c('CLAY', 'SILT' , 'SAND'),
+  tri.sum.tst        =F,
+  pch                = 21,
+  bg                 ="BLACK",
+  cex                = 1.5,
+  lwd                = 1.5
+)
+
+
+
+TT.points(
+  geo.ALLP,
+  tri.data           = Comparing.Samples[11,],
+  css.names          =c('CLAY', 'SILT' , 'SAND'),
+  tri.sum.tst        =F,
+  pch                = 21,
+  bg                 ="WHITE",
+  cex                = 1.5,
+  lwd                = 3.0
+)
+
+
+TT.text(
+  tri.data           = Comparing.Samples[15,],
+  geo                = geo.ALLP,
+  css.names          =c('CLAY', 'SILT' , 'SAND'),
+  tri.sum.tst        =F,
+  labels             = Comparing.Samples[15,"SAMPLE"],
+  pos                = 4,
+  cex                = 0.8,
+  offset             = 0.4,
+  font               =2
+)
+
+TT.text(
+  tri.data           = Comparing.Samples[6,],
+  geo                = geo.ALLP,
+  css.names          =c('CLAY', 'SILT' , 'SAND'),
+  tri.sum.tst        =F,
+  labels             = Comparing.Samples[6,"SAMPLE"],
+  pos                = 2,
+  cex                = 0.8,
+  offset             = 0.4,
+  font               =2
+)
+
+TT.text(
+  tri.data           = Comparing.Samples[11,],
+  geo                = geo.ALLP,
+  css.names          =c('CLAY', 'SILT' , 'SAND'),
+  tri.sum.tst        =F,
+  labels             = Comparing.Samples[11,"SAMPLE"],
+  pos                = 3,
+  cex                = 0.8,
+  offset             = 0.4,
+  font               =2
+)
+
+dev.off()   
 
 
 

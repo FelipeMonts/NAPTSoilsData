@@ -114,6 +114,8 @@ head(NAPT.data.MAD)
 
 NAPT.data.n<-NAPT.data.nohead[NAPT.data.nohead$VALUE == 'n',]
 
+head(NAPT.data.n)
+
 
 #### Caluclate the mode of the number of samples reported for each method
 
@@ -668,6 +670,7 @@ Soil_C_CaCO3[which(Soil_C_CaCO3$Sample.ID == c('2016-111')),]
 
 
 Soil_C_CaCO3[which(Soil_C_CaCO3$Sample.ID == c('2016-114')),]
+
 
 
 # ##########################################################################################################################################
