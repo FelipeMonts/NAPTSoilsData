@@ -1008,7 +1008,9 @@ geo.ALLP<-TT.plot(
   
 )
 
-tiff(filename=paste0("../Manuscript/Figures/HorizontalDist_REV4",".tiff"), width=5760 , height=3840, pointsize = 80)
+#tiff(filename=paste0("../Manuscript/Figures/HorizontalDist_REV5",".tiff"), width=5760 , height=3840, pointsize = 80)
+
+tiff(filename=paste0("../Manuscript/Figures/HorizontalDist_REV6",".tiff"), width=4320 , height=2880, pointsize = 60)
 
 # #par(mfrow=c(2,1))
 # 
@@ -1152,7 +1154,7 @@ abline(v=157, col="GREY50", lwd=20, lty="longdash")
 
 # par(fig = c(0.12, 0.35, 0.18, 0.54 ), new=T)
 
-par(fig = c(0.12, 0.36, 0.50 , 0.98), new=T)
+par(fig = c(0.11, 0.37, 0.49 , 1), new=T)
 
 par(mar= c(5.1, 4.1, 4.1, 2.1))
 
