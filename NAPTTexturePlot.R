@@ -442,7 +442,7 @@ TT.points(
 
 #############  Plot option 2 ############# 
 
-# This is the beter option and therefore will be created as tiff 
+# This is the beter option and therefore will be created as tiff
 
 tiff(filename="../Manuscript/Figures/AllData.tiff", width=3840 , height=3840, pointsize = 80  )
 
@@ -460,7 +460,7 @@ TT.plot(
   col                ="BLACK",
   cex                = 1.5,
   lwd                = 0.5,
-  frame.bg.col       ="gray75"
+  frame.bg.col       ="gray80"
 )
 
 
@@ -473,7 +473,7 @@ TT.points(
   tri.sum.tst        =F, # allows toplot texture fraction that do not all to 100 as in the NAPT and ALP databases
   #class.p.bg.col     =T,
   pch                = 25,
-  bg                 ="grey50",
+  bg                 ="grey15",
   col                ="black",
   cex                = 1.5,
   lwd                = 0.5
@@ -497,6 +497,85 @@ TT.points(
 legend("topleft", legend = c("NAPT", "ALP", "This Study"), pch=c(24, 25, 21), col=c( 'BLACK', 'BLACK', 'BLACK'), pt.bg = c("white", "grey50", NA), pt.cex=c(1.5,1.5,2.5), pt.lwd=c(0.5,0.5,4))
 
 dev.off()
+
+
+
+tiff(filename="../Manuscript/Figures/AllDataR5.tiff", width=3840 , height=3840, pointsize = 80  )
+TT.plot(
+  #geo.ALLP,
+  class.sys          ="USDA-NCSS.TT",
+  main               ='USDA - NCRCS Texture classification for the NAPT, \nALP and selected soil samples',
+  tri.data           = NAPT,
+  css.names          =c('CLAY', 'SILT' , 'SAND'),
+  tri.sum.tst        =F, # allows toplot texture fraction that do not all to 100 as in the NAPT and ALP databases
+  #main               ="NAPT Texture Data",
+  pch                = 24,
+  bg                 ="WHITE",
+  col                ="BLACK",
+  cex                = 1.5,
+  lwd                = 0.5,
+  frame.bg.col       ="gray80"
+)
+
+
+
+
+TT.points(
+  geo.ALLP,
+  tri.data           = ALLP,
+  css.names          =c('CLAY', 'SILT' , 'SAND'),
+  tri.sum.tst        =F, # allows toplot texture fraction that do not all to 100 as in the NAPT and ALP databases
+  #class.p.bg.col     =T,
+  pch                = 25,
+  bg                 ="BLUE",
+  col                ="black",
+  cex                = 1.5,
+  lwd                = 0.5
+)
+
+
+
+TT.points(
+  geo.ALLP,
+  tri.data           = Paper.Samples,
+  css.names          =c('CLAY', 'SILT' , 'SAND'),
+  tri.sum.tst        =F, # allows toplot texture fraction that do not all to 100 as in the NAPT and ALP databases
+  pch                =22,
+  bg                 =NA,
+  col                ="RED",
+  cex                = 2.5,
+  lwd                = 4
+)
+
+
+legend("topleft", legend = c("NAPT", "ALP", "This Study"), pch=c(24, 25, 22), col=c( 'BLACK', 'BLACK', 'RED'), pt.bg = c("white", "BLUE", NA), pt.cex=c(1.5,1.5,2.5), pt.lwd=c(0.5,0.5,4))
+
+
+dev.off()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ##################### PDF that need to be saved for the selected samples ################
