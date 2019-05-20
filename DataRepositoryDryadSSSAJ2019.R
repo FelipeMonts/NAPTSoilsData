@@ -132,43 +132,51 @@ names(LassDiff.1[,c(2,4:54)])
 
 LassDiff.2<-LassDiff.1[,order(names(LassDiff.1))]
 
+LassDiff.3<-LassDiff.2[,-17]
 
-# names(LaserDS.data) %in% LassDiff.names2
-# 
-# LassDiff.names2 %in% names(LaserDS.data)
-# 
-# 
-# str(names(LaserDS.data))
-# str(LassDiff.names2)
-# 
-# names(LaserDS.data)[c(1,21,31,43,46)]
-# 
-# match(names(LaserDS.data)[-1],LassDiff.names2)
-# 
-# match(LassDiff.names2,names(LaserDS.data)[-1])
-# 
-# 
-# 
-# names(LaserDS.data)[!(names(LaserDS.data) %in% LassDiff.names2)]
-#  
-# 
-# match(names(LaserDS.data)[!(names(LaserDS.data) %in% LassDiff.names2)], names(LaserDS.data))
+for (i in seq(1,38)) {
+  
+  barplot(LassDiff.3[,i], names.arg=LassDiff.3$Size, col="RED", ylab=names(LassDiff.3)[i], main = i)
+  barplot(LaserSSAJ[,i], names.arg=LaserSSAJ$Size, add=T, col=NA, border= "BLUE", ylab=names(LaserSSAJ)[i], mgp=c(2,1,0))   
+  
+}
+
+for (j in seq(39,47)) {
+  
+  barplot(LassDiff.3[,j], names.arg=LassDiff.3$Size, col="RED", ylab=names(LassDiff.3)[j], main = c(j,j+4))
+  barplot(LaserSSAJ[,j+4], names.arg=LaserSSAJ$Size, add=T, col=NA, border= "BLUE", ylab=names(LaserSSAJ)[j+4], mgp=c(2,1,0))   
+  
+  
+}
 
 
-
-
-
-
-##############################################################################################################################################
+for (h in seq(51,53)) {
+  
+  barplot(LassDiff.3[,h], names.arg=LassDiff.3$Size, col="RED", ylab=names(LassDiff.3)[h], main = c(h,h+2))
+  barplot(LaserSSAJ[,h+2], names.arg=LaserSSAJ$Size, add=T, col=NA, border= "BLUE", ylab=names(LaserSSAJ)[h+2], mgp=c(2,1,0))     
+  
+  
+}
 
 
 
+###############################################################################################################
+#                         Read Sand  data into R and compare them.          
+###############################################################################################################
 
 
+SandSSAJ.data<-read.xlsx("Laser and Std Results for SSSAJ.xlsx", sheet="Sand Content", colNames=T) ;
 
 
+names(SandSSAJ.data)
 
 
+SandSSAJ.1<-SandSSAJ.data[,order(names(SandSSAJ.data))]
+
+
+names(SandSSAJ)
+
+str(SandSSAJ)
 
 
 
@@ -178,5 +186,34 @@ LassDiff.2<-LassDiff.1[,order(names(LassDiff.1))]
 MassANDSand<-read.xlsx("../Manuscript/USDA Standards_PSA_Mastersizer_Felipe_20180824.xlsx", sheet="correct (6) fraction",startRow=111, rows=c(111,112), cols=(4:55), colNames=F) ;
 
 
+names(LassDiff.1)
 
- 
+names(MassANDSand)<-names(LassDiff.1)[4:54]   ;
+
+str(MassANDSand)
+
+MassANDSand[3,]<-t(MassANDSand)[,2]/t(MassANDSand)[,1]  ;
+
+
+MassANDSand.1<-MassANDSand[,order(names(MassANDSand))]
+
+
+str(MassANDSand.1)
+
+plot(t(MassANDSand.1)[1:21,3]*100,  pch=21, col="RED", cex=1.5, bg=NA)
+points(t(SandSSAJ.1)[1:21,2], type="p" , pch=21, col="BLUE", bg="BLUE")
+
+
+plot(t(MassANDSand.1)[1:17,3]*100-as.numeric(t(SandSSAJ.1)[1:17,2]))
+text(t(MassANDSand.1)[,3]*100-as.numeric(t(SandSSAJ.1)[,2]),names(MassANDSand.1), pos=3, cex=0.5, col="RED" )
+text(t(MassANDSand.1)[,3]*100-as.numeric(t(SandSSAJ.1)[,2]),names(SandSSAJ.1), pos=1, cex=0.5, col="BLUE" )
+
+
+plot(t(MassANDSand.1)[18:39,3]*100-as.numeric(t(SandSSAJ.1)[17:38,2]))
+text((t(MassANDSand.1)[18:39,3]*100-as.numeric(t(SandSSAJ.1)[17:38,2])),names(MassANDSand.1)[18:39], pos=3, cex=0.8, col="RED" )
+text(t(MassANDSand.1)[18:39,3]*100-as.numeric(t(SandSSAJ.1)[17:38,2]),names(SandSSAJ.1)[17:38], pos=1, cex=0.8, col="BLUE" )
+
+
+plot(t(MassANDSand.1)[40:50,3]*100-as.numeric(t(SandSSAJ.1)[43:53,2]))
+text((t(MassANDSand.1)[40:50,3]*100-as.numeric(t(SandSSAJ.1)[43:53,2])),names(MassANDSand.1)[40:50], pos=3, cex=0.8, col="RED" )
+text(t(MassANDSand.1)[40:50,3]*100-as.numeric(t(SandSSAJ.1)[43:53,2]),names(SandSSAJ.1)[43:53], pos=1, cex=0.8, col="BLUE" )
