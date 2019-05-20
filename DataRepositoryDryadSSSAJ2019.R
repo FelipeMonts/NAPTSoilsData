@@ -214,6 +214,6 @@ text((t(MassANDSand.1)[18:39,3]*100-as.numeric(t(SandSSAJ.1)[17:38,2])),names(Ma
 text(t(MassANDSand.1)[18:39,3]*100-as.numeric(t(SandSSAJ.1)[17:38,2]),names(SandSSAJ.1)[17:38], pos=1, cex=0.8, col="BLUE" )
 
 
-plot(t(MassANDSand.1)[40:50,3]*100-as.numeric(t(SandSSAJ.1)[43:53,2]))
-text((t(MassANDSand.1)[40:50,3]*100-as.numeric(t(SandSSAJ.1)[43:53,2])),names(MassANDSand.1)[40:50], pos=3, cex=0.8, col="RED" )
-text(t(MassANDSand.1)[40:50,3]*100-as.numeric(t(SandSSAJ.1)[43:53,2]),names(SandSSAJ.1)[43:53], pos=1, cex=0.8, col="BLUE" )
+plot(t(MassANDSand.1)[40:51,3]*100-as.numeric(t(SandSSAJ.1)[43:54,2]))
+text((t(MassANDSand.1)[40:51,3]*100-as.numeric(t(SandSSAJ.1)[43:54,2])),names(MassANDSand.1)[40:51], pos=3, cex=0.8, col="RED" )
+text(t(MassANDSand.1)[40:51,3]*100-as.numeric(t(SandSSAJ.1)[43:54,2]),names(SandSSAJ.1)[43:54], pos=1, cex=0.8, col="BLUE" )
