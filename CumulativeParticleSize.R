@@ -33,7 +33,9 @@ load('NAPTTexturePlot.RData') ;
 
 
 #install.packages("soiltexture")
+#install.packages("magick")
 library('soiltexture')
+library('magick')
 
 
 ########################################################################################################
@@ -1249,6 +1251,188 @@ TT.text(
 dev.off()   
 
 
+################################### Final Manuscript Image for the cover of the issue, vertical bars. SRS-1709, 2013-119 and 2011-118 with the picture of the soil samples in the background ###################################
+
+geo.ALLP<-TT.plot(
+  class.sys          ="USDA-NCSS.TT",
+  frame.bg.col       ="gray75",
+  bg                 ="white"
+  
+)
+
+#tiff(filename=paste0("../Manuscript/Figures/HorizontalDist_REV5",".tiff"), width=5760 , height=3840, pointsize = 80)
+
+tiff(filename=paste0("../SSSAJManuscript/Figures/CoverImage",".tiff"), width=4320 , height=2880, pointsize = 60)
+
+# #par(mfrow=c(2,1))
+# 
+# #initilaizing the horizontal bar plot with the first scaled LD results
+# 
+# # par(fig = c(0,1,0,1))
+# # par(plt=c(0.1,0.9,0.2,0.9))
+# 
+# # par(mar= c(5.1 4.1 4.1 2.1))
+# 
+par(mar= c(6.5, 6.0, 2.1, 2.0))
+par(bg="transparent")
+# par(lwd=3)
+# 
+# 
+# # barplot( height=t(ScaledLD.data[,c(27,15,25)]), beside=T, col= c('GREEN','BLACK', 'BLUE' ), names.arg=SizeLabels[seq(1,74)], axisnames= F, ylim=c(0,0.04), cex.names =0.5, cex.axis=0.5, cex.lab= 0.7, ylab="Particle Size Fraction", xlab=NA, space=c(0,0.15),las=2,lwd=1.1)
+# 
+# barplot( height=t(ScaledLD.data[,c(27,15,25)]), beside=T, col=c('GREY50', 'WHITE','BLACK'),names.arg=SizeLabels[seq(1,74)], axisnames= F, ylim=c(0,0.04), cex.names =0.6, cex.axis=0.8, cex.lab= 0.8, ylab="Particle Size Fraction", xlab=NA, space=c(0,0.1),las=2, lwd=2)
+# 
+# 
+# 
+# 
+# text(182,0.038, "SILT", col="BLACK", cex=0.8)
+# 
+# text(120,0.038, "CLAY", col="BLACK", cex=0.8)
+# 
+# text(5,0.038, "A)")
+# 
+# abline(v=157,lty=2, col="BLACK", lwd=7)
+# 
+# par(mar= c(4.1, 4.1, 0, 2.1))
+# 
+# barplot( height=t(ScaledLD.data[,c(19,8,13)]), beside=T, col= c('BLACK','GREEN', 'BLUE'), names.arg=SizeLabels[seq(1,74)], ylim=c(0,0.04), cex.names =0.5, cex.axis=0.5, cex.lab= 0.7, ylab="Particle Size Fraction", xlab=expression(paste("Equivalent particle size ( ", mu, "m)")), space=c(0,0.1),las=2)
+
+# barplot( height=t(ScaledLD.data[,c(19,8,13)]), beside=T,col=c('RED', 'BLACK', 'BLUE'), names.arg=SizeLabels[seq(1,74)], ylim=c(0,0.04), cex.names =1, cex.axis=1.0, cex.lab= 1.6, ylab="Particle Size Fraction", xlab=expression(paste("Particle size (", mu, "m)")), space=c(0,0.1),las=2, lwd=2)
+
+
+namesXaxis.1<-SizeLabels[seq(1,74)]
+
+namesXaxis.1[c(seq(2,73,by=2),74)]<-""
+
+
+
+Distribution.plot<-barplot(height=t(ScaledLD.data[,c(19,8,13)]), beside=T,col=c('RED', 'BLACK', 'BLUE'), names.arg=namesXaxis.1, ylim=c(0,0.04), cex.names=1.3, cex.axis=1.6, cex.lab= 1.4, space=c(0,0.1),las=2, lwd=2)
+
+#
+
+# Distribution.plot<-barplot(height=t(ScaledLD.data[,c(19,8,13)]), beside=T,col=c('RED', 'BLACK', 'BLUE'), ylim=c(0,0.04),space=c(0,0.1), axes=F,axisnames=F )
+# 
+# Axis(side=2,las=2, lwd=5, cex.axis=1.5)
+# 
+# Axis(side=1, cex.axis=1.0 )
+# 
+mtext(text="Particle Size Fraction", side= 2, cex=1.6, line=4)
+
+
+mtext(text=expression(paste("Particle size (", mu, "m)")), side= 1, cex=1.6, line=4)
+#expression(paste("Particle size (", mu, "m)"))
+
+text(182,0.038, "SILT", col="BLACK", cex=1.0 )
+
+text(120,0.038, "CLAY", col="BLACK", cex=1.0)
+
+#text(5,0.038, "B)")
+
+abline(v=157, col="GREY50", lwd=20, lty="longdash")
+
+
+
+
+
+
+##################################  insert Texture picture  ######################
+
+# par(fig = c(0.12, 0.35, 0.18, 0.54 ), new=T)
+
+par(fig = c(0.11, 0.37, 0.49 , 1), new=T)
+
+par(mar= c(5.1, 4.1, 4.1, 2.1))
+
+
+
+TT.plot(
+  class.sys          ="USDA-NCSS.TT",
+  main               =NA,
+  tri.data           = Comparing.Samples[15,],
+  #css.names          =c('CLAY_Norm' , 'SILT_Norm' , 'SAND_Norm'),
+  css.names          =c('CLAY', 'SILT' , 'SAND'),
+  tri.sum.tst        =F, 
+  frame.bg.col       ="WHITE",
+  pch                =19,
+  col                = "RED",
+  cex                = 1.5,
+  lwd                = 1.5,
+  cex.axis           = 1.0,
+  lwd.axis           = 2.5,
+  lwd.lab            = 1.0,
+  arrows.show        = F,
+  grid.col           = 'GREY75',
+  class.line.col     = 'BLACK',
+  
+  
+  #cex.lab            =0.8
+  class.lab.show     ='none'
+  
+)
+
+
+TT.points(
+  geo.ALLP,
+  tri.data           = Comparing.Samples[6,],
+  css.names          =c('CLAY', 'SILT' , 'SAND'),
+  tri.sum.tst        =F,
+  pch                = 21,
+  bg                 ="BLACK",
+  cex                = 1.5,
+  lwd                = 1.5
+)
+
+
+
+TT.points(
+  geo.ALLP,
+  tri.data           = Comparing.Samples[11,],
+  css.names          =c('CLAY', 'SILT' , 'SAND'),
+  tri.sum.tst        =F,
+  pch                = 21,
+  bg                 ="BLUE",
+  cex                = 1.5,
+  lwd                = 3.0
+)
+
+
+TT.text(
+  tri.data           = Comparing.Samples[15,],
+  geo                = geo.ALLP,
+  css.names          =c('CLAY', 'SILT' , 'SAND'),
+  tri.sum.tst        =F,
+  labels             = Comparing.Samples[15,"SAMPLE"],
+  pos                = 4,
+  cex                = 0.8,
+  offset             = 0.4,
+  font               =2
+)
+
+TT.text(
+  tri.data           = Comparing.Samples[6,],
+  geo                = geo.ALLP,
+  css.names          =c('CLAY', 'SILT' , 'SAND'),
+  tri.sum.tst        =F,
+  labels             = Comparing.Samples[6,"SAMPLE"],
+  pos                = 2,
+  cex                = 0.8,
+  offset             = 0.4,
+  font               =2
+)
+
+TT.text(
+  tri.data           = Comparing.Samples[11,],
+  geo                = geo.ALLP,
+  css.names          =c('CLAY', 'SILT' , 'SAND'),
+  tri.sum.tst        =F,
+  labels             = Comparing.Samples[11,"SAMPLE"],
+  pos                = 3,
+  cex                = 0.8,
+  offset             = 0.4,
+  font               =2
+)
+
+dev.off()   
 
 
 
