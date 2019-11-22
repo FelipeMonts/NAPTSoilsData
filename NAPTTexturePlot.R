@@ -49,7 +49,7 @@ library(magrittr)
 
 # Package for soil texture plotting
 
-library('soiltexture')
+library(soiltexture)
 
 # Package for writing and reading excel files
 
@@ -500,11 +500,14 @@ dev.off()
 
 
 
-tiff(filename="../Manuscript/Figures/AllDataR5.tiff", width=3840 , height=3840, pointsize = 80  )
+#tiff(filename="../SSSAJManuscript/Figures/AllDataR6.tiff", width=3840 , height=3840, pointsize = 80  ) # for high resolution 43 MB
+
+tiff(filename="../SSSAJManuscript/Figures/AllDataR6Lowress.tiff", width=3200 , height=3200, pointsize = 70  ) # for lower resolution 30MB 
+
 TT.plot(
   #geo.ALLP,
   class.sys          ="USDA-NCSS.TT",
-  main               ='USDA - NCRCS Texture classification for the NAPT, \nALP and selected soil samples',
+  main               ='USDA - NRCS Texture classification for the NAPT, \nALP and selected soil samples',
   tri.data           = NAPT,
   css.names          =c('CLAY', 'SILT' , 'SAND'),
   tri.sum.tst        =F, # allows toplot texture fraction that do not all to 100 as in the NAPT and ALP databases
